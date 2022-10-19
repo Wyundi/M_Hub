@@ -10,7 +10,7 @@ _Qingyao Fan_--------10433241
 
 ### Brief Description
 
-The project our group has chosen to develop is a **sharing platform for deep learning models**. Our initial idea is to develop a web page with a homepage, 
+The project our group has chosen to develop is a _**sharing platform for deep learning models**_. Our initial idea is to develop a web page with a homepage, 
 login interface, user profile interface, and deep learning model interface with basic creation, query, modification, uploading, and commenting functions, 
 based on the Github website format. If time and group members' ability level allow, we would like to continue to develop advanced functions 
 such as adding co-creators, linking data sources, displaying learning results for the model and so on.
