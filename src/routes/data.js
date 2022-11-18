@@ -4,7 +4,7 @@ const data = require('../data');
 const dataData = data.data;
 
 const path = require('path');
-const utils = require('utils');
+const utils = require('../utils');
 
 router
     .route('/:id')
@@ -12,3 +12,5 @@ router
     .post(async (req, res) => {})
     .put(async (req, res) => {})
     .delete(async (req, res) => {})
+
+module.exports = router;

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--
+
+Log in page.
+http://localhost:3000/login
+
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> M_Hub login </title>
+        <link rel="stylesheet" href="/public/main-styles.css">
+    </head>
+    <body>
+        <!-- page content -->
+        <h1> M_Hub </h1>
+        <main>
+
+            <p> This is a login page of this app. </p>
+
+            <form action="/search/user" method="POST" class="searchuser-form">
+
+                <label for="name">
+                    People name
+                    <input id="name" type="text" name="searching_name" placeholder="please input people name for searching" class="full-width-input">
+                </label>
+
+                <button type="submit"> search </button>
+
+            </form>
+
+        </main>
+    </body>
+</html>
