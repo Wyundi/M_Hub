@@ -4,7 +4,7 @@
   "description": "A Deep Learning model share platform.",
   "main": "app.js",
   "scripts": {
-    "test": "node test.js",
+    "seed": "node tasks/seed.js",
     "start": "node app.js"
   },
   "repository": {

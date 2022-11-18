@@ -16,18 +16,37 @@ http://localhost:3000/login
         <h1> M_Hub </h1>
         <main>
 
-            <p> This is a login page of this app. </p>
+            <h2> Log in </h2>
 
             <form action="/search/user" method="POST" class="searchuser-form">
 
                 <label for="name">
-                    People name
-                    <input id="name" type="text" name="searching_name" placeholder="please input people name for searching" class="full-width-input">
+                    User Name
+                    <input id="name" type="text" name="user_name" placeholder="please input user name" class="full-width-input">
                 </label>
 
-                <button type="submit"> search </button>
+                <br>
+
+                <label for="passwd">
+                    Password
+                    <input id="passwd" type="text" name="user_password" placeholder="please input password" class="full-width-input">
+                </label>
+
+                <br>
+                <br>
+
+                <button type="submit"> login </button>
+
+                <p> Don't have an account? Signup first. </p>
+                <button type="button"> <a href="../signup"> signup </a></button>
+
+                <br>
+
+                <button type="button"> <a href="../"> back to home page </a></button>
 
             </form>
+
+
 
         </main>
     </body>

@@ -4,16 +4,18 @@ const {ObjectId} = require('mongodb');
 
 const utils = require("../utils");
 
-const createModel = async (
-    name,
-    category,
-    description,
-    link,
-    structure,
-    input,
-    output,
-    userId
-) => {};
+const createModel = async (model) => {
+    /*
+    model.name,
+    model.category,
+    model.description,
+    model.link,
+    model.structure,
+    model.input,
+    model.output,
+    model.userId
+    */
+};
 
 const getAllModel = async () => {};
 

@@ -4,14 +4,16 @@ const {ObjectId} = require('mongodb');
 
 const utils = require("../utils");
 
-const createData = async (
-    name,
-    description,
-    features,
-    length,
-    source,
-    raw
-) => {};
+const createData = async (data) => {
+    /*
+    data.name,
+    data.description,
+    data.features,
+    data.length,
+    data.webpage,
+    data.url
+    */
+};
 
 const getAllData = async () => {};
 

@@ -7,19 +7,13 @@ const searchRoutes = require("./search");
 const path = require('path');
 
 const constructorMethod = (app) => {
-    app.use('/', (req, res) => {
-        res.status(200).sendFile(path.resolve('./static/homepage.html'));
-    })
-    app.use('/user', userRoutes);
-    app.use('/model', modelRoutes);
-    app.use('/data', dataRoutes);
-    app.use('/comment', commentRoutes);
-    app.use('/search', searchRoutes);
+
+    app.use('/', userRoutes);
 
     app.use('*', (req, res) => {
         res.status(404).render('./error', {
             error_status: '404',
-            error_message: e
+            error_message: 'Page Not Found.'
         })
     });
 };

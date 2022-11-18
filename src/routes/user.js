@@ -7,7 +7,25 @@ const path = require('path');
 const utils = require('../utils');
 
 router
-    .route('/:id')
+    .route('/')
+    .get(async (req, res) => {
+        try {
+            return res.sendFile(path.resolve('./static/homepage.html'));
+        } catch (e) {
+            return res.status(500).render('./error', {
+                error_status: '500',
+                error_message: "Server Error."
+            })
+        }    
+    });
+
+router
+    .route('/user')
+    // post function for create user
+    .post(async (req, res) => {});
+
+router
+    .route('/user/:id')
     .get(async (req, res) => {})
     .post(async (req, res) => {})
     .put(async (req, res) => {})
