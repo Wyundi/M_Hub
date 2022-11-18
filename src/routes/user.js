@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../user');
-const userData = user.data;
+const data = require('../data');
+const userData = data.user;
 
 const path = require('path');
 const utils = require('utils');
 
 router
-    .route('/')
+    .route('/:id')
     .get(async (req, res) => {})
     .post(async (req, res) => {})
+    .put(async (req, res) => {})
+    .delete(async (req, res) => {})
+

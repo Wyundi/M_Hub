@@ -4,8 +4,8 @@
   "description": "A Deep Learning model share platform.",
   "main": "app.js",
   "scripts": {
-    "test": "npm test.js",
-    "start": "npm app.js"
+    "test": "node test.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
