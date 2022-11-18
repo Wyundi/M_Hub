@@ -1,0 +1,30 @@
+const mongoCollections = require('../config/mongoCollections');
+const dataData = mongoCollections.data;
+const {ObjectId} = require('mongodb');
+
+const utils = require("../utils");
+
+const createData = async (
+    name,
+    description,
+    features,
+    length,
+    source,
+    raw
+) => {};
+
+const getAllData = async () => {};
+
+const getDataById = async (dataId) => {};
+
+const removeData = async (dataId) => {};
+
+const updateData = async (dataId) => {};
+
+module.exports = {
+    createData,
+    getAllData,
+    getDataById,
+    removeData,
+    updateData
+};
