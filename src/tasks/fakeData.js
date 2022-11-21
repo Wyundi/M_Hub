@@ -7,7 +7,7 @@ let user1 = {
     gender: 'Male',
     location: 'NJ',
     organization: 'SIT',
-    password: 'JamesR1914'
+    passwd: 'JamesR1914'
 }
 
 let user2 = {
@@ -17,7 +17,7 @@ let user2 = {
     gender: 'Male',
     location: 'NY',
     organization: 'NYU',
-    password: 'JohnM1939'
+    passwd: 'JohnM1939'
 }
 
 let user3 = {
@@ -27,7 +27,7 @@ let user3 = {
     gender: 'Female',
     location: 'MA',
     organization: 'MIT',
-    password: 'MaryL2019'
+    passwd: 'MaryL2019'
 }
 
 let model1 = {

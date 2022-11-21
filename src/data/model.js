@@ -13,7 +13,8 @@ const createModel = async (model) => {
     model.structure,
     model.input,
     model.output,
-    model.userId
+    model.userId,
+    model.dataId
     */
 };
 

@@ -1,4 +1,4 @@
-const dbConnection = require('../config/mongoConnection');
+const connection = require('../config/mongoConnection');
 const data = require('../data/');
 const userData = data.user;
 const modelData = data.model;
@@ -9,20 +9,26 @@ const fakeData = require('./fakeData');
 async function main() {
 
     // connect and drop all data
-    const db = await dbConnection();
+    const db = await connection.dbConnection();
     await db.dropDatabase();
   
+    // add user
+    await userData.createUser(fakeData.user1);
+    await userData.createUser(fakeData.user2);
+    await userData.createUser(fakeData.user3);
+
     // add data
-    
+
+    // add model
 
     // close connect
+    await connection.closeConnection();
     console.log('Done seeding database');
-    await db.serverConfig.close();
 }
   
 main().catch((error) => {
     console.error(error);
-    return dbConnection().then((db) => {
-        return db.serverConfig.close();
+    return connection.dbConnection().then((db) => {
+        return connection.closeConnection();
     });
 });
