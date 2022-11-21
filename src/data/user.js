@@ -33,7 +33,7 @@ const createUser = async (user_info) => {
 
     // add user
 
-    newUser = {
+    let newUser = {
         first_name: first_name,
         last_name: last_name,
         email: email,
@@ -49,7 +49,7 @@ const createUser = async (user_info) => {
     const insertInfo = await userCollection.insertOne(newUser);
 
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
-      throw 'Could not add movie';
+      throw 'Could not add user';
 
     const newId = insertInfo.insertedId.toString();
 
@@ -86,11 +86,16 @@ const getUseraById = async (userId) => {
 
 };
 
+const getUserByNameOrEmail = async (str) => {
+
+    return 0;
+};
+
 const removeUser = async (userId) => {
 
     id = utils.checkId(userId, 'user id');
 
-    let user = await getUseraById(id);
+    let user_db = await getUseraById(id);
 
     const userCollection = await user();
     const deletionInfo = await userCollection.deleteOne({_id: ObjectId(id)});
@@ -99,7 +104,8 @@ const removeUser = async (userId) => {
       throw `Could not delete user with id of ${id}`;
     }
     
-    return `${user.first_name} ${user.last_name} has been successfully deleted!`;
+    return `${user_db.first_name} ${user_db.last_name} has been successfully deleted!`;
+
 };
 
 const updateUser = async (userId, user_info) => {
@@ -112,12 +118,13 @@ const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
     return 0;
 
-}
+};
 
 module.exports = {
     createUser,
     getAllUser,
     getUseraById,
+    getUserByNameOrEmail,
     removeUser,
     updateUser,
     changePasswd

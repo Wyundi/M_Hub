@@ -30,6 +30,26 @@ let user3 = {
     passwd: 'MaryL2019'
 }
 
+let data1 = {
+    name: 'Boston Housing Data',
+    description: 'Concerns housing values in suburbs of Boston',
+    features: ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV'],
+    length: 506,
+    source: 'http://lib.stat.cmu.edu/datasets/boston',
+    file_path: './raw_data/boston.json',
+    userId: undefined
+}
+
+let data2 = {
+    name: 'cat and dog',
+    description: 'cat and dog dataset',
+    features: ['image_base64_string', 'label'],
+    length: 1000,
+    source: 'https://www.kaggle.com/c/dogs-vs-cats',
+    file_path: './raw_data/cat.json',
+    userId: undefined
+}
+
 let model1 = {
     name: 'DNN',
     category: 'regression',
@@ -54,32 +74,12 @@ let model2 = {
     dataId: undefined
 }
 
-let data1 = {
-    name: 'Boston Housing Data',
-    description: 'Concerns housing values in suburbs of Boston',
-    features: ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV'],
-    length: 506,
-    source: 'http://lib.stat.cmu.edu/datasets/boston',
-    file_path: '../raw_data/boston.json',
-    userId: undefined
-}
-
-let data2 = {
-    name: 'cat and dog',
-    description: 'cat and dog dataset',
-    features: ['image_base64_string', 'label'],
-    length: 1000,
-    source: 'https://www.kaggle.com/c/dogs-vs-cats',
-    file_path: '../raw_data/cat.json',
-    userId: undefined
-}
-
 module.exports = {
     user1,
     user2,
     user3,
-    model1,
-    model2,
     data1,
-    data2
+    data2,
+    model1,
+    model2
 }

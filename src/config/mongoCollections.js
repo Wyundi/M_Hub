@@ -20,5 +20,5 @@ NOTE: YOU WILL NEED TO CHANGE THE CODE BELOW TO HAVE THE COLLECTION(S) REQUIRED 
 module.exports = {
     user: getCollectionFn('user'),
     model: getCollectionFn('model'),
-    data: getCollectionFn('data')
+    dataInfo: getCollectionFn('dataInfo')
 };

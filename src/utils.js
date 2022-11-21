@@ -3,6 +3,10 @@ const {ObjectId} = require('mongodb');
 // hashing passwd
 const bcrypt = require("bcrypt")
 
+// read file
+const path = require('path');
+const fs = require('fs');
+
 // error check
 
 function checkInputExists(input) { // check parameter exists
@@ -144,6 +148,28 @@ function checkPasswd(passwd) {
     return passwd;
 }
 
+function checkStringArray(arr) {
+
+    return arr;
+}
+
+function checkUrl(url) {
+
+    return url;
+}
+
+function checkPath(path) {
+
+    return path;
+}
+
+function checkJson(json_path) {
+
+    json_obj = readJsonFile(json_path);
+
+    return json_obj;
+}
+
 // hash passwd
 function hash(passwd) {
 
@@ -151,6 +177,39 @@ function hash(passwd) {
     hashedPasswd = passwd;
 
     return hashedPasswd;
+}
+
+// json
+function readJsonFile(json_path) {
+    
+    // fake json object for test
+    // json_obj = {
+    //     "feature1": {
+    //         "0": 0.25,
+    //         "1": 0.7
+    //     },
+    //     "feature2": {
+    //         "0": 0.23,
+    //         "1": 0.56
+    //     },
+    //     "target": {
+    //         "0": 1,
+    //         "1": 0
+    //     }
+    // }
+
+    let json_string = undefined;
+    let json_obj = undefined;
+    try {
+        json_string = fs.readFileSync(path.resolve(json_path), 'utf8');
+        json_obj = JSON.parse(json_string);
+    } catch (e) {
+        throw `failed to read json file: ${e}`;
+    }
+
+    console.log(`read file ${json_path} successfully.`);
+
+    return json_obj;
 }
 
 module.exports = {
@@ -162,10 +221,19 @@ module.exports = {
     checkValidName,
     checkInt,
     checkString,
+
     checkEmail,
     checkId,
     checkGender,
     checkLocation,
     checkPasswd,
+
+    checkStringArray,
+    checkUrl,
+    checkPath,
+    checkJson,
+
+    // other help function
     hash,
+    readJsonFile,
 }

@@ -1,9 +1,9 @@
 const userData = require('./user');
 const modelData = require("./model");
-const dataData = require('./data');
+const dataInfoData = require('./dataInfo');
 
 module.exports = {
     user: userData,
     model: modelData,
-    data: dataData
+    dataInfo: dataInfoData
 };
