@@ -10,8 +10,9 @@ const createData = async (data) => {
     data.description,
     data.features,
     data.length,
-    data.webpage,
-    data.url
+    data.source,
+    data.file_path,
+    data.userId
     */
 };
 

@@ -13,7 +13,7 @@ async function main() {
     await db.dropDatabase();
   
     // add data
-
+    
 
     // close connect
     console.log('Done seeding database');
