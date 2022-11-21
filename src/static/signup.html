@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+
+Log in page.
+http://localhost:3000/login
+
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> M_Hub signup </title>
+        <link rel="stylesheet" href="/public/main-styles.css">
+    </head>
+    <body>
+        <!-- page content -->
+        <h1> M_Hub </h1>
+        <main>
+
+            <h2> Sign Up </h2>
+
+            <form action="/user" method="POST" class="signup-form">
+
+                <label for="first_name">
+                    First Name
+                    <input id="first_name" type="text" name="user_first_name" placeholder="please input your first name" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="last_name">
+                    Last Name
+                    <input id="last_name" type="text" name="user_last_name" placeholder="please input your last name" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="email">
+                    email
+                    <input id="email" type="text" name="user_email" placeholder="please input your email" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="gender">
+                    Gender
+                    <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="location">
+                    Location
+                    <input id="location" type="text" name="user_location" placeholder="please input your location" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="organization">
+                    Organization
+                    <input id="organization" type="text" name="user_organization" placeholder="please input your organization" class="full-width-input">
+                </label>
+
+                <br>
+
+                <label for="passwd">
+                    Password
+                    <input id="passwd" type="text" name="user_password" placeholder="please input password" class="full-width-input">
+                </label>
+
+                <br>
+                <br>
+
+                <button type="submit"> signup </button>
+
+                <p> Already have an account? Try login. </p>
+                <button type="button"> <a href="../login"> login </a></button>
+
+                <br>
+
+                <button type="button"> <a href="../"> back to home page </a></button>
+
+            </form>
+
+
+
+        </main>
+    </body>
+</html>
