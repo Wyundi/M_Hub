@@ -120,6 +120,20 @@ const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
 };
 
+const addData = async (userId, dataId) => {
+
+    userId = utils.checkId(userId);
+    dataId = utils.checkId(dataId);
+
+};
+
+const addModel = async (userId, modelId) => {
+
+    userId = utils.checkId(userId);
+    modelId = utils.checkId(modelId);
+
+};
+
 module.exports = {
     createUser,
     getAllUser,
@@ -127,5 +141,7 @@ module.exports = {
     getUserByNameOrEmail,
     removeUser,
     updateUser,
-    changePasswd
+    changePasswd,
+    addData,
+    addModel
 };

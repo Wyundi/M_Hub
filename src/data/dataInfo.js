@@ -101,7 +101,7 @@ const getDataById = async (dataId) => {
 
 const removeData = async (dataId) => {
 
-    id = utils.checkId(userId, 'user id');
+    id = utils.checkId(dataId, 'data id');
 
     let data_db = await getDataById(id);
 
