@@ -82,6 +82,8 @@ function checkInt(num) {
         throw 'num is not integer';
     }
 
+    return num;
+
 }
 
 function checkString(str) {

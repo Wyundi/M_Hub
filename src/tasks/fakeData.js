@@ -36,7 +36,7 @@ let data1 = {
     features: ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV'],
     length: 506,
     source: 'http://lib.stat.cmu.edu/datasets/boston',
-    file_path: './raw_data/boston.json',
+    file_path: './json_data/boston.json',
     userId: undefined
 }
 
@@ -46,7 +46,7 @@ let data2 = {
     features: ['image_base64_string', 'label'],
     length: 1000,
     source: 'https://www.kaggle.com/c/dogs-vs-cats',
-    file_path: './raw_data/cat.json',
+    file_path: './json_data/cat.json',
     userId: undefined
 }
 

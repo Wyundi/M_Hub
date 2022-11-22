@@ -2,6 +2,8 @@ const mongoCollections = require('../config/mongoCollections');
 const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
 
+const rawData = require('./raw')
+
 const utils = require("../utils");
 
 const createData = async (data) => {
@@ -29,7 +31,19 @@ const createData = async (data) => {
 
     json_obj = utils.checkJson(file_path);
 
-    // add data
+    // add data info
+    // according to mongodb document size limit, we need add another document to store raw data separately instead of store them in one document.
+
+    let raw = {}
+    for (let f of features) {
+        feature_id = ObjectId();
+        raw[f] = {};
+
+        for (let i in json_obj[f]) {
+            let single_data = await rawData.addData(json_obj[f][i].toString());
+            raw[f][i] = single_data._id.toString();
+        }
+    }
 
     let newData = {
         data_name: data_name,
@@ -37,8 +51,8 @@ const createData = async (data) => {
         features: features,
         length: length,
         source: source,
-        raw_data: json_obj,
-        userList: [userId]
+        raw_data: raw,
+        user_list: [userId]
     }
 
     const dataInfoCollection = await dataInfo();
@@ -49,6 +63,8 @@ const createData = async (data) => {
         throw 'Could not add data';
 
     const newId = insertInfo.insertedId.toString();
+
+    // return new data
 
     const data_db = await getDataById(newId);
     return data_db;

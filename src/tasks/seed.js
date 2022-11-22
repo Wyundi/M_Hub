@@ -22,9 +22,9 @@ async function main() {
     data1.userId = user1._id.toString();
     data1 = await dataInfoData.createData(fakeData.data1);
 
-    // let data2 = fakeData.data2;
-    // data2.userId = user2._id.toString();
-    // data2 = await dataInfoData.createData(fakeData.data2);
+    let data2 = fakeData.data2;
+    data2.userId = user2._id.toString();
+    data2 = await dataInfoData.createData(fakeData.data2);
 
     // add model
 
