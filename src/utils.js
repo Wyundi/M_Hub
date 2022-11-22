@@ -1,3 +1,12 @@
+const {ObjectId} = require('mongodb');
+
+// hashing passwd
+const bcrypt = require("bcrypt")
+
+// read file
+const path = require('path');
+const fs = require('fs');
+
 // error check
 
 function checkInputExists(input) { // check parameter exists
@@ -73,6 +82,136 @@ function checkInt(num) {
         throw 'num is not integer';
     }
 
+    return num;
+
+}
+
+function checkString(str) {
+    
+    checkInputExists(str);
+    checkInputType(str, 'string');
+    checkStringEnpty(str);
+
+    return str.trim();
+
+}
+
+function checkEmail(email) {
+
+    // 
+
+    email = checkString(email);
+
+    return email;
+}
+
+function checkId(id, varName) {
+    if (!id) throw `Error: You must provide a ${varName}`;
+    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
+    id = id.trim();
+    if (id.length === 0)
+        throw `Error: ${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+
+    return id;
+}
+
+function checkGender(gender) {
+
+    // ["male", "female"]
+
+    gender = checkString(gender);
+
+    return gender;
+}
+
+function checkLocation(loc) {
+
+    loc = checkString(loc);
+
+    return loc;
+}
+
+function checkPasswd(passwd) {
+
+    /*
+
+    As a general guideline, passwords should consist of 8 to 14 characters
+    including one or more characters from each of the following sets:
+
+    - Uppercase and lowercase letters (A-Z and a-z)
+
+    - Numeric characters (0-9)
+
+    */
+
+    passwd = checkString(passwd);
+
+    return passwd;
+}
+
+function checkStringArray(arr) {
+
+    return arr;
+}
+
+function checkUrl(url) {
+
+    return url;
+}
+
+function checkPath(path) {
+
+    return path;
+}
+
+function checkJson(json_path) {
+
+    json_obj = readJsonFile(json_path);
+
+    return json_obj;
+}
+
+// hash passwd
+function hash(passwd) {
+
+    passwd = checkPasswd(passwd);
+    hashedPasswd = passwd;
+
+    return hashedPasswd;
+}
+
+// json
+function readJsonFile(json_path) {
+    
+    // fake json object for test
+    // json_obj = {
+    //     "feature1": {
+    //         "0": 0.25,
+    //         "1": 0.7
+    //     },
+    //     "feature2": {
+    //         "0": 0.23,
+    //         "1": 0.56
+    //     },
+    //     "target": {
+    //         "0": 1,
+    //         "1": 0
+    //     }
+    // }
+
+    let json_string = undefined;
+    let json_obj = undefined;
+    try {
+        json_string = fs.readFileSync(path.resolve(json_path), 'utf8');
+        json_obj = JSON.parse(json_string);
+    } catch (e) {
+        throw `failed to read json file: ${e}`;
+    }
+
+    console.log(`read file ${json_path} successfully.`);
+
+    return json_obj;
 }
 
 module.exports = {
@@ -82,6 +221,21 @@ module.exports = {
     checkInputType,
     checkStringEnpty,
     checkValidName,
-    checkInt
+    checkInt,
+    checkString,
 
+    checkEmail,
+    checkId,
+    checkGender,
+    checkLocation,
+    checkPasswd,
+
+    checkStringArray,
+    checkUrl,
+    checkPath,
+    checkJson,
+
+    // other help function
+    hash,
+    readJsonFile,
 }
