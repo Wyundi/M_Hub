@@ -116,7 +116,7 @@ const removeData = async (dataId) => {
     
 };
 
-const updateData = async (dataId) => {
+const updateData = async (dataId, newData) => {
 
     return 0;
 
