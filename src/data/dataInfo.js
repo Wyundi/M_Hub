@@ -52,7 +52,8 @@ const createData = async (data) => {
         length: length,
         source: source,
         raw_data: raw,
-        user_list: [userId]
+        user_list: [userId],
+        comment: []
     }
 
     const dataInfoCollection = await dataInfo();
@@ -63,6 +64,10 @@ const createData = async (data) => {
         throw 'Could not add data';
 
     const newId = insertInfo.insertedId.toString();
+
+    // add dataId to user
+
+    await userData.addData(userId, newId);
 
     // return new data
 
@@ -101,7 +106,7 @@ const getDataById = async (dataId) => {
 
 const removeData = async (dataId) => {
 
-    id = utils.checkId(userId, 'user id');
+    id = utils.checkId(dataId, 'data id');
 
     let data_db = await getDataById(id);
 
