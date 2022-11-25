@@ -146,6 +146,9 @@ function checkPasswd(passwd) {
 
     */
 
+    passwd = checkString(passwd);
+
+    
     seenNumber = false;
     seenUpper = false;
     seenLower = false;
@@ -160,7 +163,7 @@ function checkPasswd(passwd) {
         }
     }
     
-    passwd = checkString(passwd);
+    if (!seenNumber || !seenLower || !seenUpper) throw "the password is invalid"
    
     return passwd;
 }
