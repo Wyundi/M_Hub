@@ -110,7 +110,8 @@ function checkEmail(email) {
     }
     if (counterA != 1) throw "The email you provide is invalid"
 
-    return email;
+    return email.toLowerCase(); 
+    // all email should be converted into lower for deduplication and some other purpose
 }
 
 function checkId(id, varName) {
