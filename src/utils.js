@@ -102,6 +102,14 @@ function checkEmail(email) {
 
     email = checkString(email);
 
+    counterA = 0; // counter for @, only one should exist
+    for (let i = 0; i < email.length; i++) {
+        if (email[i] == '@') {
+            counterA++;
+        }
+    }
+    if (counterA != 1) throw "The email you provide is invalid"
+
     return email;
 }
 
@@ -195,7 +203,7 @@ function isLowerCaseLetter(char) {
 }
 
 function checkStringArray(arr) {
-    
+
     return arr;
 }
 
