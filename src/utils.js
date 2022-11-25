@@ -108,6 +108,7 @@ function checkEmail(email) {
             counterA++;
         }
     }
+
     if (counterA != 1) throw "The email you provide is invalid"
 
     return email.toLowerCase(); 
@@ -127,7 +128,8 @@ function checkId(id, varName) {
 
 function checkGender(gender) {
 
-    // ["male", "female"]
+    // ["male", "female"]  
+    // according to the professor, gender should be not only male and femail, but also included some other opbtions
 
     gender = checkString(gender);
 
@@ -159,11 +161,13 @@ function checkPasswd(passwd) {
 
     passwd = checkString(passwd);
 
+    // length check
     lowerLength = 8;
     upperLength = 14;
 
     if (passwd.length < 8 || passwd.length > 14) throw "Your password needs to be between 8 ~ 14 character long"
     
+    // character check
     seenNumber = false;
     seenUpper = false;
     seenLower = false;
@@ -185,6 +189,8 @@ function checkPasswd(passwd) {
     return passwd;
 }
 
+
+// helper functions for single character checks
 function isNumber(char) {
     return char >= "0" && char <= "9";
 }
