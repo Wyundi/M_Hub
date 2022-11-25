@@ -148,10 +148,15 @@ function checkPasswd(passwd) {
 
     passwd = checkString(passwd);
 
+    lowerLength = 8;
+    upperLength = 14;
+
+    if (passwd.length < 8 || passwd.length > 14) throw "Your password needs to be between 8 ~ 14 character long"
     
     seenNumber = false;
     seenUpper = false;
     seenLower = false;
+    
 
     for (let i = 0; i < passwd.length; i++) {
         if (isNumber(passwd[i])) {
@@ -163,7 +168,9 @@ function checkPasswd(passwd) {
         }
     }
     
-    if (!seenNumber || !seenLower || !seenUpper) throw "the password is invalid"
+    if (!seenNumber) throw "Your password needs to contain at least a number"
+    if (!seenLower) throw "Your password is needs to contain at least a lower case letter"
+    if (!seenUpper) throw "Your password is needs to contain at least a upper case letter"
    
     return passwd;
 }
