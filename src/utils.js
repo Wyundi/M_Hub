@@ -146,6 +146,8 @@ function checkPasswd(passwd) {
 
     */
 
+    // haven't consider special character ralated cases
+
     passwd = checkString(passwd);
 
     lowerLength = 8;
@@ -156,7 +158,6 @@ function checkPasswd(passwd) {
     seenNumber = false;
     seenUpper = false;
     seenLower = false;
-    
 
     for (let i = 0; i < passwd.length; i++) {
         if (isNumber(passwd[i])) {
@@ -193,9 +194,8 @@ function isLowerCaseLetter(char) {
     return char == char.toLowerCase();
 }
 
-
 function checkStringArray(arr) {
-
+    
     return arr;
 }
 
