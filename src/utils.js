@@ -133,6 +133,7 @@ function checkLocation(loc) {
 }
 
 function checkPasswd(passwd) {
+    
 
     /*
 
@@ -145,10 +146,43 @@ function checkPasswd(passwd) {
 
     */
 
-    passwd = checkString(passwd);
+    seenNumber = false;
+    seenUpper = false;
+    seenLower = false;
 
+    for (let i = 0; i < passwd.length; i++) {
+        if (isNumber(passwd[i])) {
+            seenNumber = true;
+        } else if (isUppercaseLetter(passwd[i])) {
+            seenUpper = true;
+        } else if (isLowerCaseLetter(passwd[i])) {
+            seenLower = true;
+        }
+    }
+    
+    passwd = checkString(passwd);
+   
     return passwd;
 }
+
+function isNumber(char) {
+    return char >= "0" && char <= "9";
+}
+
+function isLetter(char) {
+    return char.toLowerCase() !== char.toUpperCase();
+}
+
+function isUppercaseLetter(char) {
+    if (!isLetter(char)) return false;
+    return char == char.toUpperCase();
+}
+
+function isLowerCaseLetter(char) {
+    if (!isLetter(char)) return false;
+    return char == char.toLowerCase();
+}
+
 
 function checkStringArray(arr) {
 
