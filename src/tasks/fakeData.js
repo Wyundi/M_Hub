@@ -3,6 +3,7 @@ const { model } = require("../data")
 let user1 = {
     first_name: 'James',
     last_name: 'Robert',
+    username: 'James1234',
     email: 'JamesR@gmail.com',
     gender: 'Male',
     location: 'NJ',
@@ -13,6 +14,7 @@ let user1 = {
 let user2 = {
     first_name: 'John',
     last_name: 'Michael',
+    username: 'Michael23',
     email: 'JohnM@gmail.com',
     gender: 'Male',
     location: 'NY',
@@ -23,6 +25,7 @@ let user2 = {
 let user3 = {
     first_name: 'Mary',
     last_name: 'Linda',
+    username: 'LindaM',
     email: 'MaryL@gmail.com',
     gender: 'Female',
     location: 'MA',

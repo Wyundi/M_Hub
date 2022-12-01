@@ -117,19 +117,101 @@ const removeData = async (dataId) => {
       throw `Could not delete data with id of ${id}`;
     }
     
-    return `${data_db.nane} has been successfully deleted!`;
+    return `${data_db.name} has been successfully deleted!`;
     
 };
 
 const updateData = async (dataId, newData) => {
 
-    return 0;
+    // chech dataId
+    id = utils.checkId(dataId, 'data id');
+
+    // check new data
+    data_name = utils.checkString(newData.name);
+    description = utils.checkString(newData.description);
+    features = utils.checkStringArray(newData.features);
+    length = utils.checkInt(newData.length);
+    source = utils.checkUrl(newData.source);
+    file_path = utils.checkPath(newData.file_path);
+    userId = utils.checkId(newData.userId);
+
+    // check valid json file
+
+    json_obj = utils.checkJson(file_path);
+
+    // add data info
+    // according to mongodb document size limit, we need add another document to store raw data separately instead of store them in one document.
+
+    let raw = {}
+    for (let f of features) {
+        feature_id = ObjectId();
+        raw[f] = {};
+
+        for (let i in json_obj[f]) {
+            let single_data = await rawData.addData(json_obj[f][i].toString());
+            raw[f][i] = single_data._id.toString();
+        }
+    }
+
+    newData = {
+        data_name: data_name,
+        description: description,
+        features: features,
+        length: length,
+        source: source,
+        raw_data: raw,
+        user_list: [userId],
+        comment: []
+    }
+
+    let data_db = await getDataById(id);
+
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: Object(id)},
+        {$set: newData}
+    );
+
+    if (!updateInfo) throw `Could not delete data with origin data ${data_db.name}`;
+
+    return `origin data ${data_db.name} has been successfully udpated!`;
 
 };
 
 const addUser = async (dataId, userId) => {
+    
+    // check id validation
+    id = utils.checkId(dataId);
 
-    return 0;
+    // check userId validation
+    userId = utils.checkId(userId);
+
+    let data_db = await getDataById(id);
+
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+    
+    let newData = {
+        data_name: data_db.data_name,
+        description: data_db.description,
+        features: data_db.features,
+        length: data_db.length,
+        source: data_db.source,
+        raw_data: data_db.raw_data,
+        user_list: data_db.user_list,
+        comment: data_db.comment
+    };
+    newData.user_list.push(userId);
+
+
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: Object(id)},
+        {$set: newData}
+    )
+
+    if (!updateInfo) throw `Could not add user to ${data_db.name}`;
+    
+    return 'UserId successfully added!';
 
 };
 
