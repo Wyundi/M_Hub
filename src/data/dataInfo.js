@@ -153,6 +153,9 @@ const updateData = async (dataId, newData) => {
         }
     }
 
+    let data_db = await getDataById(id);
+    if (!data_db) throw `Could not update data with id ${dataId}!`;
+
     newData = {
         data_name: data_name,
         description: description,
@@ -164,15 +167,13 @@ const updateData = async (dataId, newData) => {
         comment: []
     }
 
-    let data_db = await getDataById(id);
-
     const dataInfoCollection = await dataInfo();
     const updateInfo = await dataInfoCollection.updateOne(
-        {_id: Object(id)},
+        {_id: ObjectId(id)},
         {$set: newData}
     );
 
-    if (!updateInfo) throw `Could not delete data with origin data ${data_db.name}`;
+    if (!updateInfo) throw `Could not update data with origin data ${data_db.name}`;
 
     return `origin data ${data_db.name} has been successfully udpated!`;
 
@@ -187,7 +188,6 @@ const addUser = async (dataId, userId) => {
     userId = utils.checkId(userId);
 
     let data_db = await getDataById(id);
-
     if (!data_db) throw `Could not find data with id ${dataId}!`;
     
     let newData = {
@@ -205,7 +205,7 @@ const addUser = async (dataId, userId) => {
 
     const dataInfoCollection = await dataInfo();
     const updateInfo = await dataInfoCollection.updateOne(
-        {_id: Object(id)},
+        {_id: ObjectId(id)},
         {$set: newData}
     )
 
