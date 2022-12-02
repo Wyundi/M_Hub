@@ -1,3 +1,15 @@
+/*
+
+checkEmail                  //Qingyao
+checkGender
+
+checkUrl
+checkPath
+
+*/
+
+
+
 const {ObjectId} = require('mongodb');
 
 // hashing passwd
@@ -139,12 +151,14 @@ function checkPasswd(passwd) {
 
     /*
 
-    As a general guideline, passwords should consist of 8 to 14 characters
+    As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
 
     - Uppercase and lowercase letters (A-Z and a-z)
 
     - Numeric characters (0-9)
+
+    - special character
 
     */
 
@@ -152,57 +166,50 @@ function checkPasswd(passwd) {
 
     passwd = checkString(passwd);
 
-    // length check
-    lowerLength = 8;
-    upperLength = 14;
-
-    if (passwd.length < 8 || passwd.length > 14) throw "Your password needs to be between 8 ~ 14 character long"
-    
-    // character check
-    seenNumber = false;
-    seenUpper = false;
-    seenLower = false;
-
-    for (let i = 0; i < passwd.length; i++) {
-        if (isNumber(passwd[i])) {
-            seenNumber = true;
-        } else if (isUppercaseLetter(passwd[i])) {
-            seenUpper = true;
-        } else if (isLowerCaseLetter(passwd[i])) {
-            seenLower = true;
-        }
+    if (passwd.includes(' ')) {
+        throw "Password should not contain spaces.";
     }
-    
-    if (!seenNumber) throw "Your password needs to contain at least a number"
-    if (!seenLower) throw "Your password is needs to contain at least a lower case letter"
-    if (!seenUpper) throw "Your password is needs to contain at least a upper case letter"
-   
+
+    if (passwd.length < 6 || passwd.length > 14) {
+        throw "Password should be at least 6 characters long.";
+    }
+
+    if (passwd.match(/[A-Z]+/g) === null) {
+        throw "Password needs to be at least one uppercase character.";
+    }
+
+    if (passwd.match(/[0-9]+/g) === null) {
+        throw "Password needs to be at least one number.";
+    }
+
+    if (passwd.match(/[^a-zA-Z0-9]+/g) === null) {
+        throw "Password needs to be at least one special character.";
+    }
+
     return passwd;
 }
 
+function checkStringArray(arr, varName) {
 
-// helper functions for single character checks
-function isNumber(char) {
-    return char >= "0" && char <= "9";
-}
+    //We will allow an empty array for this,
+    //if it's not empty, we will make sure all tags are strings
 
-function isLetter(char) {
-    return char.toLowerCase() !== char.toUpperCase();
-}
+    let arrayInvalidFlag = false;
 
-function isUppercaseLetter(char) {
-    if (!isLetter(char)) return false;
-    return char == char.toUpperCase();
-}
+    if (!arr || !Array.isArray(arr))
+        throw `You must provide an array of ${varName}`;
+    for (i in arr) {
+        if (typeof arr[i] !== 'string' || arr[i].trim().length === 0) {
+            arrayInvalidFlag = true;
+            break;
+        }
+        arr[i] = arr[i].trim();
+    }
 
-function isLowerCaseLetter(char) {
-    if (!isLetter(char)) return false;
-    return char == char.toLowerCase();
-}
-
-function checkStringArray(arr) {
-
+    if (arrayInvalidFlag)
+        throw `One or more elements in ${varName} array is not a string or is an empty string`;
     return arr;
+
 }
 
 function checkUrl(url) {
@@ -266,13 +273,16 @@ function readJsonFile(json_path) {
 
 function checkUsername(username) {
 
-    const regUsername = /[a-zA-Z\d ]+/g;
-    if (typeof username !== 'string') throw 'Error: username should be a string';
-    username = username.trim();
-    if (username.length < 4) throw 'Error: usermane should be at least 4 characters long';
-    let regReslt = username.replace(regUsername, '');
-    if (!regReslt.length === 0) throw 'Error: username only include alphanumeric characters';
-    username = username.toLowerCase();
+    username = checkString(username);
+    
+    if (username.match(/[^a-zA-Z0-9]+/g) !== null) {
+        throw 'Username shoule not contain special characters.';
+    }
+
+    if (username.length < 4) {
+        throw "Username too short.";
+    }
+
     return username;
 }
 

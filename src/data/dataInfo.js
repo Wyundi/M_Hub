@@ -60,7 +60,6 @@ const createData = async (data) => {
     const dataInfoCollection = await dataInfo();
 
     const insertInfo = await dataInfoCollection.insertOne(newData);
-
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Could not add data';
 
