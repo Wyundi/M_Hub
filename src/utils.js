@@ -113,9 +113,17 @@ function checkEmail(email) {
 
     email = checkString(email);
     email = email.toLowerCase();
-
-    return email; 
     // all email should be converted into lower for deduplication and some other purpose
+
+    const result = email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    if (!result) {
+        throw "Your inputed email is invalid"
+    }
+
+    return email; // depend on how we want this to work, this could be return or not
 }
 
 function checkId(id, varName) {
