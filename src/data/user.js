@@ -1,13 +1,20 @@
 const mongoCollections = require('../config/mongoCollections');
 const user = mongoCollections.user;
 const {ObjectId} = require('mongodb');
+const bcrypt = require("bcrypt");
+const saltRounds = 6;
 
 const utils = require("../utils");
+
+/*
+add username to user_info so that we can login via username and email
+*/ 
 
 const createUser = async (user_info) => {
     /*
     user_info.first_name,
     user_info.last_name,
+    user_ino.username,
     user_info.email,
     user_info.gender,
     user_info.location,
@@ -19,7 +26,7 @@ const createUser = async (user_info) => {
 
     first_name = utils.checkString(user_info.first_name);
     last_name = utils.checkString(user_info.last_name);
-
+    username = utils.checkUsername(user_info.username);
     email = utils.checkEmail(user_info.email);
     gender = utils.checkGender(user_info.gender);
     loc = utils.checkLocation(user_info.location);
@@ -31,11 +38,18 @@ const createUser = async (user_info) => {
 
     passwd = utils.hash(passwd);
 
+    // check if same username/email exists
+    const userInfoCollection = await user();
+    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: username, $options: 'i'}});
+    const userFoundByUsername = await userInfoCollection.findOne({username: {$regex: username, $options: 'i'}});
+    if (userFoundByEmail || userFoundByUsername) throw 'Error: the username/email is already used!';
+
     // add user
 
     let newUser = {
         first_name: first_name,
         last_name: last_name,
+        username: username,
         email: email,
         gender: gender,
         location: loc,
@@ -54,6 +68,8 @@ const createUser = async (user_info) => {
     const newId = insertInfo.insertedId.toString();
 
     const user_db = await getUseraById(newId);
+
+    // return 'user successfully created!'   ???
     return user_db;
 
 };
@@ -72,7 +88,7 @@ const getAllUser = async () => {
 
 };
 
-const getUseraById = async (userId) => {
+const getUserById = async (userId) => {
 
     id = utils.checkId(userId, 'user id');
 
@@ -86,8 +102,9 @@ const getUseraById = async (userId) => {
 
 };
 
-const getUserByNameOrEmail = async (str) => {
-
+const getUserByUsernameOrEmail = async (str) => {
+    // code goes here
+    
     return 0;
 };
 
@@ -109,36 +126,137 @@ const removeUser = async (userId) => {
 };
 
 const updateUser = async (userId, user_info) => {
+    // don't contain password change, change password see next function
+    // check user_info
+    id = utils.checkId(userId, 'User id');
 
-    return 0;
+    first_name = utils.checkString(user_info.first_name);
+    last_name = utils.checkString(user_info.last_name);
+    username = utils.checkUsername(user_info.username);
+    email = utils.checkEmail(user_info.email);
+    gender = utils.checkGender(user_info.gender);
+    loc = utils.checkLocation(user_info.location);
+    org = utils.checkString(user_info.organization);
+
+    let user = await getUserById(id);
+    if (!user) throw `Could not find user with id ${id}!`;
+
+    let newUser = {
+        first_name: first_name,
+        last_name: last_name,
+        username: username,
+        email: email,
+        gender: gender,
+        location: loc,
+        organization: org,
+        passwd: user.passwd,
+        data: [],
+        model:[]
+    };
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: id},
+        {$set: newUser}
+    );
+
+    if (!updateInfo) throw `Could not update user with origin name ${user.username}!`;
+
+    return `user ${user.username} has been successfully updated!`;
 
 };
 
 const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
-    return 0;
+    // check validation
+    id = utils.checkId(userId);
+    oldPasswd = utils.checkPasswd(oldPasswd);
+    newPasswd = utils.checkPasswd(newPasswd);
+
+    let user = await getUserById(id);
+    if (!user) throw `Could not find user with id ${id}!`;
+    
+    // check old password is correct
+    let compareToMatch = false;
+    try {
+        compareToMatch = await bcrypt.compare(oldPasswd, user.passwd);
+    } catch (e) {
+        // no op
+    }
+
+    if (compareToMatch) {
+        newPasswd = utils.hash(newPasswd);
+        let newUser = user;
+        newUser.passwd = newPasswd;
+
+        const userInfoCollection = await user();
+        const updateInfo = await userInfoCollection.updateOne(
+            {_id: id},
+            {$set: newUser}
+        );
+    
+        if (!updateInfo) throw `Could not change user password!`;
+    
+        return `user ${user.username}'s password has been successfully changed!`;
+
+    } else throw 'old password is not correct, try again!';
+
 
 };
 
 const addData = async (userId, dataId) => {
 
+    // validation
     userId = utils.checkId(userId);
     dataId = utils.checkId(dataId);
+
+    let user = await getUserById(userId);
+    if (!user) throw `Could not find user with id ${userId}!`;
+
+    let newUser = user;
+    newUser.data.push(dataId);
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: newUser}
+    );
+
+    if (!updateInfo) throw `Could not add dataset to user ${user.username}!`;
+
+    return 'dataset added successfully!';
 
 };
 
 const addModel = async (userId, modelId) => {
 
+    // validation
     userId = utils.checkId(userId);
     modelId = utils.checkId(modelId);
+
+    let user = await getUserById(userId);
+    if (!user) throw `Could not find user with id ${userId}!`;
+
+    let newUser = user;
+    newUser.model.push(modelId);
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: newUser}
+    );
+
+    if (!updateInfo) throw `Could not add model to user ${user.username}!`;
+
+    return 'model added successfully!';
 
 };
 
 module.exports = {
     createUser,
     getAllUser,
-    getUseraById,
-    getUserByNameOrEmail,
+    getUserById,
+    getUserByUsernameOrEmail,
     removeUser,
     updateUser,
     changePasswd,

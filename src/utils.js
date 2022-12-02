@@ -1,7 +1,8 @@
 const {ObjectId} = require('mongodb');
 
 // hashing passwd
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const saltRounds = 6;
 
 // read file
 const path = require('path');
@@ -235,7 +236,7 @@ function checkJson(json_path) {
 function hash(passwd) {
 
     passwd = checkPasswd(passwd);
-    hashedPasswd = passwd;
+    const hashedPasswd = bcrypt.hash(passwd, saltRounds);;
 
     return hashedPasswd;
 }
@@ -273,6 +274,19 @@ function readJsonFile(json_path) {
     return json_obj;
 }
 
+function checkUsername(username) {
+
+    const regUsername = /[a-zA-Z\d ]+/g;
+    if (typeof username !== 'string') throw 'Error: username should be a string';
+    username = username.trim();
+    if (username.length < 4) throw 'Error: usermane should be at least 4 characters long';
+    let regReslt = username.replace(regUsername, '');
+    if (!regReslt.length === 0) throw 'Error: username only include alphanumeric characters';
+    username = username.toLowerCase();
+    return username;
+}
+
+
 module.exports = {
 
     // error check
@@ -293,6 +307,7 @@ module.exports = {
     checkUrl,
     checkPath,
     checkJson,
+    checkUsername,
 
     // other help function
     hash,
