@@ -99,20 +99,10 @@ function checkString(str) {
 
 function checkEmail(email) {
 
-    // 
-
     email = checkString(email);
+    email = email.toLowerCase();
 
-    counterA = 0; // counter for @, only one should exist
-    for (let i = 0; i < email.length; i++) {
-        if (email[i] == '@') {
-            counterA++;
-        }
-    }
-
-    if (counterA != 1) throw "The email you provide is invalid"
-
-    return email.toLowerCase(); 
+    return email; 
     // all email should be converted into lower for deduplication and some other purpose
 }
 
