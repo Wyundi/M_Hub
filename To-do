@@ -1,0 +1,18 @@
+/src/utils/                     //Qingyao
+    /*
+
+    checkEmail
+    checkGender
+
+    checkUrl
+    checkPath
+
+    */
+
+/data/comment/                  // YXM
+/data/model/                    // Yundi + Darin
+/ipynb                          // Yundi
+/routes                         // Yundi + whc
+/handlebars                     // whc + Qinyao
+
+/data/user                      // Darin yangyangyang 禁止撸猫
