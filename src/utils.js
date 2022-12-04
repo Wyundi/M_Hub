@@ -141,6 +141,7 @@ function checkGender(gender) {
 
     // ["male", "female"]  
     // according to the professor, gender should be not only male and femail, but also included some other opbtions
+    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "decline to answer"];
 
     gender = checkString(gender);
 
