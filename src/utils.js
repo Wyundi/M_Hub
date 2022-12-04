@@ -146,7 +146,7 @@ function checkGender(gender) {
 
     gender = checkString(gender);
     gender = gender.toLowerCase();
-    
+
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
     }
