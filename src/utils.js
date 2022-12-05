@@ -228,14 +228,26 @@ function checkStringArray(arr, varName) {
 }
 
 function checkUrl(url) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    if (!!pattern.test(url)) throw "Invalid URL"
-    return url;
+    // var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    // '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    // '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    // '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    // '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    // '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    // if (!!pattern.test(url)) throw "Invalid URL"
+    // return url;
+
+    let details
+
+    try {
+        details = new URL(url);
+    } catch (e) {
+        throw "Invalid URL"
+    }
+    if (details.protocol == "http:" || details.protocol == "https:") {
+        return url;
+    }
+    throw "Invalid URL"
 }
 
 function checkPath(path) {
