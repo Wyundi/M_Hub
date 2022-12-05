@@ -45,7 +45,9 @@ router
         }
     })
     // post function post a form of user name and passward and go to user profile page
-    .post(async (req, res) => {});
+    .post(async (req, res) => {
+
+    });
 
 router
     .route('/signup')
@@ -61,6 +63,8 @@ router
         }
     })
     // post function post a form of user info and go to user profile page
-    .post(async (req, res) => {});
+    .post(async (req, res) => {
+        
+    });
 
 module.exports = router;

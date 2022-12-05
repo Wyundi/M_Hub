@@ -1,7 +1,20 @@
+/*
+
+checkEmail                  //Qingyao
+checkGender
+
+checkUrl
+checkPath
+
+*/
+
+
+
 const {ObjectId} = require('mongodb');
 
 // hashing passwd
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const saltRounds = 6;
 
 // read file
 const path = require('path');
@@ -136,23 +149,63 @@ function checkPasswd(passwd) {
 
     /*
 
-    As a general guideline, passwords should consist of 8 to 14 characters
+    As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
 
     - Uppercase and lowercase letters (A-Z and a-z)
 
     - Numeric characters (0-9)
 
+    - special character
+
     */
 
     passwd = checkString(passwd);
 
+    if (passwd.includes(' ')) {
+        throw "Password should not contain spaces.";
+    }
+
+    if (passwd.length < 6 || passwd.length > 14) {
+        throw "Password should be at least 6 characters long.";
+    }
+
+    if (passwd.match(/[A-Z]+/g) === null) {
+        throw "Password needs to be at least one uppercase character.";
+    }
+
+    if (passwd.match(/[0-9]+/g) === null) {
+        throw "Password needs to be at least one number.";
+    }
+
+    if (passwd.match(/[^a-zA-Z0-9]+/g) === null) {
+        throw "Password needs to be at least one special character.";
+    }
+
     return passwd;
 }
 
-function checkStringArray(arr) {
+function checkStringArray(arr, varName) {
 
+    //We will allow an empty array for this,
+    //if it's not empty, we will make sure all tags are strings
+
+    let arrayInvalidFlag = false;
+
+    if (!arr || !Array.isArray(arr))
+        throw `You must provide an array of ${varName}`;
+    for (i in arr) {
+        if (typeof arr[i] !== 'string' || arr[i].trim().length === 0) {
+            arrayInvalidFlag = true;
+            break;
+        }
+        arr[i] = arr[i].trim();
+    }
+
+    if (arrayInvalidFlag)
+        throw `One or more elements in ${varName} array is not a string or is an empty string`;
     return arr;
+
 }
 
 function checkUrl(url) {
@@ -176,7 +229,7 @@ function checkJson(json_path) {
 function hash(passwd) {
 
     passwd = checkPasswd(passwd);
-    hashedPasswd = passwd;
+    const hashedPasswd = bcrypt.hash(passwd, saltRounds);;
 
     return hashedPasswd;
 }
@@ -214,6 +267,22 @@ function readJsonFile(json_path) {
     return json_obj;
 }
 
+function checkUsername(username) {
+
+    username = checkString(username);
+    
+    if (username.match(/[^a-zA-Z0-9]+/g) !== null) {
+        throw 'Username shoule not contain special characters.';
+    }
+
+    if (username.length < 4) {
+        throw "Username too short.";
+    }
+
+    return username;
+}
+
+
 module.exports = {
 
     // error check
@@ -234,6 +303,7 @@ module.exports = {
     checkUrl,
     checkPath,
     checkJson,
+    checkUsername,
 
     // other help function
     hash,
