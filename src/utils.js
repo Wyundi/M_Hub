@@ -237,6 +237,36 @@ function checkComment(comment) {
     return comment;
 }
 
+function checkModelName(modelName) {
+    if (!modelName) throw `Error: You must provide a model name`;
+    if (typeof modelName !== 'string') throw `Error: model name must be a string`;
+    modelName = modelName.trim();
+    if (modelName.length == 0) throw 'Error: model name cannot be empty';
+    const pattern = /\p{S}/gu;
+    if (modelName.match(pattern)) throw 'Error: model name cannot contain special characters';
+    return modelName;
+}
+
+function checkModelCategory(modelCategory) {
+    if (!modelCategory) throw `Error: You must provide a model category`;
+    if (typeof modelCategory !== 'string') throw `Error: model category must be a string`;
+    modelCategory = modelCategory.trim();
+    if (modelCategory.length == 0) throw 'Error: model category cannot be empty';
+    const pattern = /\p{S}|\p{P}|\p{N}/gu;
+    if (modelCategory.match(pattern)) throw 'Error: model category cannot contain special characters, punctuations or numbers';
+    return modelCategory;
+}
+
+function checkModelDescription(description) {
+    if (!description) throw `Error: You must provide a model description`;
+    if (typeof description !== 'string') throw `Error: model description must be a string`;
+    description = description.trim();
+    if (description.length == 0) throw 'Error: model description cannot be empty';
+    const pattern = /^[\p{S}\p{N}\p{P}\s]+$/gu;
+    if (description.match(pattern)) throw 'Error: model description cannot only contain punctuation or special character or numbers.';
+    return description;
+}
+
 
 module.exports = {
 
@@ -260,6 +290,10 @@ module.exports = {
     checkJson,
     checkUsername,
     checkComment,
+
+    checkModelName,
+    checkModelCategory,
+    checkModelDescription,
 
     // other help function
     hash,
