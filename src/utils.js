@@ -252,6 +252,10 @@ function checkUrl(url) {
 
 function checkPath(path) {
 
+    const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
+    
+    if (!result) throw "Invalid path"
+
     return path;
 }
 
