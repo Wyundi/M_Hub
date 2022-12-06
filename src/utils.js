@@ -227,6 +227,16 @@ function checkUsername(username) {
     return username;
 }
 
+function checkComment(comment) {
+    if (!comment) throw `Error: You must provide a comment`;
+    if (typeof comment !== 'string') throw `Error: comment must be a string`;
+    comment = comment.trim();
+    if (comment.length == 0) throw 'Error: comment cannot be empty';
+    const pattern = /^[\p{S}\p{N}\p{P}\s]+$/gu;
+    if (comment.match(pattern)) throw 'Error: comment cannot only contain punctuation or special character or numbers.';
+    return comment;
+}
+
 
 module.exports = {
 
@@ -249,6 +259,7 @@ module.exports = {
     checkPath,
     checkJson,
     checkUsername,
+    checkComment,
 
     // other help function
     hash,
