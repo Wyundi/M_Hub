@@ -10,7 +10,7 @@ const createModel = async (model_info) => {
     model_info.category,
     model_info.description,
     model_info.link,
-    model_info.structure,
+    model_info.onnx_path,
     model_info.input,
     model_info.output,
     model_info.userId,
