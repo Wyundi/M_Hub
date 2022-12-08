@@ -3,7 +3,7 @@ const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
 
 const userData = require('./user');
-const rawData = require('./raw');
+const rawData = require('./raw')
 
 const utils = require("../utils");
 
