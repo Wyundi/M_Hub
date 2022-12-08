@@ -50,7 +50,14 @@ http://localhost:3000/login
 
                 <label for="gender">
                     Gender
-                    <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input">
+                    <select name="user_gender" id="gender">
+                        <option selected="selected" disabled="disabled"  style='display: none' value=''></option>
+                        <option value="woman">Woman</option>
+                        <option value="man">Man</option>
+                        <option value="transgender">Transgender</option>
+                        <option value="non-binary">Non-binary/non-conforming</option>
+                        <option value="norespond">Prefer not to respond</option>
+                    </select>
                 </label>
 
                 <br>

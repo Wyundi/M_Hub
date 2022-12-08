@@ -252,6 +252,27 @@ const addModel = async (userId, modelId) => {
 
 };
 
+const checkUser = async (username, password) => {
+    if (!username || !password) throw 'Error: please enter a username or password';
+    username = utils.checkUsername(username);
+    passwd = utils.checkPasswd(password);
+  
+    const userCollection = await user();
+    const userFound = await userCollection.findOne({username: {$regex: username, $options: 'i'}});
+    if(userFound === null) throw 'Error: username or password is invalid';
+  
+    let compareToMatch = false;
+    try {
+      compareToMatch = await bcrypt.compare(passwd, userFound.passwd);
+    } catch (e) {
+      //no op
+    }
+  
+    if (compareToMatch) {
+      return {authenticated: true};
+    } else throw 'Error: password is not valid'
+  };
+
 module.exports = {
     createUser,
     getAllUser,
@@ -261,5 +282,6 @@ module.exports = {
     updateUser,
     changePasswd,
     addData,
-    addModel
+    addModel,
+    checkUser,
 };
