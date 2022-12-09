@@ -1,0 +1,35 @@
+<h2> {{data_name}} </h2>
+
+<h3> description </h3>
+<p> {{description}} </p>
+
+<h3> features </h3>
+<ul>
+    {{#each features}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+
+<h3> length </3>
+<p> {{length}} </p>
+
+<h3> source </3>
+<p> <a href="{{source}}"> {{source}} </a> </p>
+
+<h3> raw data </h3>
+<a href="{{raw_data_path}}"> link to raw data </a>
+
+<h3> user list </h3>
+<ul>
+    {{#each user_list}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+
+<h3> comment </h3>
+<ul>
+    {{#each comment}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+

@@ -26,7 +26,7 @@ const createData = async (data) => {
     length = utils.checkInt(data.length);
     source = utils.checkUrl(data.source);
     file_path = utils.checkPath(data.file_path);
-    userId = utils.checkId(data.userId);
+    userId = utils.checkId(data.userId, "user id");
     
     // check valid json file
 
@@ -181,37 +181,28 @@ const updateData = async (dataId, newData) => {
 
 const addUser = async (dataId, userId) => {
     
-    // check id validation
-    id = utils.checkId(dataId);
+    // error check
+    dataId = utils.checkId(dataId, "data id");
+    userId = utils.checkId(userId, "user id");
 
-    // check userId validation
-    userId = utils.checkId(userId);
-
-    let data_db = await getDataById(id);
+    // add user
+    let data_db = await getDataById(dataId);
     if (!data_db) throw `Could not find data with id ${dataId}!`;
-    
-    let newData = {
-        data_name: data_db.data_name,
-        description: data_db.description,
-        features: data_db.features,
-        length: data_db.length,
-        source: data_db.source,
-        raw_data: data_db.raw_data,
-        user_list: data_db.user_list,
-        comment: data_db.comment
-    };
-    newData.user_list.push(userId);
 
-
+    // add user to model
     const dataInfoCollection = await dataInfo();
-    const updateInfo = await dataInfoCollection.updateOne(
-        {_id: ObjectId(id)},
-        {$set: newData}
-    )
+    const updatedInfo = await dataInfoCollection
+        .updateOne( {_id: ObjectId(dataId)}, {$push: {user_list: userId}} );
 
-    if (!updateInfo) throw `Could not add user to ${data_db.name}`;
-    
-    return 'UserId successfully added!';
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add user successfully';
+    }
+
+    data_db = await getDataById(dataId);
+
+    data_db._id = data_db._id.toString();
+
+    return data_db;
 
 };
 

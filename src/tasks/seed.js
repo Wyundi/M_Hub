@@ -14,19 +14,26 @@ async function main() {
   
     // add user
     let user1 = await userData.createUser(fakeData.user1);
+    user1 = user1.insertedUser;
     let user2 = await userData.createUser(fakeData.user2);
+    user2 = user2.insertedUser;
     let user3 = await userData.createUser(fakeData.user3);
+    user3 = user3.insertedUser;
 
     // add data
     let data1 = fakeData.data1;
     data1.userId = user1._id.toString();
-    data1 = await dataInfoData.createData(fakeData.data1);
+    data1 = await dataInfoData.createData(data1);
 
     let data2 = fakeData.data2;
     data2.userId = user2._id.toString();
-    data2 = await dataInfoData.createData(fakeData.data2);
+    data2 = await dataInfoData.createData(data2);
 
     // add model
+    let model1 = fakeData.model1;
+    model1.userId = user1._id.toString();
+    model1.dataId = data1._id.toString();
+    model1 = await modelData.createModel(model1);
 
     // close connect
     await connection.closeConnection();
