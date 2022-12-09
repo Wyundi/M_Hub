@@ -142,7 +142,7 @@ function checkGender(gender) {
     // ["male", "female"]  
     // according to the professor, gender should be not only male and femail, but also included some other opbtions
 
-    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "decline to answer"];
+    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "prefer not to answer"];
 
     gender = checkString(gender);
     gender = gender.toLowerCase();
@@ -228,15 +228,6 @@ function checkStringArray(arr, varName) {
 }
 
 function checkUrl(url) {
-    // var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    // '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    // '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    // '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    // '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    // '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    // if (!!pattern.test(url)) throw "Invalid URL"
-    // return url;
-
     let details
 
     try {

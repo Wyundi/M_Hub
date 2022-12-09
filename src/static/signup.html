@@ -48,12 +48,29 @@ http://localhost:3000/login
 
                 <br>
 
-                <label for="gender">
+                <!-- <label for="gender">
                     Gender
                     <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input">
-                </label>
+                </label> -->
+                <p>Gender</p>
+                <input type="radio" id="male" name="user_gender" value="male">
+                <label for="male">Male</label><br>
+                <input type="radio" id="female" name="user_gender" value="female">
+                <label for="female">Female</label><br>
+                <input type="radio" id="transmale" name="user_gender" value="transmale">
+                <label for="female">Transmale</label><br>
+                <input type="radio" id="transfemale" name="user_gender" value="transfemale">
+                <label for="female">Transfemale</label><br>
+                <input type="radio" id="dengerqueer" name="user_gender" value="dengerqueer">
+                <label for="female">Dengerqueer</label><br>
+                <input type="radio" id="something_else" name="user_gender" value="something_else">
+                <label for="female">Something else</label><br>
+                <input type="radio" id="prefer_not_to_answer" name="user_gender" value="prefer_not_to_answer">
+                <label for="javascript">Prefer not to Answer</label>
 
                 <br>
+
+                <!-- "male", "female", "transmale", "transfemale", "dengerqueer", "something else", "prefer not to answer" -->
 
                 <label for="location">
                     Location
@@ -87,7 +104,6 @@ http://localhost:3000/login
                 <button type="button"> <a href="../"> back to home page </a></button>
 
             </form>
-
 
 
         </main>
