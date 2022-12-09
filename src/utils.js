@@ -282,6 +282,25 @@ function checkUsername(username) {
     return username;
 }
 
+function checkComment(id, username, comment) {
+
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
+    
+    // if (!comment) {
+    //     throw 'Miss the content of comment';
+    // }
+    // if (typeof(comment) !== 'string') {
+    //     throw 'The type of comment content should be STRING';
+    // }
+
+    // comment = comment.trim();
+    // if (comment.length == 0) {
+    //     throw 'Comment content can not be all spaces'
+    // }
+}
+
 
 module.exports = {
 
@@ -304,6 +323,8 @@ module.exports = {
     checkPath,
     checkJson,
     checkUsername,
+
+    checkComment,
 
     // other help function
     hash,
