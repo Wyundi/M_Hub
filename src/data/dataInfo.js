@@ -3,7 +3,7 @@ const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
 
 const userData = require('./user');
-const rawData = require('./raw');
+const rawData = require('./raw')
 
 const utils = require("../utils");
 
@@ -60,7 +60,6 @@ const createData = async (data) => {
     const dataInfoCollection = await dataInfo();
 
     const insertInfo = await dataInfoCollection.insertOne(newData);
-
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
         throw 'Could not add data';
 
