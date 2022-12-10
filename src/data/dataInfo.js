@@ -3,7 +3,7 @@ const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
 
 const userData = require('./user');
-const rawData = require('./raw')
+const rawData = require('./raw');
 
 const utils = require("../utils");
 
@@ -92,15 +92,28 @@ const getAllData = async () => {
 
 const getDataById = async (dataId) => {
 
-    id = utils.checkId(dataId, 'data id');
+    dataId = utils.checkId(dataId, 'data id');
 
     const dataInfoCollection = await dataInfo();
-    const data_res = await dataInfoCollection.findOne({_id: ObjectId(id)});
+    const data_res = await dataInfoCollection.findOne({_id: ObjectId(dataId)});
     if (data_res === null) throw 'No data with that id';
 
     data_res._id = data_res._id.toString();
 
     return data_res;
+
+};
+
+const getRawData = async (dataId) => {
+
+    // error check
+    dataId = utils.checkId(dataId, 'data id');
+
+    // get data
+    let data_db = getDataById(dataId);
+    let raw_data_path = data_db.file_path;
+
+    return raw_data_path;
 
 };
 
@@ -210,6 +223,7 @@ module.exports = {
     createData,
     getAllData,
     getDataById,
+    getRawData,
     removeData,
     updateData,
     addUser

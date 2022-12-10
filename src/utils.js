@@ -227,22 +227,6 @@ function checkJson(json_path) {
 
 // json
 function readJsonFile(json_path) {
-    
-    // fake json object for test
-    // json_obj = {
-    //     "feature1": {
-    //         "0": 0.25,
-    //         "1": 0.7
-    //     },
-    //     "feature2": {
-    //         "0": 0.23,
-    //         "1": 0.56
-    //     },
-    //     "target": {
-    //         "0": 1,
-    //         "1": 0
-    //     }
-    // }
 
     let json_string = undefined;
     let json_obj = undefined;
