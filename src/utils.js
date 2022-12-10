@@ -1,15 +1,3 @@
-/*
-
-checkEmail                  //Qingyao
-checkGender
-
-checkUrl
-checkPath
-
-*/
-
-
-
 const {ObjectId} = require('mongodb');
 
 // hashing passwd

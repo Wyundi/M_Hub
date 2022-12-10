@@ -65,10 +65,6 @@ const createData = async (data) => {
 
     const newId = insertInfo.insertedId.toString();
 
-    // add dataId to user
-
-    await userData.addData(userId, newId);
-
     // return new data
 
     const data_db = await getDataById(newId);
