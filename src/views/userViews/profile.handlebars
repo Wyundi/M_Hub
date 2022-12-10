@@ -1,0 +1,43 @@
+{{!--
+
+If the user is logged in, and 'GET /protected' endpoint is called, you will render this view that displays:
+-Username (which you stored in the session when they logged in) for the currently logged in user
+-The current date/time
+
+Also, you will need to have a hyperlink at the bottom of the page to /logout.
+
+--}}
+
+<h2> User Profile </h2>
+
+<p> {{username}} </p>
+<p> Time: {{time}} </p>
+<p> email: {{email}} </p>
+<p> Location: {{location}} </p>
+<p> organization: {{organization}} </p>
+
+<button type="button" class="btn"> <a href="../user/edit"> edit profile </a></button>
+
+<h3> Data List </h3>
+
+<ul>
+    {{#each data_list}}
+        <li>
+            <a href="./data/{{_id}}"> {{data_name}} </a>
+            <p> {{description}} </p>
+        </li>
+    {{/each}}
+</ul>
+
+<h3> Model List </h3>
+
+<ul>
+    {{#each model_list}}
+        <li>
+            <a href="./model/{{_id}}"> {{model_name}} </a>
+            <p> {{description}} </p>
+        </li>
+    {{/each}}
+</ul>
+
+<a href="../logout"> logout </a>

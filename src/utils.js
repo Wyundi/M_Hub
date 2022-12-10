@@ -225,15 +225,6 @@ function checkJson(json_path) {
     return json_obj;
 }
 
-// hash passwd
-function hash(passwd) {
-
-    passwd = checkPasswd(passwd);
-    const hashedPasswd = bcrypt.hash(passwd, saltRounds);;
-
-    return hashedPasswd;
-}
-
 // json
 function readJsonFile(json_path) {
     
@@ -282,6 +273,9 @@ function checkUsername(username) {
     return username;
 }
 
+function prior(first_ele, second_ele) {
+    return first_ele ? first_ele : second_ele;
+}
 
 module.exports = {
 
@@ -306,6 +300,6 @@ module.exports = {
     checkUsername,
 
     // other help function
-    hash,
     readJsonFile,
+    prior
 }
