@@ -3,10 +3,14 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const static = express.static(__dirname + '/public');
-
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 app.use(
   session({
@@ -17,12 +21,45 @@ app.use(
   })
 );
 
-app.use('/public', static);
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use((req, res, next) => {
+  let time = new Date().toUTCString();
+  let method = req.method;
+  let url = req.originalUrl;
+  let user = req.session.user ? 'Authenticated User' : 'Non-Authenticated User';
+  console.log(`[${time}]: ${method}, ${url}, ${(user)}`);
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+  next();
+});
+
+app.use('/user', (req, res, next) => {
+
+  if (!req.session.user) {
+      return res.redirect('/forbidden');
+  } else {
+      next();
+  }
+  
+});
+
+app.use('/data', (req, res, next) => {
+
+  if (!req.session.user) {
+      return res.redirect('/forbidden');
+  } else {
+      next();
+  }
+  
+});
+
+app.use('/model', (req, res, next) => {
+
+  if (!req.session.user) {
+      return res.redirect('/forbidden');
+  } else {
+      next();
+  }
+  
+});
 
 configRoutes(app);
 
