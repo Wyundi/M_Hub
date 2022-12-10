@@ -13,22 +13,22 @@ app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.use(
-  session({
-      name: 'AuthCookie',
-      secret: 'some secret string!',
-      resave: false,
-      saveUninitialized: true
-  })
+    session({
+        name: 'AuthCookie',
+        secret: "This is a secret.. shhh don't tell anyone",
+        resave: false,
+        saveUninitialized: true
+    })
 );
 
 app.use((req, res, next) => {
-  let time = new Date().toUTCString();
-  let method = req.method;
-  let url = req.originalUrl;
-  let user = req.session.user ? 'Authenticated User' : 'Non-Authenticated User';
-  console.log(`[${time}]: ${method}, ${url}, ${(user)}`);
+    let time = new Date().toUTCString();
+    let method = req.method;
+    let url = req.originalUrl;
+    let user = req.session.user ? 'Authenticated User' : 'Non-Authenticated User';
+    console.log(`[${time}]: ${method}, ${url}, ${(user)}`);
 
-  next();
+    next();
 });
 
 app.use('/user', (req, res, next) => {
@@ -43,22 +43,22 @@ app.use('/user', (req, res, next) => {
 
 app.use('/data', (req, res, next) => {
 
-  if (!req.session.user) {
-      return res.redirect('/forbidden');
-  } else {
-      next();
-  }
-  
+    if (!req.session.user) {
+        return res.redirect('/forbidden');
+    } else {
+        next();
+    }
+    
 });
 
 app.use('/model', (req, res, next) => {
 
-  if (!req.session.user) {
-      return res.redirect('/forbidden');
-  } else {
-      next();
-  }
-  
+    if (!req.session.user) {
+        return res.redirect('/forbidden');
+    } else {
+        next();
+    }
+    
 });
 
 configRoutes(app);
