@@ -12,10 +12,11 @@ router
         try {
             return res.sendFile(path.resolve('./static/homepage.html'));
         } catch (e) {
-            return res.status(500).render('./error', {
-                error_status: '500',
-                error_message: "Server Error."
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }    
     });
 
@@ -35,7 +36,11 @@ router
             data_list = await userData.getDataList(userId);
             model_list = await userData.getModelList(userId);
         } catch (e) {
-            return res.status(400).json({"400 Error": e});
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
 
         try {
@@ -49,10 +54,11 @@ router
                 model_list: model_list
             });
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: "Server Error."
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     })
 
@@ -75,10 +81,11 @@ router
                 organization: user_db.organization
             })
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: "Server Error."
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     })
     .post(async (req, res) => {
@@ -89,10 +96,11 @@ router
         try {
             user_db = await userData.getUserById(userId);
         } catch (e) {
-            return res.status(400).render('./error/errorPage', {
-                error_status: '400',
-                error_message: "400 Error: " + e
-            })
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
 
         let newUser = undefined;
@@ -111,10 +119,11 @@ router
 
             return res.redirect("/user");
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: "500 Error: " + e
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     })
 
@@ -137,10 +146,11 @@ router
                 return res.status(200).render("./userViews/login");
             }
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: "Server Error."
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     })
     // post function post a form of user name and passward and go to user profile page
@@ -164,8 +174,10 @@ router
                 res.redirect("./user");
             }
         } catch (e) {
-            return res.status(400).render("./userViews/login", {
-                error_msg: "400 Error:" + e
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
             });
         }
     })
@@ -182,10 +194,11 @@ router
                 return res.status(200).render("./userViews/signup");
             }
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: "Server Error."
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     })
     // post function for create user and go to login page
@@ -231,10 +244,11 @@ router
             }
             
         } catch (e) {
-            return res.status(500).render('./error/errorPage', {
-                error_status: '500',
-                error_message: e
-            })
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }
     });
 
@@ -246,7 +260,11 @@ router
             req.session.destroy();
             return res.status(200).render("./userViews/logout");
         } catch (e) {
-            return res.status(500).json("500 Error: Internal Server Error.");
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }        
     })
 
@@ -256,7 +274,11 @@ router
         try {
             return res.status(200).render("./error/forbiddenAccess");
         } catch (e) {
-            return res.status(500).json("500 Error: Internal Server Error.");
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
         }   
     })
 

@@ -17,9 +17,10 @@ router
             dataId = utils.checkId(req.params.id, "data id");
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
-            return res.status(400).render("./error/errorPage", {
-                error_status: 400,
-                error_message: "400 Error:" + e
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
             });
         }
 
@@ -31,14 +32,15 @@ router
                 features: data_db.features,
                 length: data_db.length,
                 source: data_db.source,
-                raw_data_path: `../../rawdata/:${dataId}`,
+                raw_data_path: `../../rawdata/${dataId}`,
                 user_list: data_db.user_list,
                 comment: data_db.comment
             });
         } catch (e) {
-            return res.status(400).render("./error/errorPage", {
-                error_status: 500,
-                error_message: "500 Error:" + e
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
             });
         }
     })
@@ -48,6 +50,35 @@ router
 
 router
     .route("/rawdata/:id")
-    .get(async (req, res) => {})
+    .get(async (req, res) => {
+
+        let dataId = undefined;
+        let raw_data_obj = undefined;
+        
+        let keys = undefined;
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+            raw_data_obj = await dataInfoData.getRawData(dataId);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
+        }
+
+        try {
+            res.status(200).render("./data/rawData", {
+                raw_data_obj: raw_data_obj
+            })
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: `${error_status} Error:` + e
+            });
+        }
+    })
 
 module.exports = router;

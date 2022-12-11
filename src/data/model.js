@@ -52,9 +52,6 @@ const createModel = async (model_info) => {
 
     const newId = insertInfo.insertedId.toString();
 
-    // add model to user
-    await userData.addModel(userId, newId);
-
     const model_db = await getModelById(newId);
     return model_db;
 };
