@@ -20,10 +20,12 @@ Also, you will need to have a hyperlink at the bottom of the page to /logout.
 
 <h3> Data List </h3>
 
+<button type="button" class="btn"> <a href="../data"> Create New Data </a></button>
+
 <ul>
     {{#each data_list}}
         <li>
-            <a href="./data/{{_id}}"> {{data_name}} </a>
+            <a href="./data/info/{{_id}}"> {{data_name}} </a>
             <p> {{description}} </p>
         </li>
     {{/each}}
@@ -31,13 +33,16 @@ Also, you will need to have a hyperlink at the bottom of the page to /logout.
 
 <h3> Model List </h3>
 
+<button type="button" class="btn"> <a href="../model"> Create New Model </a></button>
+
 <ul>
     {{#each model_list}}
         <li>
-            <a href="./model/{{_id}}"> {{model_name}} </a>
+            <a href="./model/info/{{_id}}"> {{model_name}} </a>
             <p> {{description}} </p>
         </li>
     {{/each}}
 </ul>
 
-<a href="../logout"> logout </a>
+<button type="button" class="btn"> <a href="../logout"> logout </a></button>
+<button type="button" class="btn"> <a href="../"> back to home page </a></button>

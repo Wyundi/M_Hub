@@ -3,9 +3,11 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
+app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -59,6 +61,16 @@ app.use('/data', (req, res, next) => {
 });
 
 app.use('/model', (req, res, next) => {
+
+    if (!req.session.user) {
+        return res.redirect('/forbidden');
+    } else {
+        next();
+    }
+    
+});
+
+app.use('/search', (req, res, next) => {
 
     if (!req.session.user) {
         return res.redirect('/forbidden');

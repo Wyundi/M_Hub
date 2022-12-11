@@ -1,0 +1,43 @@
+<h2> {{model_name}} </h2>
+
+<h3> category </h3>
+<p> {{category}} </p>
+
+<h3> description </h3>
+<p> {{description}} </p>
+
+<h3> link </3>
+<p> <a href="{{link}}"> {{link}} </a> </p>
+
+<h3> input </h3>
+<p> {{input}} </p>
+
+<h3> output </3>
+<p> {{output}} </p>
+
+<h3> user list </h3>
+<ul>
+    {{#each user_list}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+
+<h3> data list </h3>
+<ul>
+    {{#each data_list}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+
+<h3> comment </h3>
+<ul>
+    {{#each comment}}
+        <li> {{this}} </li>
+    {{/each}}
+</ul>
+
+<br>
+<br>
+<button type="button" class="btn"> <a href="../edit/{{modelId}}"> edit </a></button>
+<br>
+<button type="button" class="btn"> <a href="../../"> back to home page </a></button>
