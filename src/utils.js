@@ -267,6 +267,27 @@ function checkModelDescription(description) {
     return description;
 }
 
+function checkStringPattern(str, pattern, varName) {
+    if (!str) throw `Error: You must provide ${varName}`;
+    if (typeof str !== 'string') throw `Error: ${varName} must be string`;
+    str = str.trim();
+    if (str.length == 0) throw `Error: ${varName} length cannot be 0`;
+    const pattern1 = /^[\p{S}\p{N}\p{P}\s]+$/gu;
+    if (str.match(pattern1)) throw `Error: ${varName} cannot only contain punctuation or special character or numbers.`;
+    if (str.match(pattern)) throw `Error: ${varName} contains illegal characters.`;
+    return str;
+}
+
+function checkModelLink(link, varName) {
+    if (!link) throw `Error: You must provide ${varName}`;
+    if (typeof link !== 'string') throw `Error: ${varName} must be string`;
+    link = link.trim();
+    if (link.length == 0) throw `Error: ${varName} length cannot be 0`;
+    const Expression =  /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
+    if (RegExp(Expression).test(link)) throw `Error: ${varName} is not a valid link`;
+    return link;
+}
+
 
 module.exports = {
 
@@ -294,6 +315,8 @@ module.exports = {
     checkModelName,
     checkModelCategory,
     checkModelDescription,
+    checkStringPattern,
+    checkModelLink,
 
     // other help function
     hash,

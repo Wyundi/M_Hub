@@ -9,8 +9,8 @@ const createModel = async (model_info) => {
     model_info.name,
     model_info.category,
     model_info.description,
-    model_info.link, //example?
-    model_info.structure, //example?
+    model_info.link, 
+    model_info.structure, 
     model_info.input,
     model_info.output,
     model_info.userId,
@@ -20,10 +20,10 @@ const createModel = async (model_info) => {
     modelName = utils.checkModelName(model_info.name);
     modelCategory = utils.checkModelCategory(model_info.category);
     modelDescription = utils.checkModelDescription(model_info.description);
-    // modelLink = utils.checkModelLink(model_info.link);
-    // modelStructure = utils.checkModelStructure(model_info.structure);
-    // modelInput = utils.checkModelInput(model_info.input);
-    // modelOutput = utils.checkModelOutput(model_info.output);
+    modelLink = utils.checkModelLink(model_info.link, 'model link');
+    modelStructure = utils.checkStringPattern(model_info.structure, /\p{S}|\p{P}|\p{N}/, 'model structure');
+    modelInput = utils.checkStringPattern(model_info.input, /\p{S}|\p{P}/, 'model input');
+    modelOutput = utils.checkStringPattern(model_info.output, /\p{S}|\p{P}/, 'model output');
     modelUserId = utils.checkId(model_info.userId, 'user id');
     modelDataId = utils.checkId(model_info.dataId, 'data id');
 
@@ -33,10 +33,10 @@ const createModel = async (model_info) => {
         name: modelName,
         category: modelCategory,
         description: modelDescription,
-        // link: modelLink,
-        // structure: modelStructure,
-        // input: modelInput,
-        // output: modelOutput,
+        link: modelLink,
+        structure: modelStructure,
+        input: modelInput,
+        output: modelOutput,
         userId: modelUserId,
         dataId: modelUserId
     }
@@ -87,10 +87,10 @@ const updateModel = async (model_info) => {
     modelName = utils.checkModelName(model_info.name);
     modelCategory = utils.checkModelCategory(model_info.category);
     modelDescription = utils.checkModelDescription(model_info.description);
-    // modelLink = utils.checkModelLink(model_info.link);
-    // modelStructure = utils.checkModelStructure(model_info.structure);
-    // modelInput = utils.checkModelInput(model_info.input);
-    // modelOutput = utils.checkModelOutput(model_info.output);
+    modelLink = utils.checkModelLink(model_info.link, 'model link');
+    modelStructure = utils.checkStringPattern(model_info.structure, /\p{S}|\p{P}|\p{N}/, 'model structure');
+    modelInput = utils.checkStringPattern(model_info.input, /\p{S}|\p{P}/, 'model input');
+    modelOutput = utils.checkStringPattern(model_info.output, /\p{S}|\p{P}/, 'model output');
     modelUserId = utils.checkId(model_info.userId, 'user id');
     modelDataId = utils.checkId(model_info.dataId, 'data id');
 
@@ -99,10 +99,10 @@ const updateModel = async (model_info) => {
         name: modelName,
         category: modelCategory,
         description: modelDescription,
-        // link: modelLink,
-        // structure: modelStructure,
-        // input: modelInput,
-        // output: modelOutput,
+        link: modelLink,
+        structure: modelStructure,
+        input: modelInput,
+        output: modelOutput,
         userId: modelUserId,
         dataId: modelUserId
     };
@@ -115,9 +115,17 @@ const updateModel = async (model_info) => {
     return await getModelById(modelId);
 };
 
-const addUser = async (modelId, userId) => {};
+const addUser = async (modelId, userId) => {
+    modelId = utils.checkId(modelId, 'model id');
+    userId = utils.checkId(userId, 'user id');
 
-const addData = async (modelId, dataId) => {};
+
+
+};
+
+const addData = async (modelId, dataId) => {
+    
+};
 
 module.exports = {
     createModel,
