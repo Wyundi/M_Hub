@@ -42,7 +42,7 @@ const createModel = async (model_info) => {
         input: input,
         output: output,
         user_list: [userId],
-        dataId: [dataId],
+        data_list: [dataId],
         comment: []
     };
 
@@ -58,7 +58,7 @@ const createModel = async (model_info) => {
 
 const getAllModel = async () => {
     const modelCollection = await model();
-    const modelList = await modelCollection.find({}, {projection: {title:1}}).toArray();
+    const modelList = await modelCollection.find({}).toArray();
     if (!modelList) return [];
 
     for (i in modelList) {
@@ -84,6 +84,28 @@ const getModelById = async (modelId) => {
 
     return model_res;
 
+};
+
+const getModelByName = async (search_model_name) => {
+
+    // error check
+    search_model_name = utils.checkString(search_model_name, 'data name');
+
+    // get model
+    const model_list = await getAllModel();
+
+    let res = [];
+    for (m of model_list) {
+        if (m.model_name.toLowerCase().includes(search_model_name.toLowerCase())) {
+            res.push(m);
+        }
+    }
+
+    //sort by ID
+    res.sort(function(a, b) {return a.id - b.id;});
+
+    //return up to 20 matching results
+    return res.slice(0, 20);
 };
 
 const removeModel = async (modelId) => {
@@ -132,8 +154,8 @@ const updateModel = async (modelId) => {
             onnx_path: onnx_path,
             input: input,
             output: output,
-            userId: userId,
-            dataId: dataId
+            user_list: [userId],
+            data_list: [dataId]
         }}
     );
 
@@ -202,6 +224,7 @@ module.exports = {
     createModel,
     getAllModel,
     getModelById,
+    getModelByName,
     removeModel,
     updateModel,
     addUser,

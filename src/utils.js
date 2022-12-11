@@ -107,12 +107,12 @@ function checkEmail(email) {
 }
 
 function checkId(id, varName) {
-    if (!id) throw `Error: You must provide a ${varName}`;
-    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
+    if (!id) throw `You must provide a ${varName}`;
+    if (typeof id !== 'string') throw `${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
-        throw `Error: ${varName} cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+        throw `${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `${varName} invalid object ID`;
 
     return id;
 }
@@ -206,6 +206,7 @@ function checkPath(path) {
     return path;
 }
 
+// json
 function checkJson(json_path) {
 
     json_obj = readJsonFile(json_path);
@@ -213,7 +214,6 @@ function checkJson(json_path) {
     return json_obj;
 }
 
-// json
 function readJsonFile(json_path) {
 
     let json_string = undefined;
@@ -249,6 +249,37 @@ function prior(first_ele, second_ele) {
     return first_ele ? first_ele : second_ele;
 }
 
+function checkRawData(rawdata) {
+
+    if (!rawdata || Object.keys(rawdata).length === 0) {
+        throw "No files were uploaded.";
+    }
+
+    return rawdata;
+
+}
+
+function str2strArray(str) {
+
+    str = checkString(str);
+
+    // replace tab and space
+    str = str.replace(/[\t\s]/g, '');
+
+    // check spcial char
+    if (str.match(/[^a-zA-Z0-9-_,]+/g)) {
+        throw "Should not input special characters.";
+    }
+
+    // check comma
+    if (str.match(/,,/) !== null) {
+        throw 'More than one comma.';
+    }
+
+    return str.split(',');
+
+}
+
 module.exports = {
 
     // error check
@@ -271,7 +302,9 @@ module.exports = {
     checkJson,
     checkUsername,
 
-    // other help function
     readJsonFile,
-    prior
+    prior,
+
+    checkRawData,
+    str2strArray
 }

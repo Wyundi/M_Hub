@@ -2,7 +2,6 @@ const mongoCollections = require('../config/mongoCollections');
 const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
 
-const userData = require('./user');
 const rawData = require('./raw');
 
 const utils = require("../utils");
@@ -52,6 +51,7 @@ const createData = async (data) => {
         features: features,
         length: length,
         source: source,
+        file_path: file_path,
         raw_data: raw,
         user_list: [userId],
         comment: []
@@ -100,6 +100,28 @@ const getDataById = async (dataId) => {
 
 };
 
+const getDataByName = async (search_data_name) => {
+
+    // error check
+    search_data_name = utils.checkString(search_data_name, 'data name');
+
+    // get data
+    const data_list = await getAllData();
+
+    let res = [];
+    for (d of data_list) {
+        if (d.data_name.toLowerCase().includes(search_data_name.toLowerCase())) {
+            res.push(d);
+        }
+    }
+
+    //sort by ID
+    res.sort(function(a, b) {return a.id - b.id;});
+
+    //return up to 20 matching results
+    return res.slice(0, 20);
+};
+
 const getRawData = async (dataId) => {
 
     // error check
@@ -133,7 +155,7 @@ const removeData = async (dataId) => {
 const updateData = async (dataId, newData) => {
 
     // chech dataId
-    id = utils.checkId(dataId, 'data id');
+    dataId = utils.checkId(dataId, 'data id');
 
     // check new data
     data_name = utils.checkString(newData.name);
@@ -162,7 +184,7 @@ const updateData = async (dataId, newData) => {
         }
     }
 
-    let data_db = await getDataById(id);
+    let data_db = await getDataById(dataId);
     if (!data_db) throw `Could not update data with id ${dataId}!`;
 
     newData = {
@@ -171,6 +193,7 @@ const updateData = async (dataId, newData) => {
         features: features,
         length: length,
         source: source,
+        file_path: file_path,
         raw_data: raw,
         user_list: [userId],
         comment: []
@@ -178,7 +201,7 @@ const updateData = async (dataId, newData) => {
 
     const dataInfoCollection = await dataInfo();
     const updateInfo = await dataInfoCollection.updateOne(
-        {_id: ObjectId(id)},
+        {_id: ObjectId(dataId)},
         {$set: newData}
     );
 
@@ -219,6 +242,7 @@ module.exports = {
     createData,
     getAllData,
     getDataById,
+    getDataByName,
     getRawData,
     removeData,
     updateData,

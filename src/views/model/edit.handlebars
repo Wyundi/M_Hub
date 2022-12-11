@@ -1,0 +1,63 @@
+
+
+<h2> Edit Model </h2>
+
+<form action="/model/edit/{{id}}" method="POST" class="edit-data-form">
+
+    <label for="modelname">
+        Model Name
+        <input id="modelname" type="text" name="model_name" placeholder="{{model_name}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="category">
+        Category
+        <input id="category" type="text" name="model_category" placeholder="{{model_category}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="description">
+        Description
+        <input id="description" type="text" name="model_description" placeholder="{{model_description}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="link">
+        Link
+        <input id="link" type="text" name="model_link" placeholder="{{model_link}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="input">
+        Input
+        <input id="input" type="text" name="model_input" placeholder="{{model_input}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="output">
+        Output
+        <input id="output" type="text" name="model_output" placeholder="{{model_output}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="data">
+        Data
+        <input id="data" type="text" name="model_data" placeholder="select a data for model" class="full-width-input">
+    </label>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> submit </button>
+
+    <br>
+
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
+
+</form>

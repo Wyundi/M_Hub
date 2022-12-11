@@ -7,10 +7,10 @@ const searchRoutes = require("./search");
 const constructorMethod = (app) => {
 
     app.use('/', userRoutes);
-    app.use('/', modelRoutes);
-    app.use('/', dataInfoRoutes);
+    app.use('/model', modelRoutes);
+    app.use('/data', dataInfoRoutes);
     // app.use('/', commentRoutes);
-    // app.use('/', searchRoutes);
+    app.use('/search', searchRoutes);
 
     app.use('*', (req, res) => {
         res.status(404).render('./error/errorPage', {

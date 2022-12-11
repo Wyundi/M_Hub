@@ -1,0 +1,52 @@
+<form action="/search" method="POST" class="search">
+
+    <label for="search_data">
+        <input id="search_data" type="text" name="search_input" class="full-width-input">
+    </label>
+
+    <button type="submit" class="btn"> search </button>
+
+</form>
+
+
+<br>
+
+<a href="/data/search"> search only in data list </a>
+<br>
+<a href="/model/search"> search only in model list </a>
+<br>
+
+<h2> Search Result </h2>
+
+{{#if no_res}}
+    <p> No result for your search. </p>
+{{else}}
+    {{#if data_search_res}}
+        <h2> Data </h2>
+
+        <ul>
+            {{#each data_search_res}}
+                <li>
+                    <a href="../data/id/{{_id}}"> {{data_name}} </a>
+                    <p> {{description}} </p>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}} 
+
+    {{#if model_search_res}}
+        <h2> Model </h2>
+
+        <ul>
+            {{#each model_search_res}}
+                <li>
+                    <a href="../model/id/{{_id}}"> {{model_name}} </a>
+                    <p> {{description}} </p>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+{{/if}} 
+
+<br>
+<button type="button" class="btn"> <a href="../"> back to home page </a></button>

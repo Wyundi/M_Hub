@@ -14,8 +14,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }    
     });
@@ -38,8 +39,9 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
 
@@ -56,8 +58,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
@@ -71,6 +74,16 @@ router
 
         try {
             user_db = await userData.getUserById(userId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
             return res.status(200).render("./userViews/edit", {
                 username: user_db.username,
                 first_name: user_db.first_name,
@@ -83,8 +96,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
@@ -98,21 +112,49 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
+            });
+        }
+
+        let username = undefined;
+        let first_name = undefined;
+        let last_name = undefined;
+        let email = undefined;
+        let gender = undefined;
+        let location = undefined;
+        let organization = undefined;
+
+        try {
+
+            username = utils.checkUsername(utils.prior(req.body.user_name, user_db.username));
+            first_name = utils.checkString(utils.prior(req.body.user_first_name, user_db.first_name));
+            last_name = utils.checkString(utils.prior(req.body.user_last_name, user_db.last_name));
+            email = utils.checkEmail(utils.prior(req.body.user_email, user_db.email));
+            gender = utils.checkGender(utils.prior(req.body.user_gender, user_db.gender));
+            location = utils.checkLocation(utils.prior(req.body.user_location, user_db.location));
+            organization = utils.checkString(utils.prior(req.body.user_organization, user_db.organization));
+
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
             });
         }
 
         let newUser = undefined;
         try {
             newUser = {
-                username: utils.prior(req.body.user_name, user_db.username),
-                first_name: utils.prior(req.body.user_first_name, user_db.first_name),
-                last_name: utils.prior(req.body.user_last_name, user_db.last_name),
-                email: utils.prior(req.body.user_email, user_db.email),
-                gender: utils.prior(req.body.user_gender, user_db.gender),
-                location: utils.prior(req.body.user_location, user_db.location),
-                organization: utils.prior(req.body.user_organization, user_db.organization)
+                username: username,
+                first_name: first_name,
+                last_name: last_name,
+                email: email,
+                gender: gender,
+                location: location,
+                organization: organization
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
@@ -121,8 +163,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
@@ -148,8 +191,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
@@ -176,8 +220,9 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
@@ -196,22 +241,23 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     })
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        username = req.body.user_name;
-        first_name = req.body.user_first_name;
-        last_name = req.body.user_last_name;
-        email = req.body.user_email
-        gender = req.body.user_gender
-        loc = req.body.user_location
-        org = req.body.user_organization
-        passwd = req.body.user_password;
+        let username = req.body.user_name;
+        let first_name = req.body.user_first_name;
+        let last_name = req.body.user_last_name;
+        let email = req.body.user_email
+        let gender = req.body.user_gender
+        let loc = req.body.user_location
+        let org = req.body.user_organization
+        let passwd = req.body.user_password;
 
         try {
             // error check
@@ -246,8 +292,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }
     });
@@ -262,8 +309,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }        
     })
@@ -276,8 +324,9 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
                 error_status: error_status,
-                error_message: `${error_status} Error:` + e
+                error_message: e
             });
         }   
     })

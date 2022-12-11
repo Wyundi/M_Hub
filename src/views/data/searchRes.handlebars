@@ -1,0 +1,19 @@
+<form action="/data/search" method="POST" class="search">
+
+    <label for="search_data">
+        search in data list
+        <input id="search_data" type="text" name="search_input" class="full-width-input">
+    </label>
+
+    <button type="submit" class="btn"> search </button>
+
+</form>
+
+<ul>
+    {{#each data_list}}
+        <li>
+            <a href="./info/{{_id}}"> {{data_name}} </a>
+            <p> {{description}} </p>
+        </li>
+    {{/each}}
+</ul>
