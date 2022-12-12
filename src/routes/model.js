@@ -56,11 +56,10 @@ router
             await onnx_file.mv(upload_path);
 
             // search data from data list
-            let data_list = dataInfoData.getDataByName(model_data);
+            let data_list = await dataInfoData.getDataByName(model_data);
 
             let userId = req.session.user.userId;
-
-            console.log(data_list);
+            let dataId = data_list[0]._id.toString();
 
             newModel = {
                 name: model_name,
@@ -71,13 +70,13 @@ router
                 input: model_input,
                 output: model_output,
                 userId: userId,
-                dataId: data_list[0]._id.toString()
+                dataId: dataId
             }
 
             let model_db = await modelData.createModel(newModel);
             modelId = model_db._id.toString();
 
-            await userData.addData(userId, dataId);
+            await userData.addModel(userId, modelId);
             
         } catch (e) {
             let error_status = 400;
@@ -89,7 +88,7 @@ router
         }
 
         try {
-            return res.redirect(`/model/id/${modelId}`);
+            return res.redirect(`/model/info/${modelId}`);
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -319,15 +318,17 @@ router
         let model_link = undefined;
         let model_input = undefined;
         let model_output = undefined;
+        let model_data = undefined;
 
         try {
 
-            model_name = utils.checkString(utils.prior(req.body.data_name, model_db.model_name));
-            model_category = utils.checkString(utils.prior(req.body.model_category, model_db.model_category));
-            model_description = utils.checkString(utils.prior(req.body.model_description, model_db.model_description));
-            model_link = utils.checkUrl(utils.prior(req.body.model_link, model_db.model_link));
-            model_input = utils.checkString(utils.prior(req.body.model_input, model_db.model_input));
-            model_output = utils.checkString(utils.prior(req.body.model_output, model_db.model_output));
+            model_name = utils.checkString(utils.prior(req.body.model_name, model_db.model_name));
+            model_category = utils.checkString(utils.prior(req.body.model_category, model_db.category));
+            model_description = utils.checkString(utils.prior(req.body.model_description, model_db.description));
+            model_link = utils.checkUrl(utils.prior(req.body.model_link, model_db.link));
+            model_input = utils.checkString(utils.prior(req.body.model_input, model_db.input));
+            model_output = utils.checkString(utils.prior(req.body.model_output, model_db.output));
+            model_data = utils.checkId(utils.prior(req.body.model_data, model_db.data_list[0]))
 
         } catch (e) {
             let error_status = 400;
