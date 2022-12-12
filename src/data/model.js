@@ -129,7 +129,7 @@ const updateModel = async (modelId, model_info) => {
 
     // error check
 
-    model_name = utils.checkString(model_info.model_name);
+    model_name = utils.checkString(model_info.name);
     category = utils.checkString(model_info.category);
     description = utils.checkString(model_info.description);
     link = utils.checkUrl(model_info.link);

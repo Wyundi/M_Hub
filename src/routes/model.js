@@ -419,7 +419,7 @@ router
 
         try {
             let newModel = {
-                model_name: model_name,
+                name: model_name,
                 category: model_category,
                 description: model_description,
                 link: model_link,
