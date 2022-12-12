@@ -57,11 +57,10 @@ router
             await onnx_file.mv(upload_path);
 
             // search data from data list
-            let data_list = dataInfoData.getDataByName(model_data);
+            let data_list = await dataInfoData.getDataByName(model_data);
 
             let userId = req.session.user.userId;
-
-            console.log(data_list);
+            let dataId = data_list[0]._id.toString();
 
             newModel = {
                 name: model_name,
@@ -72,7 +71,7 @@ router
                 input: model_input,
                 output: model_output,
                 userId: userId,
-                dataId: data_list[0]._id.toString()
+                dataId: dataId
             }
 
             let model_db = await modelData.createModel(newModel);
@@ -90,7 +89,7 @@ router
         }
 
         try {
-            return res.redirect(`/model/id/${modelId}`);
+            return res.redirect(`/model/info/${modelId}`);
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -397,6 +396,7 @@ router
         let model_link = undefined;
         let model_input = undefined;
         let model_output = undefined;
+        let model_data = undefined;
 
         try {
 
