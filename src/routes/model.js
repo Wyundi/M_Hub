@@ -7,6 +7,7 @@ const modelData = data.model ;
 
 const path = require('path');
 const utils = require('../utils');
+const { model } = require('../data');
 
 router
     .route("/")
@@ -144,7 +145,82 @@ router
         }
 
     })
-    .put(async (req, res) => {})
+    .put(async (req, res) => {
+        // // update models
+        // let modelId = req.session.userId;
+        // let model_db = undefined;
+
+        // try {
+        //     model_db = await modelData.getModelById(modelId);
+        // } catch (e) {
+        //     let error_status = 400;
+        //     return res.status(error_status).render("./error/errorPage", {
+        //         username: req.session.user.username,
+        //         error_status: error_status,
+        //         error_message: e
+        //     });
+        // }
+
+        // let model_name = undefined;
+        // let category = undefined;
+        // let description = undefined;
+        // let link = undefined;
+        // let onnx_path = undefined;
+        // let input = undefined;
+        // let output = undefined;
+        // let user_list = undefined;
+        // let data_list = undefined;
+        // let comment = undefined;
+
+        // try {
+        //     model_name = utils.checkString(utils.prior(req.body.model_name, model_db.model_name));
+        //     category = utils.checkString(utils.prior(req.body.model_category, model_db.category));
+        //     description = utils.checkString(utils.prior(req.body.model_description, model_db.description));
+        //     link = utils.checkUrl(utils.prior(req.body.model_link, model_db.link));
+        //     input = utils.checkString(utils.prior(req.body.model_input, model_db.input));
+        //     output = utils.checkString(utils.prior(req.body.model_output, model_db.output));
+        //     model_data = utils.checkString(req.body.model_data);
+        // } catch (e) {
+        //     let error_status = 400;
+        //     return res.status(error_status).render("./error/errorPage", {
+        //         username: req.session.username,
+        //         error_status: error_status,
+        //         error_message: e
+        //     });
+        // }
+
+        // if (!model_db.data_list.contains(model_data)){
+        //     model_db.data_list.push(model_data);
+        // }
+
+        // let newModel = undefined;
+        // try {
+        //     newModel = {
+        //         model_name: model_name,
+        //         category: category,
+        //         description: description,
+        //         link: link,
+        //         onnx_path: model_db.onnx_path,
+        //         input: input,
+        //         output: output,
+        //         user_list: model_db.user_list,
+        //         data_list: model_db.data_list,
+        //         comment: model_db.comment
+        //     }
+
+        //     let updateStatus = await modelData.updateModel(modelId,newModel);
+
+        //     res.redirect(`../info/${modelId}`);
+        // } catch (e) {
+        //     let error_status = 500;
+        //     return res.status(error_status).render("./error/errorPage", {
+        //         username: req.session.username,
+        //         error_status:error_status,
+        //         error_message: e
+        //     });
+        // }
+
+    })
     .delete(async (req, res) => {})
 
 router
@@ -252,6 +328,7 @@ router
 
         let modelId = undefined;
         let model_db = undefined;
+        console.log('222');
 
         try {
             modelId = utils.checkId(req.params.id, "model id");
@@ -300,6 +377,7 @@ router
 
         let modelId = req.params.id;
         let model_db = undefined;
+        console.log('111');
 
         try {
             model_db = await modelData.getModelById(modelId);

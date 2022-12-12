@@ -34,7 +34,15 @@
 
     <label for="gender">
         Gender
-        <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input">
+        <select name="user_gender" id="gender">
+            <option disabled selected>Please Select</option>
+            <option value="Woman">Woman</option>
+            <option value="Man">Man</option>
+            <option value="Trans">Transgender</option>
+            <option value="NonBinary">Non-binary/non-conforming</option>
+            <option value="NotRespond">Prefer not to respond</option>
+        </select>
+        {{!-- <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input"> --}}
     </label>
 
     <br>
