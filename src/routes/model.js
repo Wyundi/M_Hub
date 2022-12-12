@@ -406,6 +406,7 @@ router
             model_link = utils.checkUrl(utils.prior(req.body.model_link, model_db.link));
             model_input = utils.checkString(utils.prior(req.body.model_input, model_db.input));
             model_output = utils.checkString(utils.prior(req.body.model_output, model_db.output));
+            model_data = utils.checkId(utils.prior(req.body.model_data, model_db.data_list[0]))
 
         } catch (e) {
             let error_status = 400;
