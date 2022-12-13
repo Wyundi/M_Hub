@@ -1,0 +1,49 @@
+
+
+<h2> Edit Data </h2>
+
+<form action="/data/edit/{{dataId}}" method="POST" class="edit-data-form">
+
+    <label for="dataname">
+        data name
+        <input id="dataname" type="text" name="data_name" placeholder="{{data_name}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="description">
+        Description
+        <input id="description" type="text" name="data_description" placeholder="{{description}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="features">
+        Features
+        <input id="features" type="text" name="data_features" placeholder="{{features}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="length">
+        Length
+        <input id="length" type="text" name="data_length" placeholder="{{length}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="source">
+        Source
+        <input id="source" type="text" name="data_source" placeholder="{{source}}" class="full-width-input">
+    </label>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> submit </button>
+
+    <br>
+
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
+
+</form>
