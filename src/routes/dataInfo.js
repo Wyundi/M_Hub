@@ -6,6 +6,7 @@ const dataInfoData = data.dataInfo;
 
 const path = require("path");
 const utils = require('../utils');
+const dl_dataprocess = require("../dl/js/dataprocess");
 
 router
     .route("/")
@@ -188,13 +189,21 @@ router
     .get(async (req, res) => {
 
         let dataId = undefined;
-        let json_obj = undefined;
+        let features = undefined;
+        let res = [];
+        let res_norm = [];
 
         try {
             dataId = utils.checkId(req.params.id, "data id");
             let data_db = await dataInfoData.getDataById(dataId);
-            console.log(data_db.file_path);
-            json_obj = utils.checkJson(data_db.file_path);
+            features = data_db.features;
+
+            for (let i=0; i<20; i++) {
+                let {single_res, single_res_norm} = await dl_dataprocess.loadData(dataId, i, getNorm=true);
+                res.push(single_res);
+                res_norm.push(single_res_norm);
+            }
+            
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -207,7 +216,9 @@ router
         try {
             res.status(200).render("./data/rawData", {
                 username: req.session.user.username,
-                json_obj: json_obj
+                features: features,
+                res: res,
+                res_norm: res_norm
             })
         } catch (e) {
             let error_status = 500;
