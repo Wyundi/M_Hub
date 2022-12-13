@@ -53,7 +53,6 @@ const loadData = async (dataId, index, getNorm=false) => {
             res[i] = Number(res[i]);
             res_norm.push(res[i] - mean[i]) / std[i];
         }
-
         return {res, res_norm};
     }
 
@@ -71,18 +70,20 @@ const loadData = async (dataId, index, getNorm=false) => {
 //     return 0;
 // };
 
-const test = async () => {
-    let cat_id = '63978f000b4aab68677297de';
+// const test = async () => {
+//     let cat_id = '63978f000b4aab68677297de';
 
-    let res = await loadImg(cat_id, 1);
+//     let res = await loadImg(cat_id, 1);
 
-    console.log(res.img_path);
-    console.log(res.label);
+//     console.log(res.img_path);
+//     console.log(res.label);
 
-};
+// };
 
-test();
+// test();
 
-// module.exports = {
-//     loadData
-// }
+module.exports = {
+    loadData,
+    loadImg
+
+}

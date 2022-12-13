@@ -190,8 +190,8 @@ router
 
         let dataId = undefined;
         let features = undefined;
-        let res = [];
-        let res_norm = [];
+        let dataSet_raw = [];
+        let dataSet_norm = [];
 
         try {
             dataId = utils.checkId(req.params.id, "data id");
@@ -199,11 +199,17 @@ router
             features = data_db.features;
 
             for (let i=0; i<20; i++) {
-                let {single_res, single_res_norm} = await dl_dataprocess.loadData(dataId, i, getNorm=true);
-                res.push(single_res);
-                res_norm.push(single_res_norm);
+                let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
+                let single_set_raw = {};
+                let single_set_norm = {};
+                for (let j = 0; j < features.length; j++) {
+                    single_set_raw[features[j]] = single_data.res[j];
+                    single_set_norm[features[j]] = single_data.res_norm[j];
+                }
+                dataSet_raw.push(single_set_raw);
+                dataSet_norm.push(single_set_norm);
+
             }
-            
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -216,9 +222,8 @@ router
         try {
             res.status(200).render("./data/rawData", {
                 username: req.session.user.username,
-                features: features,
-                res: res,
-                res_norm: res_norm
+                post_raw: dataSet_raw,
+                post_norm: dataSet_norm
             })
         } catch (e) {
             let error_status = 500;
