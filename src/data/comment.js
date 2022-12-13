@@ -16,7 +16,7 @@ const createComment = async (
     // date should be current date
 ) => {
     // id is for model?
-    modelId = utils.checkId(id, 'comment id');
+    modelId = utils.checkId(id, 'id');
     username = utils.checkUsername(userName);
     comment = utils.checkComment(comment);
 
@@ -47,7 +47,7 @@ const createComment = async (
 };
 
 const getAllComment = async (id) => {
-    modelId = utils.checkId(id, 'model id');
+    modelId = utils.checkId(id, 'id');
 
     const modelCollection = await model(); 
     const modelData = await modelCollection.findOne({_id: ObjectId(modelId)});
