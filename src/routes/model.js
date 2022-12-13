@@ -7,7 +7,7 @@ const modelData = data.model ;
 
 const path = require('path');
 const utils = require('../utils');
-const { model } = require('../data');
+const { model, dataInfo } = require('../data');
 
 router
     .route("/")
@@ -107,6 +107,8 @@ router
 
         let modelId = undefined;
         let model_db = undefined;
+        let user_name_list = [];
+        let data_name_list = [];
 
         try {
             modelId = utils.checkId(req.params.id, "model id");
@@ -121,6 +123,18 @@ router
         }
 
         try {
+            for (userIdx in model_db.user_list) {
+                userId = utils.checkId(model_db.user_list[userIdx], "user id");
+                let user_db = await userData.getUserById(userId);
+                user_name_list.push(user_db.username);
+            }
+
+            for (dataIdx in model_db.data_list) {
+                dataId = utils.checkId(model_db.data_list[dataIdx], "data id");
+                let data_db = await dataInfo.getDataById(dataId);
+                data_name_list.push(data_db.data_name);
+            }
+
             return res.status(200).render("./model/info", {
                 username: req.session.user.username,
                 modelId: modelId,
@@ -131,8 +145,8 @@ router
                 onnx_path: model_db.onnx_path,
                 input: model_db.input,
                 output: model_db.output,
-                user_list: model_db.user_list,
-                data_list: model_db.data_list,
+                user_list: user_name_list,
+                data_list: data_name_list,
                 comment: model_db.comment
             });
         } catch (e) {
@@ -452,5 +466,9 @@ router
         }
 
     })
+
+router
+    .route("/run/:id")
+    .get(async (req, res) => {})
 
 module.exports = router;

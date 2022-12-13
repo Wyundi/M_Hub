@@ -37,4 +37,24 @@
 <br>
 <button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
 <br>
+<form method="POST" action="/info/{{dataId}}?_method=DELETE">
+    <button type="submit" onclick="javascript:return del();"> Delete this dataset
+
+        <script type="text/javascript">
+
+        function del() {
+            var msg = "Are you sure to delete?";
+            if (confirm(msg) === true) {
+                alert('Successfully deleted');
+                return true;
+            } else {
+                alert('Cancelled');
+                return false;
+            }
+        }
+
+        </script>
+    </button>
+</form>
+<br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>

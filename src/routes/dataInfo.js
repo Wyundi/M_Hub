@@ -98,6 +98,7 @@ router
 
         let dataId = undefined;
         let data_db = undefined;
+        let user_name_list = [];
 
         try {
             dataId = utils.checkId(req.params.id, "data id");
@@ -112,6 +113,11 @@ router
         }
 
         try {
+            for (userIdx in data_db.user_list) {
+                userId = utils.checkId(data_db.user_list[userIdx], "user id");
+                let user_db = await userData.getUserById(userId);
+                user_name_list.push(user_db.username);
+            }
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
@@ -121,7 +127,7 @@ router
                 length: data_db.length,
                 source: data_db.source,
                 raw_data_path: `../../data/rawdata/${dataId}`,
-                user_list: data_db.user_list,
+                user_list: user_name_list,
                 comment: data_db.comment
             });
         } catch (e) {
@@ -134,7 +140,48 @@ router
         }
     })
     .put(async (req, res) => {})
-    .delete(async (req, res) => {})
+    .delete(async (req, res) => {
+        let dataId = undefined;
+        let data_db = undefined;
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+            data_db = await dataInfoData.getDataById(dataId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+            deleteInfo = dataInfoData.removeData(dataId);
+            if (deleteInfo) {
+                return res.redirect(`../user}`);
+            }
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
 
 router
     .route("/rawdata/:id")
