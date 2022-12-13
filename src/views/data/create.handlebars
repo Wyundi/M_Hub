@@ -1,0 +1,54 @@
+<h2> Create Data </h2>
+
+<form action="/data" method="POST" class="create-data-form", enctype ="multipart/form-data">
+
+    <label for="dataname">
+        data name
+        <input id="dataname" type="text" name="data_name" placeholder="please input data name" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="description">
+        Description
+        <input id="description" type="text" name="data_description" placeholder="please input data description" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="features">
+        Features
+        <input id="features" type="text" name="data_features" placeholder="please input data feature, split with comma" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="length">
+        Length
+        <input id="length" type="text" name="data_length" placeholder="please input data length" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="source">
+        Source
+        <input id="source" type="text" name="data_source" placeholder="please input data_source" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="rawdata">
+        Raw Data
+        <input id="rawdata" type="file" name="data_rawdata">
+    </label>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> submit </button>
+
+    <br>
+
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
+
+</form>

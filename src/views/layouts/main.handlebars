@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+
+This page is the default layout for all handlebars file rendered.
+
+-->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> M_Hub </title>
+        <link rel="stylesheet" href="/public/css/main.css">
+    </head>
+    <body>
+        <!-- header -->
+
+        <header id="header" class="header">
+            <ul class="header_list">
+                {{#if username}}
+                    <li><a href="/user"> {{username}} </a></li>
+                    <li><a href="/search"> search </a></li>
+                {{else}}
+                    <li><a href="/login"> log in </a></li>
+                    <li><a href="/signup"> sign up </a></li>
+                {{/if}}      
+            </ul>
+        </header>
+
+        <!-- page content -->
+        <h1> M_Hub </h1>
+        <main>
+
+            {{{body}}}
+
+            <br>
+            <br>
+            <br>
+
+            <footer> This is a brief description of this web page. This app is for CS546 Final Project, M_Hub. </footer>
+
+        </main>
+    </body>
+</html>
