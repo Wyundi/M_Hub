@@ -130,13 +130,13 @@ router
 
         try {
 
-            username = utils.checkUsername(utils.prior(req.body.user_name, user_db.username));
-            first_name = utils.checkString(utils.prior(req.body.user_first_name, user_db.first_name));
-            last_name = utils.checkString(utils.prior(req.body.user_last_name, user_db.last_name));
-            email = utils.checkEmail(utils.prior(req.body.user_email, user_db.email));
-            gender = utils.checkGender(utils.prior(req.body.user_gender, user_db.gender));
-            location = utils.checkLocation(utils.prior(req.body.user_location, user_db.location));
-            organization = utils.checkString(utils.prior(req.body.user_organization, user_db.organization));
+            username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
+            first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
+            last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));
+            email = utils.checkEmail(utils.prior(xss(req.body.user_email), user_db.email));
+            gender = utils.checkGender(utils.prior(xss(req.body.user_gender), user_db.gender));
+            location = utils.checkLocation(utils.prior(xss(req.body.user_location), user_db.location));
+            organization = utils.checkString(utils.prior(xss(req.body.user_organization), user_db.organization));
 
         } catch (e) {
             let error_status = 400;
@@ -203,8 +203,8 @@ router
     .post(async (req, res) => {
         //code here for POST
         // error check
-        let username = req.body.user_name;
-        let passwd = req.body.user_password;
+        let username = xss(req.body.user_name);
+        let passwd = xss(req.body.user_password);
 
         try {
             username = utils.checkUsername(username);
@@ -252,14 +252,14 @@ router
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        let username = req.body.user_name;
-        let first_name = req.body.user_first_name;
-        let last_name = req.body.user_last_name;
-        let email = req.body.user_email
-        let gender = req.body.user_gender
-        let loc = req.body.user_location
-        let org = req.body.user_organization
-        let passwd = req.body.user_password;
+        let username = xss(req.body.user_name);
+        let first_name = xss(req.body.user_first_name);
+        let last_name = xss(req.body.user_last_name);
+        let email = xss(req.body.user_email)
+        let gender = xss(req.body.user_gender)
+        let loc = xss(req.body.user_location)
+        let org = xss(req.body.user_organization)
+        let passwd = xss(req.body.user_password);
 
         try {
             // error check
