@@ -9,6 +9,8 @@ const path = require('path');
 const utils = require('../utils');
 const { model } = require('../data');
 
+const xss = require('xss');
+
 router
     .route("/")
     .get(async (req, res) => {

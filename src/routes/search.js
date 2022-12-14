@@ -8,6 +8,8 @@ const modelData = data.model ;
 const path = require('path');
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/')
     // get function should display a list of current data / model or user

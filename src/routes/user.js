@@ -6,6 +6,8 @@ const userData = data.user;
 const path = require('path');
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/')
     .get(async (req, res) => {

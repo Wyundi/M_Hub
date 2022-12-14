@@ -5,6 +5,8 @@ const commentData = data.comment;
 
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/:id')
     .get(async (req, res) => {
