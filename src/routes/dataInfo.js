@@ -42,20 +42,20 @@ router
 
         try {
             // error check
-            data_name = utils.checkString(req.body.data_name);
-            data_description = utils.checkString(req.body.data_description);
-            data_length = utils.checkInt(req.body.data_length);
-            data_source = utils.checkUrl(req.body.data_source);
-            data_rawdata = utils.checkRawData(req.files.data_rawdata);
+            data_name = utils.checkString(xss(req.body.data_name));
+            data_description = utils.checkString(xss(req.body.data_description));
+            data_length = utils.checkInt(xss(req.body.data_length));
+            data_source = utils.checkUrl(xss(req.body.data_source));
+            data_rawdata = utils.checkRawData(xss(req.files.data_rawdata));
 
-            data_features = utils.str2strArray(req.body.data_features);
-            data_features = utils.checkStringArray(data_features, "data features");
+            data_features = utils.str2strArray(xss(req.body.data_features));
+            data_features = utils.checkStringArray(xss(data_features), "data features");
 
             // upload json file to server
             let upload_path = path.resolve(`./raw_data/${data_name}.json`)
-            await data_rawdata.mv(upload_path);
+            await data_rawdata.mv(xss(upload_path));
 
-            let userId = req.session.user.userId;
+            let userId = xss(req.session.user.userId);
 
             newData = {
                 name: data_name,
@@ -102,7 +102,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
             let error_status = 400;
@@ -146,7 +146,7 @@ router
         let json_obj = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
             let data_db = await dataInfoData.getDataById(dataId);
             console.log(data_db.file_path);
             json_obj = utils.checkJson(data_db.file_path);
@@ -208,7 +208,7 @@ router
     })
     .post(async (req, res) => {
 
-        let search_input = req.body.search_input;
+        let search_input = xss(req.body.search_input);
         let search_res = [];
 
         try {
@@ -342,11 +342,11 @@ router
 
         try {
 
-            data_name = utils.checkString(utils.prior(req.body.data_name, data_db.data_name));
-            description = utils.checkString(utils.prior(req.body.data_description, data_db.description));
-            features = utils.checkStringArray(utils.prior(req.body.data_features, data_db.features));
-            length = utils.checkInt(utils.prior(req.body.data_length, data_db.length));
-            source = utils.checkUrl(utils.prior(req.body.data_source, data_db.source));
+            data_name = utils.checkString(utils.prior(xss(req.body.data_name), xss(data_db.data_name)));
+            description = utils.checkString(utils.prior(xss(req.body.data_description), xss(data_db.description)));
+            features = utils.checkStringArray(utils.prior(xss(req.body.data_features), xss(data_db.features)));
+            length = utils.checkInt(utils.prior(xss(req.body.data_length), xss(data_db.length)));
+            source = utils.checkUrl(utils.prior(xss(req.body.data_source), xss(data_db.source)));
 
         } catch (e) {
             let error_status = 400;
