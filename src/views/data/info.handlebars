@@ -38,10 +38,7 @@
 <button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
 <br>
 
-<button type="button" class="btn"> <a href="../preview/{{dataId}}"> data preview </a></button>
-<br>
-
-<form method="POST" action="/info/{{dataId}}?_method=DELETE">
+<form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
     <button type="submit" onclick="javascript:return del();"> Delete this dataset
 
         <script type="text/javascript">

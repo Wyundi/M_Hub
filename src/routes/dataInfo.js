@@ -379,7 +379,7 @@ router
         }
 
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
         let dataId = req.params.id;
         let data_db = undefined;
@@ -425,6 +425,7 @@ router
                 features: features,
                 length: length,
                 source: source,
+                raw_data: data_db.raw_data,
                 file_path: data_db.file_path,
                 userId: req.session.user.userId
             }

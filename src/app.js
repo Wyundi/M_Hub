@@ -6,10 +6,12 @@ const session = require('express-session');
 const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override');
 
 app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.engine('handlebars', exphbs.engine({helpers: {

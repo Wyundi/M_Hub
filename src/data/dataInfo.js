@@ -201,7 +201,7 @@ const updateData = async (dataId, newData) => {
         features: features,
         length: length,
         source: source,
-        raw_data: raw,
+        raw_data: data_db.raw_data,
         user_list: [userId],
         comment: []
     }
