@@ -280,6 +280,13 @@ function str2strArray(str) {
 
 }
 
+function checkComment(id, username, comment) {
+
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
+}
+
 module.exports = {
 
     // error check
@@ -306,5 +313,7 @@ module.exports = {
     prior,
 
     checkRawData,
-    str2strArray
+    str2strArray,
+
+    checkComment
 }
