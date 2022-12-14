@@ -3,6 +3,8 @@ const router = express.Router();
 const data = require('../data');
 const userData = data.user;
 
+const xss = require('xss');
+
 const path = require('path');
 const utils = require('../utils');
 
