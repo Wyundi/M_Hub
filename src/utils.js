@@ -130,10 +130,10 @@ function checkGender(gender) {
     // ["male", "female"]  
     // according to the professor, gender should be not only male and femail, but also included some other opbtions
 
-    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "prefer not to answer"];
+    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
 
     gender = checkString(gender);
-    gender = gender.toLowerCase();
+    // gender = gender.toLowerCase();
 
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
