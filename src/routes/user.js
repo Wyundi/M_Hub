@@ -252,14 +252,35 @@ router
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        let username = xss(req.body.user_name);
-        let first_name = xss(req.body.user_first_name);
-        let last_name = xss(req.body.user_last_name);
-        let email = xss(req.body.user_email)
-        let gender = xss(req.body.user_gender)
-        let loc = xss(req.body.user_location)
-        let org = xss(req.body.user_organization)
-        let passwd = xss(req.body.user_password);
+        let username = undefined
+        let first_name = undefined
+        let last_name = undefined
+        let email = undefined
+        let gender = undefined
+        let loc = undefined
+        let org = undefined
+        let passwd = undefined
+
+        try {
+
+            username = xss(req.body.user_name);
+            first_name = xss(req.body.user_first_name);
+            last_name = xss(req.body.user_last_name);
+            email = xss(req.body.user_email)
+            gender = xss(req.body.user_gender)
+            loc = xss(req.body.user_location)
+            org = xss(req.body.user_organization)
+            passwd = xss(req.body.user_password)
+
+        }  catch (e) {
+            
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             // error check
