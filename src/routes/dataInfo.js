@@ -170,9 +170,10 @@ router
 
         try {
             dataId = utils.checkId(req.params.id, "data id");
-            deleteInfo = dataInfoData.removeData(dataId);
-            if (deleteInfo) {
-                return res.redirect(`../user}`);
+            userId = utils.checkId(req.session.user.userId, "user id");
+            removeInfo = await userData.removeFromDataList(userId, dataId);
+            if (removeInfo) {
+                return res.redirect("/user");
             }
         } catch (e) {
             let error_status = 500;

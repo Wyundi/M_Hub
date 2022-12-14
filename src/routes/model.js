@@ -235,7 +235,49 @@ router
         // }
 
     })
-    .delete(async (req, res) => {})
+    .delete(async (req, res) => {
+        let modelId = undefined;
+        let model_db = undefined;
+
+        try {
+            modelId = utils.checkId(req.params.id, "model id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            modelId = utils.checkId(req.params.id, "model id");
+            model_db = await modelData.getModelById(modelId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            modelId = utils.checkId(req.params.id, "model id");
+            userId = utils.checkId(req.session.user.userId, "user id");
+            removeInfo = await userData.removeFromModelList(userId, modelId);
+            if (removeInfo) {
+                return res.redirect("/user");
+            }
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
 
 router
     .route("/structure/:id")
@@ -387,7 +429,7 @@ router
         }
 
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
         let modelId = req.params.id;
         let model_db = undefined;

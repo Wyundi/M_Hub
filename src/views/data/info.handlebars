@@ -34,6 +34,50 @@
 </ul>
 
 <br>
+
+<h4>Make your comment</h4>
+<p>
+
+<label>
+
+<script type="text/javascript">
+
+function show()
+
+{
+
+var value = document.getElementById("div1").style.display;
+
+if(value=="none")
+
+{
+
+document.getElementById("div1").style.display="block";
+
+}
+
+else
+
+document.getElementById("div1").style.display="none";
+
+}
+
+</script>
+
+
+<input type="button" value="Comment" onClick="show()"/>
+
+<div id="div1" style="display:none">
+    <form action="" method="POST">
+        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
+        <button type="button" class="btn"> submit</button>
+    </form>
+
+</div>
+
+</div>
+
+<br>
 <br>
 <button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
 <br>

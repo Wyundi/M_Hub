@@ -280,6 +280,13 @@ function str2strArray(str) {
 
 }
 
+function deleteFromArray(element, array) {
+    let index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    } else throw 'ID not found in list.'
+}
+
 module.exports = {
 
     // error check
@@ -306,5 +313,6 @@ module.exports = {
     prior,
 
     checkRawData,
-    str2strArray
+    str2strArray,
+    deleteFromArray
 }

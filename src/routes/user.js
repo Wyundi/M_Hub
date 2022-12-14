@@ -102,7 +102,7 @@ router
             });
         }
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
         let userId = req.session.user.userId;
         let user_db = undefined;
