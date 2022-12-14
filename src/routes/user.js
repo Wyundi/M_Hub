@@ -203,10 +203,14 @@ router
     .post(async (req, res) => {
         //code here for POST
         // error check
-        let username = xss(req.body.user_name);
-        let passwd = xss(req.body.user_password);
+        let username = undefined
+        let passwd = undefined
 
         try {
+
+            username = xss(req.body.user_name);
+            passwd = xss(req.body.user_password);
+
             username = utils.checkUsername(username);
             passwd = utils.checkPasswd(passwd);
 
@@ -273,8 +277,8 @@ router
             passwd = xss(req.body.user_password)
 
         }  catch (e) {
-            
-            let error_status = 500;
+
+            let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
