@@ -80,7 +80,7 @@ router
         }
 
         try {
-            return res.redirect(`/data/id/${dataId}`);
+            return res.redirect(`/data/info/${dataId}`);
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
