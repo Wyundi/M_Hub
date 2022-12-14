@@ -42,20 +42,21 @@ router
 
         try {
             // error check
+
             data_name = utils.checkString(xss(req.body.data_name));
             data_description = utils.checkString(xss(req.body.data_description));
             data_length = utils.checkInt(xss(req.body.data_length));
             data_source = utils.checkUrl(xss(req.body.data_source));
-            data_rawdata = utils.checkRawData(xss(req.files.data_rawdata));
+            data_rawdata = utils.checkRawData(req.files.data_rawdata);
 
             data_features = utils.str2strArray(xss(req.body.data_features));
-            data_features = utils.checkStringArray(xss(data_features), "data features");
+            data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
             let upload_path = path.resolve(`./raw_data/${data_name}.json`)
-            await data_rawdata.mv(xss(upload_path));
+            await data_rawdata.mv(upload_path);
 
-            let userId = xss(req.session.user.userId);
+            let userId = req.session.user.userId;
 
             newData = {
                 name: data_name,
@@ -80,6 +81,7 @@ router
                 error_message: e
             });
         }
+
 
         try {
             return res.redirect(`/data/info/${dataId}`);
