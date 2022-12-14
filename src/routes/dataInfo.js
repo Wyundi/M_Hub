@@ -209,9 +209,20 @@ router
 
     })
     .post(async (req, res) => {
+        let search_input = undefined
 
-        let search_input = xss(req.body.search_input);
         let search_res = [];
+
+        try {
+            let search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {
@@ -322,8 +333,19 @@ router
     })
     .post(async (req, res) => {
 
-        let dataId = xss(req.params.id);
+        let dataId = undefined;
         let data_db = undefined;
+
+        try {
+            xss(req.params.id)
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             data_db = await dataInfoData.getDataById(dataId);
@@ -344,11 +366,11 @@ router
 
         try {
 
-            data_name = utils.checkString(utils.prior(xss(req.body.data_name), xss(data_db.data_name)));
-            description = utils.checkString(utils.prior(xss(req.body.data_description), xss(data_db.description)));
-            features = utils.checkStringArray(utils.prior(xss(req.body.data_features), xss(data_db.features)));
-            length = utils.checkInt(utils.prior(xss(req.body.data_length), xss(data_db.length)));
-            source = utils.checkUrl(utils.prior(xss(req.body.data_source), xss(data_db.source)));
+            data_name = utils.checkString(utils.prior(xss(req.body.data_name), data_db.data_name));
+            description = utils.checkString(utils.prior(xss(req.body.data_description), data_db.description));
+            features = utils.checkStringArray(utils.prior(xss(req.body.data_features), data_db.features));
+            length = utils.checkInt(utils.prior(xss(req.body.data_length), data_db.length));
+            source = utils.checkUrl(utils.prior(xss(req.body.data_source), data_db.source));
 
         } catch (e) {
             let error_status = 400;

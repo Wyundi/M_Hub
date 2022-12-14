@@ -30,27 +30,34 @@ router
                 xss(req.params.userName),
                 xss(req.params.comment)
                 );
+            } catch (e) {
+                return res.status(400).json({error: 'Invalid Input'});
+            }
+
+        let commentInfo = undefined
+
+        try {
+            commentInfo = xss(req.body); // not exactly sure if xss shoule be here, delete if run into any issues
+
+            if (!xss(commentInfo)) {
+                res.status(400).json({error: 'System requires you to provide a comment ID to complete the search operation'});
+                return;
+            }
+
+            if (!xss(commentInfo.id)) {
+                res.status(400).json({error: 'You must provide an ID for your comment'});
+                return;
+            }
+            if (!xss(commentInfo.userName)) {
+                res.status(400).json({error: 'You must provide an username for your comment'});
+                return;
+            }
+            if (!xss(commentInfo.comment)) {
+                res.status(400).json({error: 'You must provide the content of your comment'});
+                return;
+            }
         } catch (e) {
-            return res.status(400).json({error: 'Invalid Input'});
-        }
-
-        let commentInfo = xss(req.body);
-
-        if (!xss(commentInfo)) {
-            res.status(400).json({error: 'System requires you to provide a comment ID to complete the search operation'});
-            return;
-        }
-
-        if (!xss(commentInfo.id)) {
-            res.status(400).json({error: 'You must provide an ID for your comment'});
-            return;
-        }
-        if (!xss(commentInfo.userName)) {
-            res.status(400).json({error: 'You must provide an username for your comment'});
-            return;
-        }
-        if (!xss(commentInfo.comment)) {
-            res.status(400).json({error: 'You must provide the content of your comment'});
+            res.status(400).json({error: e});
             return;
         }
 
@@ -71,23 +78,30 @@ router
             return res.status(400).json({error: 'Invalid Input'});
         }
 
-        let commentInfo = xss(req.body);
+        let commentInfo = undefined;
 
-        if (!xss(commentInfo)) {
-            res.status(400).json({error: 'System requires you to provide a comment ID to complete the search operation'});
-            return;
-        }
+        try {
+            let commentInfo = xss(req.body); // same logic with previous
 
-        if (!xss(commentInfo.id)) {
-            res.status(400).json({error: 'You must provide an ID for your comment'});
-            return;
-        }
-        if (!xss(commentInfo.userName)) {
-            res.status(400).json({error: 'You must provide an username for your comment'});
-            return;
-        }
-        if (!xss(commentInfo.comment)) {
-            res.status(400).json({error: 'You must provide the content of your comment'});
+            if (!xss(commentInfo)) {
+                res.status(400).json({error: 'System requires you to provide a comment ID to complete the search operation'});
+                return;
+            }
+
+            if (!xss(commentInfo.id)) {
+                res.status(400).json({error: 'You must provide an ID for your comment'});
+                return;
+            }
+            if (!xss(commentInfo.userName)) {
+                res.status(400).json({error: 'You must provide an username for your comment'});
+                return;
+            }
+            if (!xss(commentInfo.comment)) {
+                res.status(400).json({error: 'You must provide the content of your comment'});
+                return;
+            }
+        } catch (e) {
+            res.status(400).json({error: e});
             return;
         }
 

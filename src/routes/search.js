@@ -31,9 +31,20 @@ router
     // post function should show search result
     .post(async (req, res) => {
 
-        let search_input = xss(req.body.search_input);
+        let search_input = undefined;
         let data_search_res = [];
         let model_search_res = [];
+
+        try {
+            search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {

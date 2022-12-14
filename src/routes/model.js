@@ -263,8 +263,19 @@ router
     })
     .post(async (req, res) => {
 
-        let search_input = xss(req.body.search_input);
+        let search_input = undefined
         let search_res = [];
+
+        try {
+            search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {
@@ -377,9 +388,19 @@ router
     })
     .post(async (req, res) => {
 
-        let modelId = xss(req.params.id);
+        let modelId = undefined
         let model_db = undefined;
-        console.log('111');
+
+        try {
+            modelId = xss(req.params.id);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             model_db = await modelData.getModelById(modelId);
