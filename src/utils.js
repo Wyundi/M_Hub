@@ -99,11 +99,19 @@ function checkString(str) {
 
 function checkEmail(email) {
 
-    // 
-
     email = checkString(email);
+    email = email.toLowerCase();
+    // all email should be converted into lower for deduplication and some other purpose
 
-    return email;
+    const result = email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    if (!result) {
+        throw "Your inputed email is invalid"
+    }
+
+    return email; // depend on how we want this to work, this could be return or not
 }
 
 function checkId(id, varName) {
@@ -119,9 +127,17 @@ function checkId(id, varName) {
 
 function checkGender(gender) {
 
-    // ["male", "female"]
+    // ["male", "female"]  
+    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+
+    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "prefer not to answer"];
 
     gender = checkString(gender);
+    gender = gender.toLowerCase();
+
+    if (!options.includes(gender)) {
+        throw "the gender you provide is not valid, please try again";
+    }
 
     return gender;
 }
@@ -134,6 +150,7 @@ function checkLocation(loc) {
 }
 
 function checkPasswd(passwd) {
+    
 
     /*
 
@@ -147,6 +164,8 @@ function checkPasswd(passwd) {
     - special character
 
     */
+
+    // haven't consider special character ralated cases
 
     passwd = checkString(passwd);
 
@@ -197,11 +216,24 @@ function checkStringArray(arr, varName) {
 }
 
 function checkUrl(url) {
+    let details
 
-    return url;
+    try {
+        details = new URL(url);
+    } catch (e) {
+        throw "Invalid URL"
+    }
+    if (details.protocol == "http:" || details.protocol == "https:") {
+        return url;
+    }
+    throw "Invalid URL"
 }
 
 function checkPath(path) {
+
+    const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
+    
+    if (!result) throw "Invalid path"
 
     return path;
 }
@@ -280,6 +312,13 @@ function str2strArray(str) {
 
 }
 
+function checkComment(id, username, comment) {
+
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
+}
+
 module.exports = {
 
     // error check
@@ -306,5 +345,7 @@ module.exports = {
     prior,
 
     checkRawData,
-    str2strArray
+    str2strArray,
+
+    checkComment
 }

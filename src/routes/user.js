@@ -220,7 +220,7 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
+                // username: username,
                 error_status: error_status,
                 error_message: e
             });
