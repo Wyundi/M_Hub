@@ -37,6 +37,10 @@
   h6 {
     color: #222;
     margin-bottom: 5px;
+    text-align: left;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    direction: ltr;
   }
   
   h1 {
@@ -65,9 +69,18 @@
   
   p {
     font-size: 1rem;
-    line-height: 2;
+    line-height: 120%;
+    text-align: justify;
+    text-indent: 25px;
+    letter-spacing: 1px;
+    direction: ltr;
   }
   
+  p.frame{
+    border-style: solid;
+    border-width: medium;
+  }
+
   .post {
     width: 75%;
     border-bottom: 1px dashed #333;
@@ -94,11 +107,12 @@
   
   .author-link,
   .author-link:link {
-    color: #224a8b;
+    color: #00f;
   }
   
   .author-link:visited {
     font-style: italic;
+    color: rgb(230, 0, 255);
   }
   
   .author-link:hover {
@@ -107,5 +121,52 @@
   }
   
   .author-link:active {
-    color: #f700ffa7;
+    color: rgb(0, 255, 162);
+  }
+
+  ul.lc{
+    list-style-type: circle;
+  }
+
+  ul.ld{
+    list-style-type: disc;
+  }
+
+  ul.ls{
+    list-style-type: square;
+  }
+
+  td, th{
+    font-size: 1em;
+    border: 1px solid #2139bf;
+    padding: 3px 7px 2px 7px;
+  }
+
+  th{
+    font-size: 1rem;
+    text-align: center;
+    vertical-align:auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #42a5c9;
+    color: #ffffff;
+  }
+
+  tr.alt td{
+    color: #000000;
+    background-color: #d3f1f2;
+  }
+
+  img.cat{
+    height: 300px;
+    width: 300px;
+  }
+
+  img.normal{
+    height: 100px;
+    width: 100px;
+  }
+
+  img.hidden{
+    visibility: hidden;
   }
