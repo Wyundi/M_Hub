@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 // error check
+var pathValidator = require('is-valid-path');
 
 function checkInputExists(input) { // check parameter exists
     if (input == undefined) {
@@ -231,7 +232,7 @@ function checkUrl(url) {
 
 function checkPath(path) {
 
-    const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
+    const result = pathValidator(path)
     
     if (!result) throw "Invalid path"
 
