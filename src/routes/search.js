@@ -31,7 +31,7 @@ router
     // post function should show search result
     .post(async (req, res) => {
 
-        let search_input = req.body.search_input;
+        let search_input = xss(req.body.search_input);
         let data_search_res = [];
         let model_search_res = [];
 

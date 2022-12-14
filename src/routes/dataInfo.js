@@ -277,7 +277,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -320,7 +320,7 @@ router
     })
     .post(async (req, res) => {
 
-        let dataId = req.params.id;
+        let dataId = xss(req.params.id);
         let data_db = undefined;
 
         try {
