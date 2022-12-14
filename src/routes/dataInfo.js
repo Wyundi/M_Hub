@@ -143,7 +143,7 @@ router
 
         let dataId = undefined;
         let features = undefined;
-        let res = [];
+        let res_ori = [];
         let res_norm = [];
 
         try {
@@ -153,7 +153,7 @@ router
 
             for (let i=0; i<20; i++) {
                 let {single_res, single_res_norm} = await dl_dataprocess.loadData(dataId, i, getNorm=true);
-                res.push(single_res);
+                res_ori.push(single_res);
                 res_norm.push(single_res_norm);
             }
             
@@ -170,7 +170,7 @@ router
             res.status(200).render("./data/rawData", {
                 username: req.session.user.username,
                 features: features,
-                res: res,
+                res_ori: res_ori,
                 res_norm: res_norm
             })
         } catch (e) {
