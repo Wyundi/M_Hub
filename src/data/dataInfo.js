@@ -250,35 +250,36 @@ const removeFromUserList = async (dataId, userId) => {
     dataId = utils.checkId(dataId, "data id");
     userId = utils.checkId(userId, "user id");
 
-    let user_db = await getUserById(userId);
-    if (!user_db) throw `Could not find user with id ${userId}!`;
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
 
-    let user_data_list = user_db.data_list;
-    if (!user_data_list) throw 'user data list is empty';
-    utils.deleteFromArray(dataId, user_data_list);
+    let data_user_list = data_db.user_list;
+    if (!data_user_list) throw 'data user list is empty';
+    utils.deleteFromArray(userId, data_user_list);
 
-    let newUser = {
-        username: user_db.username,
-        first_name: user_db.first_name,
-        last_name: user_db.last_name,
-        email: user_db.email,
-        gender: user_db.gender,
-        location: user_db.location,
-        organization: user_db.organization,
-        passwd: user_db.passwd,
-        data_list: user_data_list,
-        model_list: user_db.model_list
-    };
+    let newData = {
+        data_name: data_db.data_name,
+        description: data_db.description,
+        features: data_db.features,
+        mean: data_db.mean,
+        std: data_db.std,
+        length: data_db.length,
+        source: data_db.source,
+        file_path: data_db.file_path,
+        raw_data: data_db.raw_data,
+        user_list: data_user_list,
+        comment: data_db.comment
+    }
 
-    const userInfoCollection = await user();
-    const updateInfo = await userInfoCollection.updateOne(
-        {_id: ObjectId(userId)},
-        {$set: newUser}
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: ObjectId(dataId)},
+        {$set: newData}
     );
 
-    if (!updateInfo) throw `Could not update user with origin name ${user.username}!`;
+    if (!updateInfo) throw `Could not update data with origin name ${data_db.data_name}!`;
 
-    return `user ${user.username} has been successfully updated!`;
+    return `data ${data_db.data_name} has been successfully updated!`;
 
 }; 
 

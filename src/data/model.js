@@ -220,6 +220,43 @@ const addData = async (modelId, dataId) => {
 
 };
 
+const removeFromUserList = async (modelId, userId) => {
+
+    modelId = utils.checkId(modelId, "model id");
+    userId = utils.checkId(userId, "user id");
+
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+    let model_user_list = model_db.user_list;
+    if (!model_user_list) throw 'model user list is empty';
+    utils.deleteFromArray(userId, model_user_list);
+
+    let newModel = {
+        model_name: model_db.model_name,
+        category: model_db.category,
+        description: model_db.description,
+        link: model_db.link,
+        onnx_path: model_db.onnx_path,
+        input: model_db.input,
+        output: model_db.output,
+        user_list: model_user_list,
+        data_list: model_db.data_list,
+        comment: model_db.comment
+    };
+
+    const modelInfoCollection = await model();
+    const updateInfo = await modelInfoCollection.updateOne(
+        {_id: ObjectId(modelId)},
+        {$set: newModel}
+    );
+
+    if (!updateInfo) throw `Could not update model with origin name ${model_db.model_name}!`;
+
+    return `model ${model_db.model_name} has been successfully updated!`;
+
+}; 
+
 module.exports = {
     createModel,
     getAllModel,
@@ -228,5 +265,6 @@ module.exports = {
     removeModel,
     updateModel,
     addUser,
-    addData
+    addData,
+    removeFromUserList
 };

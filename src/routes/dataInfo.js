@@ -171,8 +171,9 @@ router
         try {
             dataId = utils.checkId(req.params.id, "data id");
             userId = utils.checkId(req.session.user.userId, "user id");
-            removeInfo = await userData.removeFromDataList(userId, dataId);
-            if (removeInfo) {
+            userRemoveInfo = await userData.removeFromDataList(userId, dataId);
+            dataRemoveInfo = await dataInfoData.removeFromUserList(dataId, userId);
+            if (userRemoveInfo && dataRemoveInfo) {
                 return res.redirect("/user");
             }
         } catch (e) {

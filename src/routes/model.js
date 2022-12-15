@@ -265,8 +265,9 @@ router
         try {
             modelId = utils.checkId(req.params.id, "model id");
             userId = utils.checkId(req.session.user.userId, "user id");
-            removeInfo = await userData.removeFromModelList(userId, modelId);
-            if (removeInfo) {
+            userRemoveInfo = await userData.removeFromModelList(userId, modelId);
+            modelRemoveInfo = await modelData.removeFromUserList(modelId,userId);
+            if (userRemoveInfo && modelRemoveInfo) {
                 return res.redirect("/user");
             }
         } catch (e) {
