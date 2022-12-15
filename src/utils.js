@@ -154,11 +154,14 @@ function checkPasswd(passwd) {
     
 
     /*
+    
     As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
     - Uppercase and lowercase letters (A-Z and a-z)
     - Numeric characters (0-9)
+
     - special character
+
     */
 
     // haven't consider special character ralated cases
@@ -189,7 +192,6 @@ function checkPasswd(passwd) {
 }
 
 function checkStringArray(arr, varName) {
-
 
     //We will allow an empty array for this,
     //if it's not empty, we will make sure all tags are strings

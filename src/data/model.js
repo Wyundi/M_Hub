@@ -63,6 +63,7 @@ const getAllModel = async () => {
     for (i in modelList) {
         modelList[i]._id = modelList[i]._id.toString();
     }
+
     return modelList;
 };
 
@@ -217,6 +218,7 @@ const addData = async (modelId, dataId) => {
     return model_db;
 
 };
+
 
 const removeFromUserList = async (modelId, userId) => {
 
