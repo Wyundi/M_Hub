@@ -114,11 +114,11 @@ router
         }
 
         try {
-            for (userIdx in data_db.user_list) {
-                userId = utils.checkId(data_db.user_list[userIdx], "user id");
-                let user_db = await userData.getUserById(userId);
-                user_name_list.push(user_db.username);
-            }
+            userId = utils.checkId(req.session.user.userId, "user id");
+            contributorId = data_db.user_list[0];
+            let user_db = await userData.getUserById(contributorId);
+            contributor = user_db.username;
+            let is_contributor = req.session.user.userId === contributorId;
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
@@ -128,8 +128,9 @@ router
                 length: data_db.length,
                 source: data_db.source,
                 raw_data_path: `../../data/rawdata/${dataId}`,
-                user_list: user_name_list,
-                comment: data_db.comment
+                contributor: contributor,
+                comment: data_db.comment,
+                is_contributor: is_contributor
             });
         } catch (e) {
             let error_status = 500;
@@ -140,7 +141,51 @@ router
             });
         }
     })
-    .put(async (req, res) => {})
+    .post(async (req, res) => {
+        let userId = req.session.user.userId;
+        let dataId = req.body.dataId;
+        let user_db = undefined;
+        let data_db = undefined;
+
+        try {
+            userId = utils.checkId(userId, "user id");
+            dataId = utils.checkId(dataId, "data id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            user_db = await userData.getUserById(userId);
+            data_db = await dataInfoData.getDataById(dataId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            if (user_db.data_list.includes(dataId)) throw 'Data already contained in your list';
+            userUpdateInfo = await userData.addData(userId, dataId);
+            if (userUpdateInfo) {
+                return res.redirect("/user");
+            };
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
     .delete(async (req, res) => {
         let dataId = undefined;
         let data_db = undefined;
