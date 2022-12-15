@@ -5,7 +5,73 @@
   
     var myNewTaskForm = $('#login_form')
 
+    myNewTaskForm.submit(function (event) {
+      event.preventDefault();
+
+      var newName = $('#login_username'),
+      newPasswd = $('#login_passwd'),
+      errorMsg = $('#login_error');
+
+      console.log("we reached here - before getting values")
   
+      var newName = newName.val();
+      var newPasswd = newPasswd.val();
+  
+      try {
+        checkUsername(newName);
+        checkPasswd(newPasswd);
+
+        var requestConfig = {
+            method: 'POST',
+            url: '/login',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                user_name: newName,
+                user_password: newPasswd
+            })
+        };
+
+        console.log("Everything looks good, let's send those data to routes")
+  
+          $.ajax(requestConfig).then(function (responseMessage) {
+            console.log(responseMessage);
+            var newElement = $(responseMessage);
+            //---------------------- Lines in middle might not be needed
+            // bindEventsToTodoItem(newElement);
+            //----------------------
+            errorMsg.append(newElement);
+        });
+      } catch (e) {
+        var requestConfig = {
+            method: 'POST',
+            url: '/login',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                user_name: newName,
+                user_password: newPasswd
+            })
+        };
+
+        
+        console.log("Something is wrong, but we got here")
+  
+          $.ajax(requestConfig).then(function (responseMessage) {
+            console.log(responseMessage);
+            var newElement = $(responseMessage);
+            //---------------------- Lines in middle might not be needed
+            // bindEventsToTodoItem(newElement);
+            //----------------------
+  
+            errorMsg.append(newElement);
+            errorMsg.append(e);
+          });
+      }
+
+
+    });
+})(window.jQuery);
+
+
     // --------------------------------- below should be deleted after figuring out stuffs
     // function bindEventsToTodoItem(todoItem) {
     //     todoItem.find('.finishItem').on('click', function (event) {
@@ -115,72 +181,3 @@ function checkPasswd(passwd) {
 
   return passwd;
 }
-
-//------------------------------------------below are the codes that really matter---------------------------------------------
-
-
-    myNewTaskForm.submit(function (event) {
-      event.preventDefault();
-
-      var newName = $('#login_username'),
-      newPasswd = $('#login_passwd'),
-      errorMsg = $('#login_error');
-
-      console.log("we reached here - before getting values")
-  
-      var newName = newName.val();
-      var newPasswd = newPasswd.val();
-  
-      try {
-        checkUsername(newName);
-        checkPasswd(newPasswd);
-
-        var requestConfig = {
-            method: 'POST',
-            url: '/login',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                user_name: newName,
-                user_password: newPasswd
-            })
-        };
-
-        console.log("Everything looks good, let's send those data to routes")
-  
-          $.ajax(requestConfig).then(function (responseMessage) {
-            console.log(responseMessage);
-            var newElement = $(responseMessage);
-            //---------------------- Lines in middle might not be needed
-            // bindEventsToTodoItem(newElement);
-            //----------------------
-            errorMsg.append(newElement);
-        });
-      } catch (e) {
-        var requestConfig = {
-            method: 'POST',
-            url: '/login',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                user_name: newName,
-                user_password: newPasswd
-            })
-        };
-
-        
-        console.log("Something is wrong, but we got here")
-  
-          $.ajax(requestConfig).then(function (responseMessage) {
-            console.log(responseMessage);
-            var newElement = $(responseMessage);
-            //---------------------- Lines in middle might not be needed
-            // bindEventsToTodoItem(newElement);
-            //----------------------
-  
-            errorMsg.append(newElement);
-            errorMsg.append(e);
-          });
-      }
-
-
-    });
-})(window.jQuery);
