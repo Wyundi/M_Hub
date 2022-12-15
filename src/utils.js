@@ -154,7 +154,7 @@ function checkPasswd(passwd) {
     
 
     /*
-    
+
     As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
     - Uppercase and lowercase letters (A-Z and a-z)

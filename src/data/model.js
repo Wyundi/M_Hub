@@ -219,7 +219,6 @@ const addData = async (modelId, dataId) => {
 
 };
 
-
 const removeFromUserList = async (modelId, userId) => {
 
     modelId = utils.checkId(modelId, "model id");
