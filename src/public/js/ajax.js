@@ -1,17 +1,42 @@
 (function ($) {
     // Let's start writing AJAX calls!
     
-    console.log("we reached here")
+    console.log("we reached here - start of ajax")
   
     var myNewTaskForm = $('#login_form'),
       newName = $('#login_username'),
       newPasswd = $('#login_passwd'),
       errorMsg = $('#login_error');
   
+    // --------------------------------- below should be deleted after figuring out stuffs
+    function bindEventsToTodoItem(todoItem) {
+        todoItem.find('.finishItem').on('click', function (event) {
+          event.preventDefault();
+          var currentLink = $(this);
+          var currentId = currentLink.data('id');
+    
+          var requestConfig = {
+            method: 'POST',
+            url: '/login'
+          };
+    
+          $.ajax(requestConfig).then(function (responseMessage) {
+            var newElement = $(responseMessage);
+            bindEventsToTodoItem(newElement);
+            todoItem.replaceWith(newElement);
+          });
+        });
+      }
+    
+      todoArea.children().each(function (index, element) {
+        bindEventsToTodoItem($(element));
+      });
+//-------------------------------------------- ABOVE
+
     myNewTaskForm.submit(function (event) {
       event.preventDefault();
 
-      console.log("we reached here")
+      console.log("we reached here - before getting values")
   
       var newName = newName.val();
       var newPasswd = newPasswd.val();
@@ -30,13 +55,14 @@
             })
         };
 
-        console.log("we are at the passing r")
+        console.log("Everything looks good, let's send those data to routes")
   
           $.ajax(requestConfig).then(function (responseMessage) {
             console.log(responseMessage);
             var newElement = $(responseMessage);
-            // bindEventsToTodoItem(newElement);
-  
+            //---------------------- Lines in middle might not be needed
+            bindEventsToTodoItem(newElement);
+            //----------------------
             errorMsg.append(newElement);
         });
       } catch (e) {
@@ -51,12 +77,14 @@
         };
 
         
-        console.log("Reverse Card")
+        console.log("Something is wrong, but we got here")
   
           $.ajax(requestConfig).then(function (responseMessage) {
             console.log(responseMessage);
             var newElement = $(responseMessage);
-            // bindEventsToTodoItem(newElement);
+            //---------------------- Lines in middle might not be needed
+            bindEventsToTodoItem(newElement);
+            //----------------------
   
             errorMsg.append(newElement);
             errorMsg.append(e);
