@@ -1,5 +1,3 @@
-const ndarray = require("ndarray")
-
 const mongoCollections = require('../config/mongoCollections');
 const dataInfo = mongoCollections.dataInfo;
 const {ObjectId} = require('mongodb');
@@ -11,6 +9,7 @@ const utils = require("../utils");
 const createData = async (data) => {
     /*
     data.name,
+    data.type,
     data.description,
     data.features,
     data.length,
@@ -22,6 +21,7 @@ const createData = async (data) => {
     // error check
 
     data_name = utils.checkString(data.name);
+    data_type = utils.checkDataType(data.type);
     description = utils.checkString(data.description);
     features = utils.checkStringArray(data.features);
     length = utils.checkInt(data.length);
@@ -70,6 +70,7 @@ const createData = async (data) => {
 
     let newData = {
         data_name: data_name,
+        type: data_type,
         description: description,
         features: features,
         mean: mean_list,
@@ -183,12 +184,13 @@ const updateData = async (dataId, newData) => {
     dataId = utils.checkId(dataId, 'data id');
 
     // check new data
-    data_name = utils.checkString(newData.name);
-    description = utils.checkString(newData.description);
-    features = utils.checkStringArray(newData.features);
-    length = utils.checkInt(newData.length);
-    source = utils.checkUrl(newData.source);
-    userId = utils.checkId(newData.userId);
+    let data_name = utils.checkString(newData.name);
+    let type = utils.checkDataType(newData.type);
+    let description = utils.checkString(newData.description);
+    let features = utils.checkStringArray(newData.features);
+    let length = utils.checkInt(newData.length);
+    let source = utils.checkUrl(newData.source);
+    let userId = utils.checkId(newData.userId);
 
     // add data info
 
@@ -197,6 +199,7 @@ const updateData = async (dataId, newData) => {
 
     newData = {
         data_name: data_name,
+        type: type,
         description: description,
         features: features,
         length: length,

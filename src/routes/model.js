@@ -328,7 +328,6 @@ router
 
         let modelId = undefined;
         let model_db = undefined;
-        console.log('222');
 
         try {
             modelId = utils.checkId(req.params.id, "model id");
@@ -377,7 +376,6 @@ router
 
         let modelId = req.params.id;
         let model_db = undefined;
-        console.log('111');
 
         try {
             model_db = await modelData.getModelById(modelId);

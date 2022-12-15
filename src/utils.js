@@ -231,9 +231,9 @@ function checkUrl(url) {
 
 function checkPath(path) {
 
-    const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
+    // const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
     
-    if (!result) throw "Invalid path"
+    // if (!result) throw "Invalid path"
 
     return path;
 }
@@ -319,6 +319,16 @@ function checkComment(id, username, comment) {
     comment = checkString(comment);
 }
 
+function checkDataType(type) {
+
+    let type_list = ['data', 'img'];
+    if (type_list.indexOf(type) === -1) {
+        throw 'input type not in type list.';
+    }
+
+    return type;
+}
+
 module.exports = {
 
     // error check
@@ -347,5 +357,6 @@ module.exports = {
     checkRawData,
     str2strArray,
 
-    checkComment
+    checkComment,
+    checkDataType
 }
