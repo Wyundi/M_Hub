@@ -261,8 +261,10 @@ module.exports = {
     createModel,
     getAllModels,
     getModelById,
+    getModelByName,
     removeModel,
     updateModel,
     addUser,
-    addData
+    addData,
+    removeFromUserList
 };
