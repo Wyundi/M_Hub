@@ -1,17 +1,19 @@
 <h2> Log in </h2>
 
-<form action="/login" method="POST" class="searchuser-form">
+<div id = "login_error" class="error">I'm an error</div>
+    
+<form id = "login_form" action="/login" method="POST" class="searchuser-form">
 
-    <label for="name">
+    <label for="login_username">
         User Name
-        <input id="name" type="text" name="user_name" placeholder="please input user name" class="full-width-input">
+        <input id="login_username" type="text" name="user_name" placeholder="please input user name" class="full-width-input">
     </label>
 
     <br>
 
-    <label for="passwd">
+    <label for="login_passwd">
         Password
-        <input id="passwd" type="password" name="user_password" placeholder="please input password" class="full-width-input">
+        <input id="login_passwd" type="password" name="user_password" placeholder="please input password" class="full-width-input">
     </label>
 
     <br>
