@@ -116,15 +116,57 @@ const updateModel = async (model_info) => {
 };
 
 const addUser = async (modelId, userId) => {
-    modelId = utils.checkId(modelId, 'model id');
-    userId = utils.checkId(userId, 'user id');
+    
+    // error check
+    modelId = utils.checkId(modelId, "model id");
+    userId = utils.checkId(userId, "user id");
 
+    // add user
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
 
+    // add user to model
+    const modelCollection = await model();
+    const updatedInfo = await modelCollection
+        .updateOne( {_id: ObjectId(modelId)}, {$push: {user_list: userId}} );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add user successfully';
+    }
+
+    model_db = await getModelById(modelId);
+
+    model_db._id = model_db._id.toString();
+
+    return model_db;
 
 };
 
 const addData = async (modelId, dataId) => {
-    
+
+    // error check
+    modelId = utils.checkId(modelId, "model id");
+    dataId = utils.checkId(dataId, "data id");
+
+    // add user
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+    // add user to model
+    const modelCollection = await model();
+    const updatedInfo = await modelCollection
+        .updateOne( {_id: ObjectId(modelId)}, {$push: {data_list: dataId}} );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add data successfully';
+    }
+
+    model_db = await getModelById(modelId);
+
+    model_db._id = model_db._id.toString();
+
+    return model_db;
+
 };
 
 module.exports = {

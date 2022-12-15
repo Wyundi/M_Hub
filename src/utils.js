@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 // error check
+var pathValidator = require('is-valid-path');
 
 function checkInputExists(input) { // check parameter exists
     if (input == undefined) {
@@ -99,29 +100,45 @@ function checkString(str) {
 
 function checkEmail(email) {
 
-    // 
-
     email = checkString(email);
+    email = email.toLowerCase();
+    // all email should be converted into lower for deduplication and some other purpose
 
-    return email;
+    const result = email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    if (!result) {
+        throw "Your inputed email is invalid"
+    }
+
+    return email; // depend on how we want this to work, this could be return or not
 }
 
 function checkId(id, varName) {
-    if (!id) throw `Error: You must provide a ${varName}`;
-    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
+    if (!id) throw `You must provide a ${varName}`;
+    if (typeof id !== 'string') throw `${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
-        throw `Error: ${varName} cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+        throw `${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `${varName} invalid object ID`;
 
     return id;
 }
 
 function checkGender(gender) {
 
-    // ["male", "female"]
+    // ["male", "female"]  
+    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+
+    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
 
     gender = checkString(gender);
+    // gender = gender.toLowerCase();
+
+    if (!options.includes(gender)) {
+        throw "the gender you provide is not valid, please try again";
+    }
 
     return gender;
 }
@@ -134,38 +151,90 @@ function checkLocation(loc) {
 }
 
 function checkPasswd(passwd) {
+    
 
     /*
-
-    As a general guideline, passwords should consist of 8 to 14 characters
+    As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
-
     - Uppercase and lowercase letters (A-Z and a-z)
-
     - Numeric characters (0-9)
-
+    - special character
     */
 
+    // haven't consider special character ralated cases
+
     passwd = checkString(passwd);
+
+    if (passwd.includes(' ')) {
+        throw "Password should not contain spaces.";
+    }
+
+    if (passwd.length < 6 || passwd.length > 14) {
+        throw "Password should be at least 6 characters long.";
+    }
+
+    if (passwd.match(/[A-Z]+/g) === null) {
+        throw "Password needs to be at least one uppercase character.";
+    }
+
+    if (passwd.match(/[0-9]+/g) === null) {
+        throw "Password needs to be at least one number.";
+    }
+
+    if (passwd.match(/[^a-zA-Z0-9]+/g) === null) {
+        throw "Password needs to be at least one special character.";
+    }
 
     return passwd;
 }
 
-function checkStringArray(arr) {
+function checkStringArray(arr, varName) {
 
+    //We will allow an empty array for this,
+    //if it's not empty, we will make sure all tags are strings
+
+    let arrayInvalidFlag = false;
+
+    if (!arr || !Array.isArray(arr))
+        throw `You must provide an array of ${varName}`;
+    for (i in arr) {
+        if (typeof arr[i] !== 'string' || arr[i].trim().length === 0) {
+            arrayInvalidFlag = true;
+            break;
+        }
+        arr[i] = arr[i].trim();
+    }
+
+    if (arrayInvalidFlag)
+        throw `One or more elements in ${varName} array is not a string or is an empty string`;
     return arr;
+
 }
 
 function checkUrl(url) {
+    let details
 
-    return url;
+    try {
+        details = new URL(url);
+    } catch (e) {
+        throw "Invalid URL"
+    }
+    if (details.protocol == "http:" || details.protocol == "https:") {
+        return url;
+    }
+    throw "Invalid URL"
 }
 
 function checkPath(path) {
 
+    const result = pathValidator(path)
+    
+    if (!result) throw "Invalid path"
+
     return path;
 }
 
+// json
 function checkJson(json_path) {
 
     json_obj = readJsonFile(json_path);
@@ -173,33 +242,7 @@ function checkJson(json_path) {
     return json_obj;
 }
 
-// hash passwd
-function hash(passwd) {
-
-    passwd = checkPasswd(passwd);
-    const hashedPasswd = bcrypt.hash(passwd, saltRounds);;
-
-    return hashedPasswd;
-}
-
-// json
 function readJsonFile(json_path) {
-    
-    // fake json object for test
-    // json_obj = {
-    //     "feature1": {
-    //         "0": 0.25,
-    //         "1": 0.7
-    //     },
-    //     "feature2": {
-    //         "0": 0.23,
-    //         "1": 0.56
-    //     },
-    //     "target": {
-    //         "0": 1,
-    //         "1": 0
-    //     }
-    // }
 
     let json_string = undefined;
     let json_obj = undefined;
@@ -217,77 +260,60 @@ function readJsonFile(json_path) {
 
 function checkUsername(username) {
 
-    const regUsername = /[a-zA-Z\d ]+/g;
-    if (typeof username !== 'string') throw 'Error: username should be a string';
-    username = username.trim();
-    if (username.length < 4) throw 'Error: usermane should be at least 4 characters long';
-    let regReslt = username.replace(regUsername, '');
-    if (!regReslt.length === 0) throw 'Error: username only include alphanumeric characters';
-    username = username.toLowerCase();
+    username = checkString(username);
+    
+    if (username.match(/[^a-zA-Z0-9]+/g) !== null) {
+        throw 'Username shoule not contain special characters.';
+    }
+
+    if (username.length < 4) {
+        throw "Username too short.";
+    }
+
     return username;
 }
 
-function checkComment(comment) {
-    if (!comment) throw `Error: You must provide a comment`;
-    if (typeof comment !== 'string') throw `Error: comment must be a string`;
-    comment = comment.trim();
-    if (comment.length == 0) throw 'Error: comment cannot be empty';
-    const pattern = /^[\p{S}\p{N}\p{P}\s]+$/gu;
-    if (comment.match(pattern)) throw 'Error: comment cannot only contain punctuation or special character or numbers.';
-    return comment;
+function prior(first_ele, second_ele) {
+    return first_ele ? first_ele : second_ele;
 }
 
-function checkModelName(modelName) {
-    if (!modelName) throw `Error: You must provide a model name`;
-    if (typeof modelName !== 'string') throw `Error: model name must be a string`;
-    modelName = modelName.trim();
-    if (modelName.length == 0) throw 'Error: model name cannot be empty';
-    const pattern = /\p{S}/gu;
-    if (modelName.match(pattern)) throw 'Error: model name cannot contain special characters';
-    return modelName;
+function checkRawData(rawdata) {
+
+    if (!rawdata || Object.keys(rawdata).length === 0) {
+        throw "No files were uploaded.";
+    }
+
+    return rawdata;
+
 }
 
-function checkModelCategory(modelCategory) {
-    if (!modelCategory) throw `Error: You must provide a model category`;
-    if (typeof modelCategory !== 'string') throw `Error: model category must be a string`;
-    modelCategory = modelCategory.trim();
-    if (modelCategory.length == 0) throw 'Error: model category cannot be empty';
-    const pattern = /\p{S}|\p{P}|\p{N}/gu;
-    if (modelCategory.match(pattern)) throw 'Error: model category cannot contain special characters, punctuations or numbers';
-    return modelCategory;
+function str2strArray(str) {
+
+    str = checkString(str);
+
+    // replace tab and space
+    str = str.replace(/[\t\s]/g, '');
+
+    // check spcial char
+    if (str.match(/[^a-zA-Z0-9-_,]+/g)) {
+        throw "Should not input special characters.";
+    }
+
+    // check comma
+    if (str.match(/,,/) !== null) {
+        throw 'More than one comma.';
+    }
+
+    return str.split(',');
+
 }
 
-function checkModelDescription(description) {
-    if (!description) throw `Error: You must provide a model description`;
-    if (typeof description !== 'string') throw `Error: model description must be a string`;
-    description = description.trim();
-    if (description.length == 0) throw 'Error: model description cannot be empty';
-    const pattern = /^[\p{S}\p{N}\p{P}\s]+$/gu;
-    if (description.match(pattern)) throw 'Error: model description cannot only contain punctuation or special character or numbers.';
-    return description;
-}
+function checkComment(id, username, comment) {
 
-function checkStringPattern(str, pattern, varName) {
-    if (!str) throw `Error: You must provide ${varName}`;
-    if (typeof str !== 'string') throw `Error: ${varName} must be string`;
-    str = str.trim();
-    if (str.length == 0) throw `Error: ${varName} length cannot be 0`;
-    const pattern1 = /^[\p{S}\p{N}\p{P}\s]+$/gu;
-    if (str.match(pattern1)) throw `Error: ${varName} cannot only contain punctuation or special character or numbers.`;
-    if (str.match(pattern)) throw `Error: ${varName} contains illegal characters.`;
-    return str;
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
 }
-
-function checkModelLink(link, varName) {
-    if (!link) throw `Error: You must provide ${varName}`;
-    if (typeof link !== 'string') throw `Error: ${varName} must be string`;
-    link = link.trim();
-    if (link.length == 0) throw `Error: ${varName} length cannot be 0`;
-    const Expression =  /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
-    if (RegExp(Expression).test(link)) throw `Error: ${varName} is not a valid link`;
-    return link;
-}
-
 
 module.exports = {
 
@@ -310,15 +336,12 @@ module.exports = {
     checkPath,
     checkJson,
     checkUsername,
-    checkComment,
 
-    checkModelName,
-    checkModelCategory,
-    checkModelDescription,
-    checkStringPattern,
-    checkModelLink,
-
-    // other help function
-    hash,
     readJsonFile,
+    prior,
+
+    checkRawData,
+    str2strArray,
+
+    checkComment
 }

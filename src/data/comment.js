@@ -15,7 +15,6 @@ const createComment = async (
     comment
     // date should be current date
 ) => {
-    // id is for model?
     modelId = utils.checkId(id, 'comment id');
     username = utils.checkUsername(userName);
     comment = utils.checkComment(comment);
