@@ -1,19 +1,19 @@
-let myForm = document.getElementById("random_cat_buttom");
-let random_cat = document.getElementById("random_cat_img");
+let home_myForm = document.getElementById("home_random_cat_buttom");
+let home_random_cat = document.getElementById("home_random_cat_img");
 
-if (myForm) {
-    myForm.addEventListener('submit', (event) => {
+if (home_myForm) {
+    home_myForm.addEventListener('submit', (event) => {
       console.log('Form submission fired');
       event.preventDefault();
       console.log('Has a form');
 
-      let randCat = getRandomCat();
+      let randCat = homeGetRandomCat();
 
-      random_cat.setAttribute("src", randCat)
+      home_random_cat.setAttribute("src", randCat)
     });
 }
 
-const getRandomCat = () => {
+const homeGetRandomCat = () => {
 
     const cats = [
         "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?q=65&w=1135&ar=2:1&fit=crop",
