@@ -1,0 +1,68 @@
+
+
+<h2> Create Model </h2>
+
+<form action="/model" method="POST" class="create-data-form", enctype ="multipart/form-data">
+
+    <label for="modelname">
+        Model Name
+        <input id="modelname" type="text" name="model_name" placeholder="please input model name" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="category">
+        Category
+        <input id="category" type="text" name="model_category" placeholder="please input model category" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="description">
+        Description
+        <input id="description" type="text" name="model_description" placeholder="please input data description" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="link">
+        Link
+        <input id="link" type="text" name="model_link" placeholder="please input model link" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="input">
+        Input
+        <input id="input" type="text" name="model_input" placeholder="model input" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="output">
+        Output
+        <input id="output" type="text" name="model_output" placeholder="model output" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="onnxfile">
+        Onnx File
+        <input id="onnxfile" type="file" name="onnx_file">
+    </label>
+
+    <label for="data">
+        Data
+        <input id="data" type="text" name="model_data" placeholder="select a data for model" class="full-width-input">
+    </label>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> submit </button>
+
+    <br>
+
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
+
+</form>
