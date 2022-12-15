@@ -2,6 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const model = mongoCollections.model;
 const {ObjectId} = require('mongodb');
 
+const userData = require('./user');
 const utils = require("../utils");
 
 const createModel = async (model_info) => {
