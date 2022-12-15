@@ -28,7 +28,7 @@
         });
       }
     
-      todoArea.children().each(function (index, element) {
+      errorMsg.children().each(function (index, element) {
         bindEventsToTodoItem($(element));
       });
 //-------------------------------------------- ABOVE
