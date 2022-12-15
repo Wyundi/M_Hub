@@ -5,6 +5,7 @@ const userData = data.user;
 
 const path = require('path');
 const utils = require('../utils');
+const { dataInfo } = require('../data');
 
 router
     .route('/')
@@ -25,6 +26,12 @@ router
     .route('/user')
     // post function for create user
     .get(async (req, res) => {
+        if (req.session.message) {
+            window.onbeforeunload = function() {
+                return req.session.message;
+              };
+        }
+
         time = new Date().toUTCString();
 
         let userId = req.session.user.userId;
@@ -53,7 +60,8 @@ router
                 location: user_db.location,
                 organization: user_db.organization,
                 data_list: data_list,
-                model_list: model_list
+                model_list: model_list,
+                message: req.session.message
             });
         } catch (e) {
             let error_status = 500;
@@ -64,6 +72,7 @@ router
             });
         }
     })
+    .post()
 
 router
     .route('/user/edit')

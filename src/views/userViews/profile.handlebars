@@ -18,6 +18,10 @@ Also, you will need to have a hyperlink at the bottom of the page to /logout.
 
 <button type="button" class="btn"> <a href="../user/edit"> edit profile </a></button>
 
+{{#if message}}
+    <p> {{message}} </p>
+{{/if}}
+
 <h3> Data List </h3>
 
 <button type="button" class="btn"> <a href="../data"> Create New Data </a></button>

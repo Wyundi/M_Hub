@@ -1,3 +1,4 @@
+const { dataInfo } = require('../config/mongoCollections');
 const connection = require('../config/mongoConnection');
 const data = require('../data/');
 const userData = data.user;
@@ -24,7 +25,9 @@ async function main() {
     let data1 = fakeData.data1;
     data1.userId = user1._id.toString();
     data1 = await dataInfoData.createData(data1);
+    await dataInfoData.addUser(data1._id, user2._id);
     await userData.addData(user1._id, data1._id);
+    await userData.addData(user2._id, data1._id);
 
     let data2 = fakeData.data2;
     data2.userId = user2._id.toString();

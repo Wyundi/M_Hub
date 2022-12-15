@@ -123,6 +123,12 @@ router
         }
 
         try {
+            userId = utils.checkId(req.session.user.userId, "user id");
+            contributorId = model_db.user_list[0];
+            let user_db = await userData.getUserById(contributorId);
+            contributor = user_db.username;
+            let is_contributor = req.session.user.userId === contributorId;
+
             for (userIdx in model_db.user_list) {
                 userId = utils.checkId(model_db.user_list[userIdx], "user id");
                 let user_db = await userData.getUserById(userId);
@@ -145,9 +151,10 @@ router
                 onnx_path: model_db.onnx_path,
                 input: model_db.input,
                 output: model_db.output,
-                user_list: user_name_list,
+                contributor: contributor,
                 data_list: data_name_list,
-                comment: model_db.comment
+                comment: model_db.comment,
+                is_contributor: is_contributor
             });
         } catch (e) {
             let error_status = 500;
@@ -159,81 +166,54 @@ router
         }
 
     })
-    .put(async (req, res) => {
-        // // update models
-        // let modelId = req.session.userId;
-        // let model_db = undefined;
+    .post(async (req, res) => {
+        let userId = req.session.user.userId;
+        let modelId = req.body.modelId;
+        let user_db = undefined;
+        let model_db = undefined;
 
-        // try {
-        //     model_db = await modelData.getModelById(modelId);
-        // } catch (e) {
-        //     let error_status = 400;
-        //     return res.status(error_status).render("./error/errorPage", {
-        //         username: req.session.user.username,
-        //         error_status: error_status,
-        //         error_message: e
-        //     });
-        // }
+        try {
+            userId = utils.checkId(userId, "user id");
+            modelId = utils.checkId(modelId, "model id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
-        // let model_name = undefined;
-        // let category = undefined;
-        // let description = undefined;
-        // let link = undefined;
-        // let onnx_path = undefined;
-        // let input = undefined;
-        // let output = undefined;
-        // let user_list = undefined;
-        // let data_list = undefined;
-        // let comment = undefined;
+        try {
+            user_db = await userData.getUserById(userId);
+            model_db = await modelData.getModelById(modelId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
-        // try {
-        //     model_name = utils.checkString(utils.prior(req.body.model_name, model_db.model_name));
-        //     category = utils.checkString(utils.prior(req.body.model_category, model_db.category));
-        //     description = utils.checkString(utils.prior(req.body.model_description, model_db.description));
-        //     link = utils.checkUrl(utils.prior(req.body.model_link, model_db.link));
-        //     input = utils.checkString(utils.prior(req.body.model_input, model_db.input));
-        //     output = utils.checkString(utils.prior(req.body.model_output, model_db.output));
-        //     model_data = utils.checkString(req.body.model_data);
-        // } catch (e) {
-        //     let error_status = 400;
-        //     return res.status(error_status).render("./error/errorPage", {
-        //         username: req.session.username,
-        //         error_status: error_status,
-        //         error_message: e
-        //     });
-        // }
-
-        // if (!model_db.data_list.contains(model_data)){
-        //     model_db.data_list.push(model_data);
-        // }
-
-        // let newModel = undefined;
-        // try {
-        //     newModel = {
-        //         model_name: model_name,
-        //         category: category,
-        //         description: description,
-        //         link: link,
-        //         onnx_path: model_db.onnx_path,
-        //         input: input,
-        //         output: output,
-        //         user_list: model_db.user_list,
-        //         data_list: model_db.data_list,
-        //         comment: model_db.comment
-        //     }
-
-        //     let updateStatus = await modelData.updateModel(modelId,newModel);
-
-        //     res.redirect(`../info/${modelId}`);
-        // } catch (e) {
-        //     let error_status = 500;
-        //     return res.status(error_status).render("./error/errorPage", {
-        //         username: req.session.username,
-        //         error_status:error_status,
-        //         error_message: e
-        //     });
-        // }
-
+        try {
+            if (user_db.model_list.includes(modelId)) {
+                req.session.message = 'Model already contained in your list';
+                return res.redirect("/user");
+            }
+            userUpdateInfo = await userData.addModel(userId, modelId);
+            if (userUpdateInfo) {
+                req.session.message = 'Model added to your list successfully';
+                return res.redirect("/user");
+            };
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
     })
     .delete(async (req, res) => {
         let modelId = undefined;

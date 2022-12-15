@@ -1,32 +1,28 @@
 <h2> {{data_name}} </h2>
 
-<h3> description </h3>
+<h3> Description </h3>
 <p> {{description}} </p>
 
-<h3> features </h3>
+<h3> Features </h3>
 <ul>
     {{#each features}}
         <li> {{this}} </li>
     {{/each}}
 </ul>
 
-<h3> length </3>
+<h3> Length </3>
 <p> {{length}} </p>
 
-<h3> source </3>
+<h3> Source </3>
 <p> <a href="{{source}}"> {{source}} </a> </p>
 
-<h3> raw data </h3>
+<h3> Raw Data </h3>
 <a href="{{raw_data_path}}"> link to raw data </a>
 
-<h3> user list </h3>
-<ul>
-    {{#each user_list}}
-        <li> {{this}} </li>
-    {{/each}}
-</ul>
+<h3> Contributor </h3>
+<p> {{contributor}} </p>
 
-<h3> comment </h3>
+<h3> Comment </h3>
 <ul>
     {{#each comment}}
         <li> {{this}} </li>
@@ -79,27 +75,33 @@ document.getElementById("div1").style.display="none";
 
 <br>
 <br>
-<button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
-<br>
+{{#if is_contributor}}
+    <button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
+    <br>
 
-<form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
-    <button type="submit" onclick="javascript:return del();"> Delete this dataset
+    <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
+        <button type="submit" onclick="javascript:return del();"> Delete this dataset
 
-        <script type="text/javascript">
+            <script type="text/javascript">
 
-        function del() {
-            var msg = "Are you sure to delete?";
-            if (confirm(msg) === true) {
-                alert('Successfully deleted');
-                return true;
-            } else {
-                alert('Cancelled');
-                return false;
+            function del() {
+                var msg = "Are you sure to delete?";
+                if (confirm(msg) === true) {
+                    alert('Successfully deleted');
+                    return true;
+                } else {
+                    alert('Cancelled');
+                    return false;
+                }
             }
-        }
 
-        </script>
-    </button>
-</form>
+            </script>
+        </button>
+    </form>
+{{else}}
+    <form action="./{{dataId}}" method="POST">
+        <button type="submit" value="{{dataId}}" name="dataId"> add to data list </button>
+    </form>
+{{/if}} 
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>
