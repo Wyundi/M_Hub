@@ -258,7 +258,7 @@ const removeFromUserList = async (modelId, userId) => {
 
 module.exports = {
     createModel,
-    getAllModels,
+    getAllModel,
     getModelById,
     getModelByName,
     removeModel,
