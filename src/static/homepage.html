@@ -22,6 +22,43 @@ This page will be shown when the following route is hit: GET http://localhost:30
 
         <!-- page content -->
         <h1> M_Hub </h1>
+        
+        
+        <form method="" id="random_cat_buttom">
+            <img src = "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg" alt="random_cat"
+            style="height: 250px; width: 500px" id = "random_cat_img">
+
+            <button type="submit" onclick="randomCat()"> Get a random cat </button>
+        </form>
+
+        <script>
+            function randomCat() {
+                let myForm = document.getElementById("random_cat_buttom");
+                let random_cat = document.getElementById("random_cat_img");
+
+                const cats = [
+                    "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?q=65&w=1135&ar=2:1&fit=crop",
+                    "https://www.cnet.com/a/img/resize/5eb6d5e0c0dbff265f36109152cde81958eb68cf/hub/2020/09/22/ad4bd31b-cf8c-46f5-aa70-231df9acc041/longcat.jpg?auto=webp&fit=crop&height=675&width=1200",
+                    "https://external-preview.redd.it/UpoNaV9BKB9eJCPKOsPyr40M1AE19rFkN5UJqhcPGLg.png?width=960&crop=smart&format=pjpg&auto=webp&v=enabled&s=e1e226e9471251266245f611aa9b16ff62320b45",
+                    "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
+                    "https://www.webbox.co.uk/wp-content/webp-express/webp-images/uploads/2022/04/shutterstock_1661727271.jpg.webp",
+                    "https://i.ytimg.com/vi/8BVYaL6OQ9Q/maxresdefault.jpg"
+                ]
+
+                if (myForm) {
+                    myForm.addEventListener('submit', (event) => {
+                    console.log('Form submission fired');
+                    event.preventDefault();
+                    console.log('Has a form');
+
+                    let random_number = Math.floor(Math.random() * cats.length)
+
+                    random_cat.setAttribute("src", cats[random_number])
+                    });
+                }
+            }
+        </script>
+
         <main>
 
             <p> This is a brief description of this web page. This app is for CS546 Final Project, M_Hub. </p>
