@@ -9,108 +9,157 @@ const createModel = async (model_info) => {
     model_info.name,
     model_info.category,
     model_info.description,
-    model_info.link, 
-    model_info.structure, 
+    model_info.link,
+    model_info.onnx_path,
     model_info.input,
     model_info.output,
     model_info.userId,
     model_info.dataId
     */
 
-    modelName = utils.checkModelName(model_info.name);
-    modelCategory = utils.checkModelCategory(model_info.category);
-    modelDescription = utils.checkModelDescription(model_info.description);
-    modelLink = utils.checkModelLink(model_info.link, 'model link');
-    modelStructure = utils.checkStringPattern(model_info.structure, /\p{S}|\p{P}|\p{N}/, 'model structure');
-    modelInput = utils.checkStringPattern(model_info.input, /\p{S}|\p{P}/, 'model input');
-    modelOutput = utils.checkStringPattern(model_info.output, /\p{S}|\p{P}/, 'model output');
-    modelUserId = utils.checkId(model_info.userId, 'user id');
-    modelDataId = utils.checkId(model_info.dataId, 'data id');
+    // error check
 
+    model_name = utils.checkString(model_info.name);
+    category = utils.checkString(model_info.category);
+    description = utils.checkString(model_info.description);
+    link = utils.checkUrl(model_info.link);
+    onnx_path = utils.checkPath(model_info.onnx_path);
+    input = utils.checkString(model_info.input);
+    output = utils.checkString(model_info.output);
+    userId = utils.checkId(model_info.userId, "user id");
+    dataId = utils.checkId(model_info.dataId, "data id");
+
+    // add model to db
     const modelCollection = await model();
 
     let newModel = {
-        name: modelName,
-        category: modelCategory,
-        description: modelDescription,
-        link: modelLink,
-        structure: modelStructure,
-        input: modelInput,
-        output: modelOutput,
-        userId: modelUserId,
-        dataId: modelUserId
-    }
+        model_name: model_name,
+        category: category,
+        description: description,
+        link: link,
+        onnx_path: onnx_path,
+        input: input,
+        output: output,
+        user_list: [userId],
+        data_list: [dataId],
+        comment: []
+    };
 
     const insertInfo = await modelCollection.insertOne(newModel);
-    if (!insertInfo.insertedId) throw `Error: cannot insert model`;
+    if (!insertInfo.acknowledged || !insertInfo.insertedId)
+      throw 'Could not add model';
+
     const newId = insertInfo.insertedId.toString();
-    const model = await getModelById(newId);
-    model._id = model._id.toString();
-    
-    return model;
+
+    const model_db = await getModelById(newId);
+    return model_db;
 };
 
-const getAllModels = async () => {
+const getAllModel = async () => {
     const modelCollection = await model();
     const modelList = await modelCollection.find({}).toArray();
-    if(!modelList) throw `Error: movie list cannot be fetched`;
-    modelList.forEach(element => {
-        element._id = element._id.toString();
-    });
+    if (!modelList) return [];
+
+    for (i in modelList) {
+        modelList[i]._id = modelList[i]._id.toString();
+    }
     return modelList;
 };
 
 const getModelById = async (modelId) => {
+
     modelId = utils.checkId(modelId, 'model id');
+
     const modelCollection = await model();
-    const modelObj = await modelCollection.findOne({_id: ObjectId(modelId)});
-    if (JSON.stringify(modelObj) == "{}") throw `Error: no movie exists with that id`;
-    modelObj._id = modelObj._id.toString();
-    if (modelObj.length != 0) {
-        modelObj.comments.forEach(element => {
-            element._id = element._id.toString();
-        })
+    const model_res = await modelCollection.findOne({_id: ObjectId(modelId)});
+    if (model_res === null) throw 'No model with that id';
+
+    model_res._id = model_res._id.toString();
+
+    for (i in model_res.comment) {
+        model_res.comment[i]._id = model_res.comment[i]._id.toString();
     }
-    return modelObj;
+
+    return model_res;
+
+};
+
+const getModelByName = async (search_model_name) => {
+
+    // error check
+    search_model_name = utils.checkString(search_model_name, 'data name');
+
+    // get model
+    const model_list = await getAllModel();
+
+    let res = [];
+    for (m of model_list) {
+        if (m.model_name.toLowerCase().includes(search_model_name.toLowerCase())) {
+            res.push(m);
+        }
+    }
+
+    //sort by ID
+    res.sort(function(a, b) {return a.id - b.id;});
+
+    //return up to 20 matching results
+    return res.slice(0, 20);
 };
 
 const removeModel = async (modelId) => {
+
     modelId = utils.checkId(modelId, 'model id');
+
+    let model_db = await getModelById(modelId);
+
     const modelCollection = await model();
-    const model = await getModelById(modelId);
-    const deleteInfo = await modelCollection.deleteOne({_id: ObjectId(modelId)});
-    if (deleteInfo.deletedCount === 0) throw `Error: could not delete model with id of ${modelId}`;
-    return;
+    const deletionInfo = await modelCollection.deleteOne({_id: ObjectId(modelId)});
+
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete model with id of ${modelId}`;
+    }
+    
+    return `${model_db.name} has been successfully deleted!`;
+
 };
 
-const updateModel = async (model_info) => {
-    modelName = utils.checkModelName(model_info.name);
-    modelCategory = utils.checkModelCategory(model_info.category);
-    modelDescription = utils.checkModelDescription(model_info.description);
-    modelLink = utils.checkModelLink(model_info.link, 'model link');
-    modelStructure = utils.checkStringPattern(model_info.structure, /\p{S}|\p{P}|\p{N}/, 'model structure');
-    modelInput = utils.checkStringPattern(model_info.input, /\p{S}|\p{P}/, 'model input');
-    modelOutput = utils.checkStringPattern(model_info.output, /\p{S}|\p{P}/, 'model output');
-    modelUserId = utils.checkId(model_info.userId, 'user id');
-    modelDataId = utils.checkId(model_info.dataId, 'data id');
+const updateModel = async (modelId, model_info) => {
+
+    // error check
+
+    model_name = utils.checkString(model_info.name);
+    category = utils.checkString(model_info.category);
+    description = utils.checkString(model_info.description);
+    link = utils.checkUrl(model_info.link);
+    onnx_path = utils.checkPath(model_info.onnx_path);
+    input = utils.checkString(model_info.input);
+    output = utils.checkString(model_info.output);
+    userId = utils.checkId(model_info.userId, "user id");
+    dataId = utils.checkId(model_info.dataId, "data id");
+
+    // update data
+
+    let model_db = await getModelById(modelId);                 // throw an error when not found
 
     const modelCollection = await model();
-    const updatedModel = {
-        name: modelName,
-        category: modelCategory,
-        description: modelDescription,
-        link: modelLink,
-        structure: modelStructure,
-        input: modelInput,
-        output: modelOutput,
-        userId: modelUserId,
-        dataId: modelUserId
-    };
     const updatedInfo = await modelCollection.updateOne(
         {_id: ObjectId(modelId)},
-        {$set: updateModel}
+        {$set: {
+            model_name: model_name,
+            category: category,
+            description: description,
+            link: link,
+            onnx_path: onnx_path,
+            input: input,
+            output: output,
+            user_list: [userId],
+            data_list: [dataId]
+        }}
     );
-    if (updatedInfo.modifiedCount === 0) throw `Error: no change, cannot update`;
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update model successfully';
+    }
 
     return await getModelById(modelId);
 };
@@ -168,6 +217,43 @@ const addData = async (modelId, dataId) => {
     return model_db;
 
 };
+
+const removeFromUserList = async (modelId, userId) => {
+
+    modelId = utils.checkId(modelId, "model id");
+    userId = utils.checkId(userId, "user id");
+
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+    let model_user_list = model_db.user_list;
+    if (!model_user_list) throw 'model user list is empty';
+    utils.deleteFromArray(userId, model_user_list);
+
+    let newModel = {
+        model_name: model_db.model_name,
+        category: model_db.category,
+        description: model_db.description,
+        link: model_db.link,
+        onnx_path: model_db.onnx_path,
+        input: model_db.input,
+        output: model_db.output,
+        user_list: model_user_list,
+        data_list: model_db.data_list,
+        comment: model_db.comment
+    };
+
+    const modelInfoCollection = await model();
+    const updateInfo = await modelInfoCollection.updateOne(
+        {_id: ObjectId(modelId)},
+        {$set: newModel}
+    );
+
+    if (!updateInfo) throw `Could not update model with origin name ${model_db.model_name}!`;
+
+    return `model ${model_db.model_name} has been successfully updated!`;
+
+}; 
 
 module.exports = {
     createModel,

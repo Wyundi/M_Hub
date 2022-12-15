@@ -190,6 +190,7 @@ function checkPasswd(passwd) {
 
 function checkStringArray(arr, varName) {
 
+
     //We will allow an empty array for this,
     //if it's not empty, we will make sure all tags are strings
 
@@ -308,11 +309,11 @@ function str2strArray(str) {
 
 }
 
-function checkComment(id, username, comment) {
-
-    id = checkId(id);
-    username = checkUsername(username);
-    comment = checkString(comment);
+function deleteFromArray(element, array) {
+    let index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    } else throw 'ID not found in list.'
 }
 
 module.exports = {
@@ -342,6 +343,5 @@ module.exports = {
 
     checkRawData,
     str2strArray,
-
-    checkComment
+    deleteFromArray
 }
