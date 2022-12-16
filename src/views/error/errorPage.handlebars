@@ -1,2 +1,11 @@
 <p> {{error_status}} Error: {{error_message}}</p>
-<p>{{error_status}}</p>
+
+<form method="{{#if method}}{{method}}{{else}}POST{{/if}}" action="{{#if action}}{{action}}{{else}}/{{/if}}" class="menu-edit-form"></form>
+
+<img src = "https://http.cat/{{error_status}}"
+    
+    alt="404_not_found"
+    style="height: 600px; width: 750px" 
+>
+
+<br>
