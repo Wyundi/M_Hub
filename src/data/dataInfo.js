@@ -48,12 +48,11 @@ const createData = async (data) => {
         for (let f of features) {
             raw[f] = {};
             raw_list.push([])
-    
+
             for (let i in json_obj[f]) {
                 // add to raw obj
                 let single_data = await rawData.addData(json_obj[f][i].toString());
                 raw[f][i] = single_data._id.toString();
-    
                 // add to raw list
                 if (Number(json_obj[f][i] == json_obj[f][i])) {
                     raw_list[raw_list.length - 1].push(Number(json_obj[f][i]));
@@ -117,6 +116,7 @@ const createData = async (data) => {
         file_path: file_path,
         raw_data: raw,
         user_list: [userId],
+        model_list: [],
         comment: []
     }
 
@@ -285,6 +285,111 @@ const addUser = async (dataId, userId) => {
 
 };
 
+const addModel = async (dataId, modelId) => {   
+    
+    // error check
+    dataId = utils.checkId(dataId, "data id");
+    modelId = utils.checkId(modelId, "model id");
+
+    // add model
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+
+    // add model to data
+    const dataInfoCollection = await dataInfo();
+    const updatedInfo = await dataInfoCollection
+        .updateOne( {_id: ObjectId(dataId)}, {$push: {model_list: modelId}} );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add user successfully';
+    }
+
+    data_db = await getDataById(dataId);
+
+    data_db._id = data_db._id.toString();
+
+    return data_db;
+
+};
+
+const removeFromUserList = async (dataId, userId) => {
+
+    dataId = utils.checkId(dataId, "data id");
+    userId = utils.checkId(userId, "user id");
+
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+
+    let data_user_list = data_db.user_list;
+    if (!data_user_list) throw 'data user list is empty';
+    utils.deleteFromArray(userId, data_user_list);
+
+    let newData = {
+        data_name: data_db.data_name,
+        description: data_db.description,
+        features: data_db.features,
+        mean: data_db.mean,
+        std: data_db.std,
+        length: data_db.length,
+        source: data_db.source,
+        file_path: data_db.file_path,
+        raw_data: data_db.raw_data,
+        user_list: data_user_list,
+        comment: data_db.comment
+    }
+
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: ObjectId(dataId)},
+        {$set: newData}
+    );
+
+    if (!updateInfo) throw `Could not update data with origin name ${data_db.data_name}!`;
+
+    return `data ${data_db.data_name} has been successfully updated!`;
+
+}; 
+
+const removeFromModelList = async (dataId, modelId) => {
+
+    dataId = utils.checkId(dataId, "data id");
+    modelId = utils.checkId(modelId, "model id");
+
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+
+    let data_model_list = data_db.model_list;
+    if (!data_model_list) throw 'data model list is empty';
+    utils.deleteFromArray(modelId, data_model_list);
+
+    let newData = {
+        data_name: data_db.data_name,
+        description: data_db.description,
+        features: data_db.features,
+        mean: data_db.mean,
+        std: data_db.std,
+        length: data_db.length,
+        source: data_db.source,
+        file_path: data_db.file_path,
+        raw_data: data_db.raw_data,
+        user_list: data_db.user_list,
+        model_list: data_model_list,
+        comment: data_db.comment
+    }
+
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: ObjectId(dataId)},
+        {$set: newData}
+    );
+
+    if (!updateInfo) throw `Could not update data with origin name ${data_db.data_name}!`;
+
+    return `data ${data_db.data_name} has been successfully updated!`;
+
+}; 
+
+
 module.exports = {
     createData,
     getAllData,
@@ -293,5 +398,8 @@ module.exports = {
     getRawData,
     removeData,
     updateData,
-    addUser
+    addUser,
+    addModel,
+    removeFromUserList,
+    removeFromModelList
 };

@@ -11,7 +11,7 @@ const constructorMethod = (app) => {
     app.use('/', userRoutes);
     app.use('/model', modelRoutes);
     app.use('/data', dataInfoRoutes);
-    // app.use('/', commentRoutes);
+    app.use('/comment', commentRoutes);
     app.use('/search', searchRoutes);
 
     app.use('*', (req, res) => {

@@ -217,6 +217,7 @@ const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
     // check validation
     userId = utils.checkId(userId);
+    userId = utils.checkId(userId);
     oldPasswd = utils.checkPasswd(oldPasswd);
     newPasswd = utils.checkPasswd(newPasswd);
 
@@ -367,6 +368,80 @@ const getModelList = async(userId) => {
 
 };
 
+const removeFromDataList = async (userId, dataId) => {
+
+    userId = utils.checkId(userId, "user id");
+    dataId = utils.checkId(dataId, "data id");
+
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
+
+    let user_data_list = user_db.data_list;
+    if (!user_data_list) throw 'user data list is empty';
+    utils.deleteFromArray(dataId, user_data_list);
+
+    let newUser = {
+        username: user_db.username,
+        first_name: user_db.first_name,
+        last_name: user_db.last_name,
+        email: user_db.email,
+        gender: user_db.gender,
+        location: user_db.location,
+        organization: user_db.organization,
+        passwd: user_db.passwd,
+        data_list: user_data_list,
+        model_list: user_db.model_list
+    };
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: newUser}
+    );
+
+    if (!updateInfo) throw `Could not update user with origin name ${user.username}!`;
+
+    return `user ${user.username} has been successfully updated!`;
+
+}; 
+
+const removeFromModelList = async (userId, modelId) => {
+
+    userId = utils.checkId(userId, "user id");
+    modelId = utils.checkId(modelId, "model id");
+
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
+
+    let user_model_list = user_db.model_list;
+    if (!user_model_list) throw 'user data list is empty';
+    utils.deleteFromArray(modelId, user_model_list);
+
+    let newUser = {
+        username: user_db.username,
+        first_name: user_db.first_name,
+        last_name: user_db.last_name,
+        email: user_db.email,
+        gender: user_db.gender,
+        location: user_db.location,
+        organization: user_db.organization,
+        passwd: user_db.passwd,
+        data_list: user_db.data_list,
+        model_list: user_model_list
+    };
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: newUser}
+    );
+
+    if (!updateInfo) throw `Could not update user with origin name ${user.username}!`;
+
+    return `user ${user.username} has been successfully updated!`;
+
+}; 
+
 module.exports = {
     createUser,
     checkUser,
@@ -380,4 +455,6 @@ module.exports = {
     addModel,
     getDataList,
     getModelList,
+    removeFromDataList,
+    removeFromModelList
 };

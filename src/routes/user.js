@@ -55,7 +55,7 @@ router
                 location: user_db.location,
                 organization: user_db.organization,
                 data_list: data_list,
-                model_list: model_list
+                model_list: model_list,
             });
         } catch (e) {
             let error_status = 500;
@@ -104,7 +104,7 @@ router
             });
         }
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
         let userId = undefined;
         let user_db = undefined;
@@ -138,6 +138,7 @@ router
         let gender = undefined;
         let location = undefined;
         let organization = undefined;
+        let password = undefined;
 
         try {
 
@@ -250,8 +251,6 @@ router
                 error_message: e
             });
         }
-
-
     })
 
 router
@@ -275,10 +274,10 @@ router
     })
     // post function post a form of user name and passward and go to user profile page
     .post(async (req, res) => {
-        
+
         // error check
-        let username = undefined
-        let passwd = undefined
+        let username = undefined;
+        let passwd = undefined;
 
         try {
             username = utils.checkUsername(xss(req.body.user_name));
@@ -366,6 +365,7 @@ router
             }
 
             const create_status = await userData.createUser(user_info);
+
             if (!create_status.insertedUser) {
                 throw 'Failed to create user.';
             }

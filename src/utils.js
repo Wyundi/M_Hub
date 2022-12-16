@@ -157,9 +157,7 @@ function checkPasswd(passwd) {
 
     As a general guideline, passwords should consist of 6 to 14 characters
     including one or more characters from each of the following sets:
-
     - Uppercase and lowercase letters (A-Z and a-z)
-
     - Numeric characters (0-9)
 
     - special character
@@ -330,6 +328,13 @@ function checkDataType(type) {
     return type;
 }
 
+function deleteFromArray(element, array) {
+    let index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    } else throw 'ID not found in list.'
+}
+
 module.exports = {
 
     // error check
@@ -359,5 +364,6 @@ module.exports = {
     str2strArray,
 
     checkComment,
-    checkDataType
+    checkDataType,
+    deleteFromArray
 }
