@@ -61,6 +61,17 @@
     let data_result_list = $('#data_result_list');
     let model_result_list = $('#model_result_list');
 
+    function error_func(res) {
+        if (res.statue === 403) {
+            search_page.empty();
+            search_page.html('<h1> Forbidden Access </h1><br><p> The user is not logged in. </p><br><a href="../"> homepage </a>');
+        }
+        else {
+            search_page.empty();
+            search_page.html(`<h1> ${res.statusText} </h1>`);
+        }
+    }
+
     function update_page(res) {
 
         if (res.error_message) {
@@ -124,6 +135,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: post_data,
+                error: error_func,
                 success: update_page
             };
     
