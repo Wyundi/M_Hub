@@ -128,6 +128,7 @@ router
         let gender = undefined;
         let location = undefined;
         let organization = undefined;
+        let password = undefined;
 
         try {
 
@@ -138,6 +139,7 @@ router
             gender = utils.checkGender(utils.prior(req.body.user_gender, user_db.gender));
             location = utils.checkLocation(utils.prior(req.body.user_location, user_db.location));
             organization = utils.checkString(utils.prior(req.body.user_organization, user_db.organization));
+            password = await userData.changePasswd(userId, user_db.passwd, password);
 
         } catch (e) {
             let error_status = 400;
@@ -157,7 +159,8 @@ router
                 email: email,
                 gender: gender,
                 location: location,
-                organization: organization
+                organization: organization,
+                password: password
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
