@@ -106,8 +106,19 @@ router
     })
     .post(async (req, res) => {
 
-        let userId = req.session.user.userId;
+        let userId = undefined;
         let user_db = undefined;
+
+        try {
+            userId = utils.checkId(xss(req.session.user.userId), "user id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             user_db = await userData.getUserById(userId);
@@ -270,12 +281,8 @@ router
         let passwd = undefined
 
         try {
-
-            username = xss(req.body.user_name);
-            passwd = xss(req.body.user_password);
-
-            username = utils.checkUsername(username);
-            passwd = utils.checkPasswd(passwd);
+            username = utils.checkUsername(xss(req.body.user_name));
+            passwd = utils.checkPasswd(xss(req.body.user_password));
 
             let check_status = await userData.checkUser(username, passwd);
             if (check_status.authenticatedUser) {
@@ -359,10 +366,10 @@ router
             }
 
             const create_status = await userData.createUser(user_info);
-
-            if (create_status.insertedUser) {
-                return res.status(200).redirect("/login");
+            if (!create_status.insertedUser) {
+                throw 'Failed to create user.';
             }
+
         } catch (e) {
             let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {

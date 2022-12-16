@@ -150,10 +150,6 @@ router
     .delete(async (req, res) => {})
 
 router
-    .route("/structure/:id")
-    .get(async (req, res) => {})
-
-router
     .route("/search")
     .get(async (req, res) => {
 
@@ -303,7 +299,7 @@ router
         let model_db = undefined;
 
         try {
-            modelId = xss(req.params.id);
+            modelId = utils.checkId(xss(req.params.id), "model id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
