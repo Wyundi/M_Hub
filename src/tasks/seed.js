@@ -24,7 +24,6 @@ async function main() {
     // add data
     let data1 = fakeData.data1;
     data1.userId = user1._id.toString();
-    data1.modelId = user1._id.toString();
     data1 = await dataInfoData.createData(data1);
     await dataInfoData.addUser(data1._id, user2._id);
     await userData.addData(user1._id, data1._id);
@@ -43,6 +42,15 @@ async function main() {
     model1.dataId = data1._id.toString();
     model1 = await modelData.createModel(model1);
     await userData.addModel(user1._id, model1._id);
+    await dataInfoData.addModel(data1._id, model1._id);
+
+    let model2 = fakeData.model2;
+    model2.userId = user1._id.toString();
+    model2.dataId = data2._id.toString();
+    model2 = await modelData.createModel(model2);
+    await userData.addModel(user1._id, model2._id)
+    await dataInfoData.addModel(data1._id, model2._id);
+    await modelData.addData(model2._id, data1._id);
 
     // close connect
     await connection.closeConnection();

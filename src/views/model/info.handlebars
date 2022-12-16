@@ -25,7 +25,8 @@
     {{/each}}
 </ul>
 
-<h3> comment </h3>
+<h3> Comment </h3>
+<h4> <a href="/comment/model/{{modelId}}">See more comments</a> </h4>
 <ul>
     {{#each comment}}
         <li> {{this}} </li>
@@ -63,9 +64,14 @@ document.getElementById("div1").style.display="none";
 
 </script>
 
-<br>
 
-<button type="button" class="btn"> <a href="./comment/{{modelId}}"> Leave a comment</a></button>
+<input type="button" value="Comment" onClick="show()"/>
+
+<div id="div1" style="display:none">
+    <form action="" method="POST">
+        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
+        <button type="button" class="btn"> submit</button>
+    </form>
 
 </div>
 

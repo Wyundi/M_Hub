@@ -28,7 +28,6 @@ const createData = async (data) => {
     source = utils.checkUrl(data.source);
     file_path = utils.checkPath(data.file_path);
     userId = utils.checkId(data.userId, "user id");
-    modelId = utils.checkId(data.modelId, "model id");
     
     // check valid json file
 
@@ -80,7 +79,7 @@ const createData = async (data) => {
         file_path: file_path,
         raw_data: raw,
         user_list: [userId],
-        model_list: [modelId],
+        model_list: [],
         comment: []
     }
 
@@ -190,8 +189,6 @@ const updateData = async (dataId, newData) => {
     features = utils.checkStringArray(newData.features);
     length = utils.checkInt(newData.length);
     source = utils.checkUrl(newData.source);
-    userId = utils.checkId(newData.userId);
-    modelId = utils.ckeckId(newData.modelId);
 
     // add data info
 
@@ -205,8 +202,6 @@ const updateData = async (dataId, newData) => {
         length: length,
         source: source,
         raw_data: data_db.raw_data,
-        user_list: [userId],
-        model_list: [modelId],
         comment: []
     }
 
