@@ -8,6 +8,8 @@ const path = require("path");
 const utils = require('../utils');
 const dl_dataprocess = require("../dl/js/dataprocess");
 
+const xss = require('xss');
+
 router
     .route("/")
     .get(async (req, res) => {
@@ -42,14 +44,16 @@ router
 
         try {
             // error check
-            data_name = utils.checkString(req.body.data_name);
-            data_type = utils.checkString(req.body.data_type);
-            data_description = utils.checkString(req.body.data_description);
-            data_length = utils.checkInt(req.body.data_length);
-            data_source = utils.checkUrl(req.body.data_source);
+
+            data_name = utils.checkString(xss(req.body.data_name));
+            data_type = utils.checkString(xss(req.body.data_type));
+            data_description = utils.checkString(xss(req.body.data_description));
+            data_length = utils.checkInt(xss(req.body.data_length));
+            data_source = utils.checkUrl(xss(req.body.data_source));
+
             data_rawdata = utils.checkRawData(req.files.data_rawdata);
 
-            data_features = utils.str2strArray(req.body.data_features);
+            data_features = utils.str2strArray(xss(req.body.data_features));
             data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
@@ -83,8 +87,9 @@ router
             });
         }
 
+
         try {
-            return res.redirect(`/data/id/${dataId}`);
+            return res.redirect(`/data/info/${dataId}`);
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -104,7 +109,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
             let error_status = 400;
@@ -152,7 +157,7 @@ router
         let res_norm = [];
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
             let data_db = await dataInfoData.getDataById(dataId);
             features = data_db.features;
 
@@ -239,9 +244,20 @@ router
 
     })
     .post(async (req, res) => {
+        let search_input = undefined
 
-        let search_input = req.body.search_input;
         let search_res = [];
+
+        try {
+            let search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {
@@ -309,7 +325,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -353,8 +369,19 @@ router
     })
     .post(async (req, res) => {
 
-        let dataId = req.params.id;
+        let dataId = undefined;
         let data_db = undefined;
+
+        try {
+            xss(req.params.id)
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             data_db = await dataInfoData.getDataById(dataId);
@@ -376,12 +403,13 @@ router
 
         try {
 
-            data_name = utils.checkString(utils.prior(req.body.data_name, data_db.data_name));
-            data_type = utils.checkDataType(utils.prior(req.body.data_type, data_db.type));
-            description = utils.checkString(utils.prior(req.body.data_description, data_db.description));
-            features = utils.checkStringArray(utils.prior(req.body.data_features, data_db.features));
-            length = utils.checkInt(utils.prior(req.body.data_length, data_db.length));
-            source = utils.checkUrl(utils.prior(req.body.data_source, data_db.source));
+            data_name = utils.checkString(utils.prior(xss(req.body.data_name), data_db.data_name));
+            data_type = utils.checkDataType(utils.prior(xss(req.body.data_type), data_db.type));
+            description = utils.checkString(utils.prior(xss(req.body.data_description), data_db.description));
+            features = utils.checkStringArray(utils.prior(xss(req.body.data_features), data_db.features));
+            length = utils.checkInt(utils.prior(xss(req.body.data_length), data_db.length));
+            source = utils.checkUrl(utils.prior(xss(req.body.data_source), data_db.source));
+
 
         } catch (e) {
             let error_status = 400;

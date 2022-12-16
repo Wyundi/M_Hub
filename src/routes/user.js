@@ -6,6 +6,8 @@ const userData = data.user;
 const path = require('path');
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/')
     .get(async (req, res) => {
@@ -128,13 +130,13 @@ router
 
         try {
 
-            username = utils.checkUsername(utils.prior(req.body.user_name, user_db.username));
-            first_name = utils.checkString(utils.prior(req.body.user_first_name, user_db.first_name));
-            last_name = utils.checkString(utils.prior(req.body.user_last_name, user_db.last_name));
-            email = utils.checkEmail(utils.prior(req.body.user_email, user_db.email));
-            gender = utils.checkGender(utils.prior(req.body.user_gender, user_db.gender));
-            location = utils.checkLocation(utils.prior(req.body.user_location, user_db.location));
-            organization = utils.checkString(utils.prior(req.body.user_organization, user_db.organization));
+            username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
+            first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
+            last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));
+            email = utils.checkEmail(utils.prior(xss(req.body.user_email), user_db.email));
+            gender = utils.checkGender(utils.prior(xss(req.body.user_gender), user_db.gender));
+            location = utils.checkLocation(utils.prior(xss(req.body.user_location), user_db.location));
+            organization = utils.checkString(utils.prior(xss(req.body.user_organization), user_db.organization));
 
         } catch (e) {
             let error_status = 400;
@@ -201,10 +203,14 @@ router
     .post(async (req, res) => {
         
         // error check
-        let username = req.body.user_name;
-        let passwd = req.body.user_password;
+        let username = undefined
+        let passwd = undefined
 
         try {
+
+            username = xss(req.body.user_name);
+            passwd = xss(req.body.user_password);
+
             username = utils.checkUsername(username);
             passwd = utils.checkPasswd(passwd);
 
@@ -250,14 +256,35 @@ router
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        let username = req.body.user_name;
-        let first_name = req.body.user_first_name;
-        let last_name = req.body.user_last_name;
-        let email = req.body.user_email
-        let gender = req.body.user_gender
-        let loc = req.body.user_location
-        let org = req.body.user_organization
-        let passwd = req.body.user_password;
+        let username = undefined
+        let first_name = undefined
+        let last_name = undefined
+        let email = undefined
+        let gender = undefined
+        let loc = undefined
+        let org = undefined
+        let passwd = undefined
+
+        try {
+
+            username = xss(req.body.user_name);
+            first_name = xss(req.body.user_first_name);
+            last_name = xss(req.body.user_last_name);
+            email = xss(req.body.user_email)
+            gender = xss(req.body.user_gender)
+            loc = xss(req.body.user_location)
+            org = xss(req.body.user_organization)
+            passwd = xss(req.body.user_password)
+
+        }  catch (e) {
+
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             // error check
