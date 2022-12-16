@@ -1,15 +1,3 @@
-/*
-
-checkEmail                  //Qingyao
-checkGender
-
-checkUrl
-checkPath
-
-*/
-
-
-
 const {ObjectId} = require('mongodb');
 
 // hashing passwd
@@ -21,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 // error check
+var pathValidator = require('is-valid-path');
 
 function checkInputExists(input) { // check parameter exists
     if (input == undefined) {
@@ -111,29 +100,45 @@ function checkString(str) {
 
 function checkEmail(email) {
 
-    // 
-
     email = checkString(email);
+    email = email.toLowerCase();
+    // all email should be converted into lower for deduplication and some other purpose
 
-    return email;
+    const result = email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    if (!result) {
+        throw "Your inputed email is invalid"
+    }
+
+    return email; // depend on how we want this to work, this could be return or not
 }
 
 function checkId(id, varName) {
-    if (!id) throw `Error: You must provide a ${varName}`;
-    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
+    if (!id) throw `You must provide a ${varName}`;
+    if (typeof id !== 'string') throw `${varName} must be a string`;
     id = id.trim();
     if (id.length === 0)
-        throw `Error: ${varName} cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+        throw `${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `${varName} invalid object ID`;
 
     return id;
 }
 
 function checkGender(gender) {
 
-    // ["male", "female"]
+    // ["male", "female"]  
+    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+
+    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
 
     gender = checkString(gender);
+    // gender = gender.toLowerCase();
+
+    if (!options.includes(gender)) {
+        throw "the gender you provide is not valid, please try again";
+    }
 
     return gender;
 }
@@ -146,6 +151,7 @@ function checkLocation(loc) {
 }
 
 function checkPasswd(passwd) {
+    
 
     /*
 
@@ -160,7 +166,9 @@ function checkPasswd(passwd) {
 
     */
 
-    passwd = checkString(passwd);
+    // haven't consider special character ralated cases
+
+    let passwd_trim = checkString(passwd);
 
     if (passwd.includes(' ')) {
         throw "Password should not contain spaces.";
@@ -209,15 +217,29 @@ function checkStringArray(arr, varName) {
 }
 
 function checkUrl(url) {
+    let details
 
-    return url;
+    try {
+        details = new URL(url);
+    } catch (e) {
+        throw "Invalid URL"
+    }
+    if (details.protocol == "http:" || details.protocol == "https:") {
+        return url;
+    }
+    throw "Invalid URL"
 }
 
 function checkPath(path) {
 
+    const result = pathValidator(path)
+    
+    if (!result) throw "Invalid path"
+
     return path;
 }
 
+// json
 function checkJson(json_path) {
 
     json_obj = readJsonFile(json_path);
@@ -225,33 +247,7 @@ function checkJson(json_path) {
     return json_obj;
 }
 
-// hash passwd
-function hash(passwd) {
-
-    passwd = checkPasswd(passwd);
-    const hashedPasswd = bcrypt.hash(passwd, saltRounds);;
-
-    return hashedPasswd;
-}
-
-// json
 function readJsonFile(json_path) {
-    
-    // fake json object for test
-    // json_obj = {
-    //     "feature1": {
-    //         "0": 0.25,
-    //         "1": 0.7
-    //     },
-    //     "feature2": {
-    //         "0": 0.23,
-    //         "1": 0.56
-    //     },
-    //     "target": {
-    //         "0": 1,
-    //         "1": 0
-    //     }
-    // }
 
     let json_string = undefined;
     let json_obj = undefined;
@@ -282,6 +278,57 @@ function checkUsername(username) {
     return username;
 }
 
+function prior(first_ele, second_ele) {
+    return first_ele ? first_ele : second_ele;
+}
+
+function checkRawData(rawdata) {
+
+    if (!rawdata || Object.keys(rawdata).length === 0) {
+        throw "No files were uploaded.";
+    }
+
+    return rawdata;
+
+}
+
+function str2strArray(str) {
+
+    str = checkString(str);
+
+    // replace tab and space
+    str = str.replace(/[\t\s]/g, '');
+
+    // check spcial char
+    if (str.match(/[^a-zA-Z0-9-_,]+/g)) {
+        throw "Should not input special characters.";
+    }
+
+    // check comma
+    if (str.match(/,,/) !== null) {
+        throw 'More than one comma.';
+    }
+
+    return str.split(',');
+
+}
+
+function checkComment(id, username, comment) {
+
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
+}
+
+function checkDataType(type) {
+
+    let type_list = ['data', 'img'];
+    if (type_list.indexOf(type) === -1) {
+        throw 'input type not in type list.';
+    }
+
+    return type;
+}
 
 module.exports = {
 
@@ -305,7 +352,12 @@ module.exports = {
     checkJson,
     checkUsername,
 
-    // other help function
-    hash,
     readJsonFile,
+    prior,
+
+    checkRawData,
+    str2strArray,
+
+    checkComment,
+    checkDataType
 }

@@ -1,0 +1,34 @@
+<h2> Log in </h2>
+
+<form action="/login" method="POST" class="searchuser-form">
+
+    <label for="name">
+        User Name
+        <input id="name" type="text" name="user_name" placeholder="please input user name" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="passwd">
+        Password
+        <input id="passwd" type="password" name="user_password" placeholder="please input password" class="full-width-input">
+    </label>
+
+    <br>
+    {{#if error_msg}}
+        <p> {{error_msg}} </p>
+    {{/if}}
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> login </button>
+
+    <p> Don't have an account? Signup first. </p>
+    <button type="button" class="btn"> <a href="../signup"> signup </a></button>
+
+    <br>
+
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
+
+</form>

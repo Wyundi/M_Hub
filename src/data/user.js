@@ -4,6 +4,9 @@ const {ObjectId} = require('mongodb');
 const bcrypt = require("bcrypt");
 const saltRounds = 6;
 
+const dataInfoData = require("./dataInfo");
+const modelData = require("./model");
+
 const utils = require("../utils");
 
 /*
@@ -12,9 +15,9 @@ add username to user_info so that we can login via username and email
 
 const createUser = async (user_info) => {
     /*
+    user_ino.username,
     user_info.first_name,
     user_info.last_name,
-    user_ino.username,
     user_info.email,
     user_info.gender,
     user_info.location,
@@ -24,9 +27,9 @@ const createUser = async (user_info) => {
 
     // error check
 
+    username = utils.checkUsername(user_info.username);
     first_name = utils.checkString(user_info.first_name);
     last_name = utils.checkString(user_info.last_name);
-    username = utils.checkUsername(user_info.username);
     email = utils.checkEmail(user_info.email);
     gender = utils.checkGender(user_info.gender);
     loc = utils.checkLocation(user_info.location);
@@ -36,27 +39,31 @@ const createUser = async (user_info) => {
 
     // hashing password
 
-    passwd = utils.hash(passwd);
+    const hash_passwd = await bcrypt.hash(passwd, saltRounds);
 
     // check if same username/email exists
     const userInfoCollection = await user();
     const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: username, $options: 'i'}});
     const userFoundByUsername = await userInfoCollection.findOne({username: {$regex: username, $options: 'i'}});
-    if (userFoundByEmail || userFoundByUsername) throw 'Error: the username/email is already used!';
+
+    if (userFoundByEmail || userFoundByUsername) {
+        throw 'Error: the username/email is already used!';
+    }
+
 
     // add user
 
     let newUser = {
+        username: username,
         first_name: first_name,
         last_name: last_name,
-        username: username,
         email: email,
         gender: gender,
         location: loc,
         organization: org,
-        passwd: passwd,
-        data: [],
-        model:[]
+        passwd: hash_passwd,
+        data_list: [],
+        model_list:[]
     };
 
     const userCollection = await user();
@@ -67,10 +74,53 @@ const createUser = async (user_info) => {
 
     const newId = insertInfo.insertedId.toString();
 
-    const user_db = await getUseraById(newId);
+    const user_db = await getUserById(newId);
 
     // return 'user successfully created!'   ???
-    return user_db;
+    return {insertedUser: user_db};;
+
+};
+
+const checkUser = async (username, password) => {
+
+    // error check
+    username = utils.checkUsername(username);
+    password = utils.checkPasswd(password);
+
+    // query user name in database
+    let userList = await getAllUser();
+
+    let user_found = null;
+    for (let i in userList) {
+        if (userList[i].username.toLowerCase() === username.toLowerCase()) {
+            if (user_found === null){
+                user_found = userList[i];
+            }
+            else {
+                throw "Error in database: duplicate username.";
+            }
+        }
+    }
+
+    if (user_found === null) {
+        throw "Error: user not found.";
+    }
+
+    // check passwd
+    let compare_res = false;
+
+    try {
+        compare_res = await bcrypt.compare(password, user_found.passwd);
+    } catch (e) {
+        throw "Error occurred in compare process.";
+    }
+
+    if (compare_res) {
+        return {authenticatedUser: user_found};
+    }
+    else {
+        throw "Error: Either the username or password is invalid.";
+    }
 
 };
 
@@ -128,35 +178,32 @@ const removeUser = async (userId) => {
 const updateUser = async (userId, user_info) => {
     // don't contain password change, change password see next function
     // check user_info
-    id = utils.checkId(userId, 'User id');
+    userId = utils.checkId(userId, 'User id');
 
+    username = utils.checkUsername(user_info.username);
     first_name = utils.checkString(user_info.first_name);
     last_name = utils.checkString(user_info.last_name);
-    username = utils.checkUsername(user_info.username);
     email = utils.checkEmail(user_info.email);
     gender = utils.checkGender(user_info.gender);
     loc = utils.checkLocation(user_info.location);
     org = utils.checkString(user_info.organization);
 
-    let user = await getUserById(id);
-    if (!user) throw `Could not find user with id ${id}!`;
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
 
     let newUser = {
+        username: username,
         first_name: first_name,
         last_name: last_name,
-        username: username,
         email: email,
         gender: gender,
         location: loc,
-        organization: org,
-        passwd: user.passwd,
-        data: [],
-        model:[]
+        organization: org
     };
 
     const userInfoCollection = await user();
     const updateInfo = await userInfoCollection.updateOne(
-        {_id: id},
+        {_id: ObjectId(userId)},
         {$set: newUser}
     );
 
@@ -169,38 +216,51 @@ const updateUser = async (userId, user_info) => {
 const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
     // check validation
-    id = utils.checkId(userId);
+    userId = utils.checkId(userId);
     oldPasswd = utils.checkPasswd(oldPasswd);
     newPasswd = utils.checkPasswd(newPasswd);
 
-    let user = await getUserById(id);
-    if (!user) throw `Could not find user with id ${id}!`;
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
     
     // check old password is correct
     let compareToMatch = false;
     try {
-        compareToMatch = await bcrypt.compare(oldPasswd, user.passwd);
+        compareToMatch = await bcrypt.compare(oldPasswd, user_db.passwd);
     } catch (e) {
-        // no op
+        throw 'failed to compare password.';
     }
 
-    if (compareToMatch) {
-        newPasswd = utils.hash(newPasswd);
-        let newUser = user;
-        newUser.passwd = newPasswd;
+    if (!compareToMatch) {
+        throw 'Old password not match.';
+    }
 
-        const userInfoCollection = await user();
-        const updateInfo = await userInfoCollection.updateOne(
-            {_id: id},
-            {$set: newUser}
-        );
-    
-        if (!updateInfo) throw `Could not change user password!`;
-    
-        return `user ${user.username}'s password has been successfully changed!`;
+    // check if new password equal to old
+    let compareNew = false;
+    try {
+        compareNew = await bcrypt.compare(newPasswd, user_db.passwd);
+    } catch (e) {
+        throw 'failed to compare password.';
+    }
 
-    } else throw 'old password is not correct, try again!';
+    if (compareNew) {
+        throw "The new password is the same as the old one.";
+    }
 
+    // change passwd
+    newPasswd = await bcrypt.hash(newPasswd, saltRounds);
+
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: {
+            passwd: newPasswd
+        }}
+    );
+
+    if (!updateInfo) throw `Could not change user password!`;
+
+    return "Your password has been successfully changed!";
 
 };
 
@@ -210,50 +270,106 @@ const addData = async (userId, dataId) => {
     userId = utils.checkId(userId);
     dataId = utils.checkId(dataId);
 
-    let user = await getUserById(userId);
-    if (!user) throw `Could not find user with id ${userId}!`;
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
 
-    let newUser = user;
-    newUser.data.push(dataId);
-
+    // add data to user
     const userInfoCollection = await user();
-    const updateInfo = await userInfoCollection.updateOne(
-        {_id: ObjectId(userId)},
-        {$set: newUser}
-    );
+    const updatedInfo = await userInfoCollection
+        .updateOne( {_id: ObjectId(userId)}, {$push: {data_list: dataId}} );
 
-    if (!updateInfo) throw `Could not add dataset to user ${user.username}!`;
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add data successfully';
+    }
 
-    return 'dataset added successfully!';
+    user_db = await getUserById(userId);
+
+    user_db._id = user_db._id.toString();
+
+    return user_db;
 
 };
 
 const addModel = async (userId, modelId) => {
 
-    // validation
+    // error check
     userId = utils.checkId(userId);
     modelId = utils.checkId(modelId);
 
-    let user = await getUserById(userId);
-    if (!user) throw `Could not find user with id ${userId}!`;
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
 
-    let newUser = user;
-    newUser.model.push(modelId);
-
+    // add model to user
+    
     const userInfoCollection = await user();
-    const updateInfo = await userInfoCollection.updateOne(
-        {_id: ObjectId(userId)},
-        {$set: newUser}
-    );
+    const updatedInfo = await userInfoCollection
+        .updateOne( {_id: ObjectId(userId)}, {$push: {model_list: modelId}} );
 
-    if (!updateInfo) throw `Could not add model to user ${user.username}!`;
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add model successfully';
+    }
 
-    return 'model added successfully!';
+    user_db = await getUserById(userId);
+
+    user_db._id = user_db._id.toString();
+
+    return user_db;
+
+};
+
+const getDataList = async(userId) => {
+
+    // error check
+    userId = utils.checkId(userId, "user id");
+
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
+
+    // get Data List
+    let data_list = []
+    let data_id_list = user_db.data_list;
+    let data_db = undefined;
+
+    for (dataId of data_id_list) {
+        dataId = utils.checkId(dataId, "data id");
+        data_db = await dataInfoData.getDataById(dataId);
+        if (!user_db) throw `Could not find data with id ${dataId}!`;
+
+        data_list.push(data_db);
+    }
+
+    return data_list;
+
+};
+
+const getModelList = async(userId) => {
+
+    // error check
+    userId = utils.checkId(userId, "user id");
+
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
+
+    // get Data List
+    let model_list = []
+    let model_id_list = user_db.model_list;
+    let model_db = undefined;
+
+    for (modelId of model_id_list) {
+        modelId = utils.checkId(modelId, "model id");
+        model_db = await modelData.getModelById(modelId);
+        if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+        model_list.push(model_db);
+    }
+
+    return model_list;
 
 };
 
 module.exports = {
     createUser,
+    checkUser,
     getAllUser,
     getUserById,
     getUserByUsernameOrEmail,
@@ -261,5 +377,7 @@ module.exports = {
     updateUser,
     changePasswd,
     addData,
-    addModel
+    addModel,
+    getDataList,
+    getModelList,
 };

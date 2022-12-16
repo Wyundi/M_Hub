@@ -1,0 +1,75 @@
+
+
+<h2> Edit profile </h2>
+
+<form action="/user/edit" method="POST" class="edit-user-form">
+
+    <label for="username">
+        Username
+        <input id="username" type="text" name="user_name" placeholder="{{username}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="first_name">
+        First Name
+        <input id="first_name" type="text" name="user_first_name" placeholder="{{first_name}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="last_name">
+        Last Name
+        <input id="last_name" type="text" name="user_last_name" placeholder="{{last_name}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="email">
+        email
+        <input id="email" type="text" name="user_email" placeholder="{{email}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="gender">
+        Gender
+        <select name="user_gender" id="gender">
+            <option disabled selected>Please Select</option>
+            <option value="Woman">Woman</option>
+            <option value="Man">Man</option>
+            <option value="Trans">Transgender</option>
+            <option value="NonBinary">Non-binary/non-conforming</option>
+            <option value="NotRespond">Prefer not to respond</option>
+        </select>
+        {{!-- <input id="gender" type="text" name="user_gender" placeholder="{{gender}}" class="full-width-input"> --}}
+    </label>
+
+    <br>
+
+    <label for="location">
+        Location
+        <input id="location" type="text" name="user_location" placeholder="{{location}}" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="organization">
+        Organization
+        <input id="organization" type="text" name="user_organization" placeholder="{{organization}}" class="full-width-input">
+    </label>
+
+    <br>
+    <br>
+
+    <button type="submit" class="btn"> submit </button>
+
+</form>
+
+<br>
+
+<button type="button" class="btn"> <a href="./edit/changepasswd"> change password </a></button>
+
+<br>
+
+<button type="button" class="btn"> <a href="../user"> back to user profile page </a></button>
