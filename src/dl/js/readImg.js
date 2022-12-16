@@ -1,12 +1,21 @@
 const fs = require('fs');
 const jpeg = require('jpeg-js');
+const sharp = require('sharp');
 
-const readImg = (img_path) => {
+const readImg = async (img_path, resize=false) => {
     // Read the image file into a buffer
-    const buf = fs.readFileSync(img_path);
-
     // Decode the JPEG data to get raw pixel data
-    const data = jpeg.decode(buf, {useTArray: true});
+    const buf = fs.readFileSync(img_path);
+    let sharp_img = await sharp(img_path);
+
+    if (resize) {
+        sharp_img = await sharp_img.resize(224,224).toBuffer();
+    }
+    else {
+        sharp_img = await sharp_img.toBuffer();
+    }
+    
+    data = jpeg.decode(sharp_img, {useTArray: true});
 
     // The pixel data is stored as a 1D array (data.data) of 8-bit integers,
     // where each pixel is represented by 4 consecutive integers (for the red,
@@ -46,8 +55,8 @@ const readImg = (img_path) => {
 
     let res = {
         img_data: floatPlanes,
-        img_width: floatPlanes.length,
-        img_height: floatPlanes[0].length,
+        img_height: floatPlanes.length,
+        img_width: floatPlanes[0].length,
         img_channel: floatPlanes[0][0].length
     }
 
@@ -55,5 +64,5 @@ const readImg = (img_path) => {
 };
 
 module.exports = {
-    readImg
+    readImg,
 }

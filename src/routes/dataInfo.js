@@ -6,7 +6,6 @@ const dataInfoData = data.dataInfo;
 
 const path = require("path");
 const utils = require('../utils');
-const dl_dataprocess = require("../dl/js/dataprocess");
 
 const xss = require('xss');
 

@@ -8,7 +8,6 @@ const {readImg} = require("../dl/js/readImg");
 
 const path = require("path");
 const utils = require("../utils");
-const { read } = require('fs');
 
 const createData = async (data) => {
     /*
@@ -89,15 +88,15 @@ const createData = async (data) => {
                 if (f === 'img_path') {
                     // read img
                     let img_path = path.resolve(json_obj[f][i]);
-                    let img_info = readImg(img_path);
+                    let img_info = await readImg(img_path);
 
                     // // calculate mean and std, add them to the list
-                    // let values = img_info.img_data.flat(Infinity);
-                    // let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
-                    // let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
+                    let values = img_info.img_data.flat(Infinity);
+                    let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+                    let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
 
-                    // mean_list.push(mean);
-                    // std_list.push(std);
+                    mean_list.push(mean);
+                    std_list.push(std);
 
                     p = (Number(i)+1).toString().padStart(3, '0');
                     console.log(`Process: [${p} | ${l}]`);
