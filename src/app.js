@@ -11,9 +11,12 @@ const exphbs = require('express-handlebars');
 const static = express.static(__dirname + '/public');
 app.use('/public', static);
 
+const methodOverride = require('method-override');
+
 app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.engine('handlebars', exphbs.engine({helpers: {
@@ -46,11 +49,11 @@ app.use((req, res, next) => {
 
 app.use('/user', (req, res, next) => {
 
-  if (!req.session.user) {
-      return res.status(403).redirect('/forbidden');
-  } else {
-      next();
-  }
+    if (!req.session.user) {
+        return res.status(403).redirect('/forbidden');
+    } else {
+        next();
+    }
   
 });
 

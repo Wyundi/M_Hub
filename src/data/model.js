@@ -136,8 +136,6 @@ const updateModel = async (modelId, model_info) => {
     onnx_path = utils.checkPath(model_info.onnx_path);
     input = utils.checkString(model_info.input);
     output = utils.checkString(model_info.output);
-    userId = utils.checkId(model_info.userId, "user id");
-    dataId = utils.checkId(model_info.dataId, "data id");
 
     // update data
 
@@ -154,8 +152,6 @@ const updateModel = async (modelId, model_info) => {
             onnx_path: onnx_path,
             input: input,
             output: output,
-            user_list: [userId],
-            data_list: [dataId]
         }}
     );
 
@@ -220,6 +216,80 @@ const addData = async (modelId, dataId) => {
 
 };
 
+const removeFromUserList = async (modelId, userId) => {
+
+    modelId = utils.checkId(modelId, "model id");
+    userId = utils.checkId(userId, "user id");
+
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+    let model_user_list = model_db.user_list;
+    if (!model_user_list) throw 'model user list is empty';
+    utils.deleteFromArray(userId, model_user_list);
+
+    let newModel = {
+        model_name: model_db.model_name,
+        category: model_db.category,
+        description: model_db.description,
+        link: model_db.link,
+        onnx_path: model_db.onnx_path,
+        input: model_db.input,
+        output: model_db.output,
+        user_list: model_user_list,
+        data_list: model_db.data_list,
+        comment: model_db.comment
+    };
+
+    const modelInfoCollection = await model();
+    const updateInfo = await modelInfoCollection.updateOne(
+        {_id: ObjectId(modelId)},
+        {$set: newModel}
+    );
+
+    if (!updateInfo) throw `Could not update model with origin name ${model_db.model_name}!`;
+
+    return `model ${model_db.model_name} has been successfully updated!`;
+
+}; 
+
+const removeFromDataList = async (modelId, dataId) => {
+
+    modelId = utils.checkId(modelId, "model id");
+    dataId = utils.checkId(dataId, "data id");
+
+    let model_db = await getModelById(modelId);
+    if (!model_db) throw `Could not find model with id ${modelId}!`;
+
+    let model_data_list = model_db.data_list;
+    if (!model_data_list) throw 'model data list is empty';
+    utils.deleteFromArray(dataId, model_data_list);
+
+    let newModel = {
+        model_name: model_db.model_name,
+        category: model_db.category,
+        description: model_db.description,
+        link: model_db.link,
+        onnx_path: model_db.onnx_path,
+        input: model_db.input,
+        output: model_db.output,
+        user_list: model_db.user_list,
+        data_list: model_data_list,
+        comment: model_db.comment
+    };
+
+    const modelInfoCollection = await model();
+    const updateInfo = await modelInfoCollection.updateOne(
+        {_id: ObjectId(modelId)},
+        {$set: newModel}
+    );
+
+    if (!updateInfo) throw `Could not update model with origin name ${model_db.model_name}!`;
+
+    return `model ${model_db.model_name} has been successfully updated!`;
+
+};
+
 module.exports = {
     createModel,
     getAllModel,
@@ -228,5 +298,7 @@ module.exports = {
     removeModel,
     updateModel,
     addUser,
-    addData
+    addData,
+    removeFromUserList,
+    removeFromDataList
 };

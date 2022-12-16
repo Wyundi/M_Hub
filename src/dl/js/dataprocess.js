@@ -56,6 +56,7 @@ const loadData = async (dataId, index, getNorm=false) => {
         }
 
         return {ori, norm};
+
     }
 
     return ori;
