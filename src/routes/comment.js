@@ -6,7 +6,7 @@ const modelData = data.model;
 const utils = require('../utils');
 
 router
-    .route('/model/info/:modelId')
+    .route('/:modelId')
     .get(async (req, res) => {
         try {
             modelId = utils.checkId(req.params.modelId, 'model id');
@@ -59,8 +59,7 @@ router
           res.status(500).render("./model/info", {error_message: e});
         }
     })
-    // .put(async (req, res) => {
-    // })
+
   router
     .route('comment/:commentId')
     .delete(async (req, res) => {

@@ -63,19 +63,9 @@ document.getElementById("div1").style.display="none";
 
 </script>
 
-
-<input type="button" value="Comment" onClick="show()"/>
-
-<div id="div1" style="display:none">
-    <form action="/model/info/{{modelId}}?_method=post" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
-    </form>
-
-{{#if error_message}}
-<p class="error">{{this.error_message}}</p>
-{{/if}}
 <br>
+
+<button type="button" class="btn"> <a href="./comment/{{modelId}}"> Leave a comment</a></button>
 
 </div>
 
@@ -112,4 +102,4 @@ document.getElementById("div1").style.display="none";
     </form>
 {{/if}}
 <br>
-<button type="button" class="btn"> <a href="../../"> back to home page </a></button>
+<button type="button" class="btn"> <a href="../"> back to home page </a></button>
