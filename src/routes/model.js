@@ -129,10 +129,14 @@ router
             contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
 
-            for (dataIdx in model_db.data_list) {
-                dataId = utils.checkId(model_db.data_list[dataIdx], "data id");
-                let data_db = await dataInfo.getDataById(dataId);
-                data_name_list.push(data_db.data_name);
+            let data_info_list = [];
+            for (let i = 0; i < model_db.data_list.length; i++) {
+                let data_info = {};
+                data_db = await dataInfoData.getDataById(model_db.data_list[i]);
+                data_name = data_db.data_name;
+                data_info.id = model_db.data_list[i];
+                data_info.name = data_name;
+                data_info_list.push(data_info);
             }
 
             return res.status(200).render("./model/info", {
@@ -146,7 +150,7 @@ router
                 input: model_db.input,
                 output: model_db.output,
                 contributor: contributor,
-                data_list: data_name_list,
+                data_info_list: data_info_list,
                 comment: model_db.comment,
                 is_contributor: is_contributor
             });
@@ -236,7 +240,7 @@ router
             });
         }
 
-        /* owner delete: 1. delete model from db    2. all users' model list --
+        /* owner delete: 1. delete model from db    2. all users' model list --    3. add data's model list --
          * not owner delete: current user's model list --
          */
 
@@ -246,6 +250,11 @@ router
                 for (user of model_db.user_list) {
                     userRemoveInfo = await userData.removeFromModelList(user, modelId);
                     if (!userRemoveInfo) throw 'remove modelid from user profile failed'
+                }
+
+                for (data_id of model_db.data_list) {
+                    dataRemoveInfo = await dataInfoData.removeFromModelList(data_id, modelId);
+                    if (!dataRemoveInfo) throw 'remove modelid from data profile failed'
                 }
 
                 modelRemoveInfo = await modelData.removeModel(modelId);

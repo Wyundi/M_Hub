@@ -309,6 +309,46 @@ const removeFromUserList = async (dataId, userId) => {
 
 }; 
 
+const removeFromModelList = async (dataId, modelId) => {
+
+    dataId = utils.checkId(dataId, "data id");
+    modelId = utils.checkId(modelId, "model id");
+
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+
+    let data_model_list = data_db.model_list;
+    if (!data_model_list) throw 'data model list is empty';
+    utils.deleteFromArray(modelId, data_model_list);
+
+    let newData = {
+        data_name: data_db.data_name,
+        description: data_db.description,
+        features: data_db.features,
+        mean: data_db.mean,
+        std: data_db.std,
+        length: data_db.length,
+        source: data_db.source,
+        file_path: data_db.file_path,
+        raw_data: data_db.raw_data,
+        user_list: data_db.user_list,
+        model_list: data_model_list,
+        comment: data_db.comment
+    }
+
+    const dataInfoCollection = await dataInfo();
+    const updateInfo = await dataInfoCollection.updateOne(
+        {_id: ObjectId(dataId)},
+        {$set: newData}
+    );
+
+    if (!updateInfo) throw `Could not update data with origin name ${data_db.data_name}!`;
+
+    return `data ${data_db.data_name} has been successfully updated!`;
+
+}; 
+
+
 module.exports = {
     createData,
     getAllData,
@@ -319,5 +359,6 @@ module.exports = {
     updateData,
     addUser,
     addModel,
-    removeFromUserList
+    removeFromUserList,
+    removeFromModelList
 };

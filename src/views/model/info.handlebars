@@ -20,8 +20,8 @@
 
 <h3> data list </h3>
 <ul>
-    {{#each data_list}}
-        <li> {{this}} </li>
+    {{#each data_info_list}}
+        <li> <a href="/data/info/{{id}}"> {{name}} </a> </li>
     {{/each}}
 </ul>
 
@@ -104,11 +104,11 @@ document.getElementById("div1").style.display="none";
     </form>
 {{else}}
     <form action="./{{modelId}}" method="POST">
-        <button type="submit" value="{{modelId}}" name="modelId"> add to data list </button>
+        <button type="submit" value="{{modelId}}" name="modelId"> add to model list </button>
     </form>
     <br>
     <form method="POST" action="/model/info/{{modelId}}?_method=DELETE">
-        <button type="submit" onclick="javascript:return del();"> Remove this dataset
+        <button type="submit" onclick="javascript:return del();"> Remove this model
 
             <script type="text/javascript">
 

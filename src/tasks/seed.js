@@ -1,4 +1,4 @@
-const { dataInfo } = require('../config/mongoCollections');
+const { dataInfo, model } = require('../config/mongoCollections');
 const connection = require('../config/mongoConnection');
 const data = require('../data/');
 const userData = data.user;
@@ -31,8 +31,8 @@ async function main() {
 
     let data2 = fakeData.data2;
     data2.userId = user2._id.toString();
-    data2.modelId = user1._id.toString();
     data2 = await dataInfoData.createData(data2);
+    await dataInfoData.addUser(data2._id, user2._id);
     await userData.addData(user1._id, data2._id);
     await userData.addData(user2._id, data2._id);
 
@@ -42,15 +42,22 @@ async function main() {
     model1.dataId = data1._id.toString();
     model1 = await modelData.createModel(model1);
     await userData.addModel(user1._id, model1._id);
+    await userData.addModel(user2._id, model1._id);
+    await modelData.addUser(model1._id, user2._id);
+    await modelData.addData(model1._id, data2._id);
     await dataInfoData.addModel(data1._id, model1._id);
+    await dataInfoData.addModel(data2._id, model1._id);
 
     let model2 = fakeData.model2;
-    model2.userId = user1._id.toString();
+    model2.userId = user2._id.toString();
     model2.dataId = data2._id.toString();
     model2 = await modelData.createModel(model2);
-    await userData.addModel(user1._id, model2._id)
+    await userData.addModel(user1._id, model2._id);
+    await userData.addModel(user2._id, model2._id);
     await dataInfoData.addModel(data1._id, model2._id);
+    await dataInfoData.addModel(data2._id, model2._id);
     await modelData.addData(model2._id, data1._id);
+    await modelData.addUser(model2._id, user1._id);
 
     // close connect
     await connection.closeConnection();

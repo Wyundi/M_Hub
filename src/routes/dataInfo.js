@@ -3,10 +3,12 @@ const router = express.Router();
 const data = require('../data');
 const userData = data.user;
 const dataInfoData = data.dataInfo;
+const ModelData = data.model;
 
 const path = require("path");
 const utils = require('../utils');
 const dl_dataprocess = require("../dl/js/dataprocess");
+const { model } = require('../config/mongoCollections');
 
 router
     .route("/")
@@ -119,6 +121,15 @@ router
             let user_db = await userData.getUserById(contributorId);
             contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
+            let model_info_list = [];
+            for (let i = 0; i < data_db.model_list.length; i++) {
+                let model_info = {};
+                model_db = await ModelData.getModelById(data_db.model_list[i]);
+                model_name = model_db.model_name;
+                model_info.id = data_db.model_list[i];
+                model_info.name = model_name;
+                model_info_list.push(model_info);
+            }
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
@@ -129,8 +140,9 @@ router
                 source: data_db.source,
                 raw_data_path: `../../data/rawdata/${dataId}`,
                 contributor: contributor,
+                model_info_list: model_info_list,
                 comment: data_db.comment,
-                is_contributor: is_contributor
+                is_contributor: is_contributor,
             });
         } catch (e) {
             let error_status = 500;
@@ -172,14 +184,49 @@ router
         }
 
         try {
-            if (user_db.model_list.includes(modelId)) {
-                req.session.message = 'Model already contained in your list';
-                return res.redirect("/user");
+            if (user_db.data_list.includes(dataId)) {
+                let message = 'Data already contained in your list';
+                let notification = 'true';
+                return res.render("./data/info", {
+                    username: req.session.user.username,
+                    dataId: dataId,
+                    data_name: data_db.data_name,
+                    description: data_db.description,
+                    features: data_db.features,
+                    length: data_db.length,
+                    source: data_db.source,
+                    raw_data_path: `../../data/rawdata/${dataId}`,
+                    contributor: data_db.contributor,
+                    model_info_list: data_db.model_info_list,
+                    comment: data_db.comment,
+                    is_contributor: data_db.is_contributor,
+                    message: message,
+                    notification: notification
+                });
+            } else {
+                userUpdateInfo = await userData.addData(userId, dataId);
+                let message = 'Data added successfully';
+                let notification = 'true';
+                if (userUpdateInfo) {
+                    return res.render("./data/info", {
+                        username: req.session.user.username,
+                        dataId: dataId,
+                        data_name: data_db.data_name,
+                        description: data_db.description,
+                        features: data_db.features,
+                        length: data_db.length,
+                        source: data_db.source,
+                        raw_data_path: `../../data/rawdata/${dataId}`,
+                        contributor: data_db.contributor,
+                        model_info_list: data_db.model_info_list,
+                        comment: data_db.comment,
+                        is_contributor: data_db.is_contributor,
+                        message: message,
+                        notification: notification
+                    });
+                };
             }
-            userUpdateInfo = await userData.addData(userId, dataId);
-            if (userUpdateInfo) {
-                return res.redirect("/user");
-            };
+
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -216,7 +263,7 @@ router
             });
         }
 
-        /* owner delete: 1. delete data from db    2. all users' data list -1
+        /* owner delete data: 1. delete data from db    2. all users' data list -1  3. all model's data list -1
          * not owner delete: current user's data list -1
          */
         try {
@@ -225,6 +272,11 @@ router
                 for (user of data_db.user_list) {
                     userRemoveInfo = await userData.removeFromDataList(user, dataId);
                     if (!userRemoveInfo) throw 'remove dataid from user profile failed'
+                }
+
+                for (model_id of data_db.model_list) {
+                    modelRemoveInfo = await ModelData.removeFromDataList(model_id, dataId);
+                    if (!modelRemoveInfo) throw 'remove dataid from model profile failed'
                 }
 
                 dataRemoveInfo = await dataInfoData.removeData(dataId);
