@@ -172,7 +172,10 @@ router
         }
 
         try {
-            if (user_db.data_list.includes(dataId)) throw 'Data already contained in your list';
+            if (user_db.model_list.includes(modelId)) {
+                req.session.message = 'Model already contained in your list';
+                return res.redirect("/user");
+            }
             userUpdateInfo = await userData.addData(userId, dataId);
             if (userUpdateInfo) {
                 return res.redirect("/user");
@@ -213,13 +216,25 @@ router
             });
         }
 
+        /* owner delete: 1. delete data from db    2. all users' data list -1
+         * not owner delete: current user's data list -1
+         */
         try {
-            dataId = utils.checkId(req.params.id, "data id");
             userId = utils.checkId(req.session.user.userId, "user id");
-            userRemoveInfo = await userData.removeFromDataList(userId, dataId);
-            dataRemoveInfo = await dataInfoData.removeFromUserList(dataId, userId);
-            if (userRemoveInfo && dataRemoveInfo) {
-                return res.redirect("/user");
+            if (userId === data_db.user_list[0]) {
+                for (user of data_db.user_list) {
+                    userRemoveInfo = await userData.removeFromDataList(user, dataId);
+                    if (!userRemoveInfo) throw 'remove dataid from user profile failed'
+                }
+
+                dataRemoveInfo = await dataInfoData.removeData(dataId);
+
+                if (dataRemoveInfo) return res.redirect("/user");
+            } else {
+                userRemoveInfo = await userData.removeFromDataList(userId, dataId);
+                if (userRemoveInfo) {
+                    return res.redirect("/user");
+                }
             }
         } catch (e) {
             let error_status = 500;
