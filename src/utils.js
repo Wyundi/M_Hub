@@ -9,6 +9,7 @@ const path = require('path');
 const fs = require('fs');
 
 // error check
+var pathValidator = require('is-valid-path');
 
 function checkInputExists(input) { // check parameter exists
     if (input == undefined) {
@@ -130,10 +131,10 @@ function checkGender(gender) {
     // ["male", "female"]  
     // according to the professor, gender should be not only male and femail, but also included some other opbtions
 
-    const options = ["male", "female", "transmale", "transfemale", "dengerqueer", "something else", "prefer not to answer"];
+    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
 
     gender = checkString(gender);
-    gender = gender.toLowerCase();
+    // gender = gender.toLowerCase();
 
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
@@ -231,9 +232,9 @@ function checkUrl(url) {
 
 function checkPath(path) {
 
-    // const result = /^[a-z]:((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+\.xml$/i.test(path);
+    const result = pathValidator(path)
     
-    // if (!result) throw "Invalid path"
+    if (!result) throw "Invalid path"
 
     return path;
 }
