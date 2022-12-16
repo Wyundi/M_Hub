@@ -1,32 +1,118 @@
+<style>
+/* The (background) */
+.notif {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* notif Content */
+.notif-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+
+{{#if notification}}
+    <div id="notif" class="notif">
+
+    <!-- notif content -->
+    <div class="notif-content">
+        <span class="close">×</span>
+        <p> {{message}} </p>
+    </div>
+
+    </div>
+
+    <script>
+    // Get the notif
+    var notif = document.getElementById('notif');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    document.addEventListener("DOMContentLoaded", function(event) { 
+    notif.style.display = "block";
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        notif.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == notif) {
+            notif.style.display = "none";
+        }
+    }
+    </script>
+
+{{/if}}
+
 <h2> {{data_name}} </h2>
 
-<h3> description </h3>
+<h3> Description </h3>
 <p> {{description}} </p>
 
-<h3> features </h3>
+<h3> Features </h3>
 <ul>
     {{#each features}}
         <li> {{this}} </li>
     {{/each}}
 </ul>
 
-<h3> length </3>
+<h3> Length </3>
 <p> {{length}} </p>
 
-<h3> source </3>
+<h3> Source </3>
 <p> <a href="{{source}}"> {{source}} </a> </p>
 
-<h3> raw data </h3>
+<h3> Raw Data </h3>
 <a href="{{raw_data_path}}"> link to raw data </a>
 
-<h3> user list </h3>
+<h3> Contributor </h3>
+<p> {{contributor}} </p>
+
+<h3> Applied models </h3>
 <ul>
-    {{#each user_list}}
-        <li> {{this}} </li>
+    {{#each model_info_list}}
+        <li> <a href="/model/info/{{id}}"> {{name}} </a> </li>
     {{/each}}
 </ul>
 
-<h3> comment </h3>
+
+<h3> Comment </h3>
+<h4> <a href="/comment/data/{{dataId}}">See more comments</a> </h4>
 <ul>
     {{#each comment}}
         <li> {{this}} </li>
@@ -34,7 +120,98 @@
 </ul>
 
 <br>
+
+<h4>Make your comment</h4>
+<p>
+
+<label>
+
+<script type="text/javascript">
+
+function show()
+
+{
+
+var value = document.getElementById("div1").style.display;
+
+if(value=="none")
+
+{
+
+document.getElementById("div1").style.display="block";
+
+}
+
+else
+
+document.getElementById("div1").style.display="none";
+
+}
+
+</script>
+
+
+<input type="button" value="Comment" onClick="show()"/>
+
+<div id="div1" style="display:none">
+    <form action="" method="POST">
+        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
+        <button type="button" class="btn"> submit</button>
+    </form>
+
+</div>
+
+</div>
+
 <br>
-<button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
+<br>
+{{#if is_contributor}}
+    <button type="button" class="btn"> <a href="../edit/{{dataId}}"> edit </a></button>
+    <br>
+
+    <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
+        <button type="submit" onclick="javascript:return del();"> Delete this dataset
+
+            <script type="text/javascript">
+
+            function del() {
+                var msg = "Are you sure to delete?";
+                if (confirm(msg) === true) {
+                    alert('Successfully deleted');
+                    return true;
+                } else {
+                    alert('Cancelled');
+                    return false;
+                }
+            }
+
+            </script>
+        </button>
+    </form>
+{{else}}
+    <form action="./{{dataId}}" method="POST">
+        <button type="submit" value="{{dataId}}" name="dataId"> add to data list </button>
+    </form>
+    <br>
+    <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
+        <button type="submit" onclick="javascript:return del();"> Remove this dataset
+
+            <script type="text/javascript">
+
+            function del() {
+                var msg = "Are you sure to delete?";
+                if (confirm(msg) === true) {
+                    alert('Successfully deleted');
+                    return true;
+                } else {
+                    alert('Cancelled');
+                    return false;
+                }
+            }
+
+            </script>
+        </button>
+    </form>
+{{/if}} 
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>

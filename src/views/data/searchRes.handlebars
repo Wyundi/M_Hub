@@ -9,11 +9,15 @@
 
 </form>
 
-<ul>
-    {{#each data_list}}
-        <li>
-            <a href="./info/{{_id}}"> {{data_name}} </a>
-            <p> {{description}} </p>
-        </li>
-    {{/each}}
-</ul>
+{{#if no_res}}
+    <p> No result </p>
+{{else}}
+    <ul>
+        {{#each data_list}}
+            <li>
+                <a href="./info/{{_id}}"> {{data_name}} </a>
+                <p> {{description}} </p>
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}
