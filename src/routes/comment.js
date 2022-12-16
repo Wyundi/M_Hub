@@ -6,30 +6,31 @@ const modelData = data.model;
 const utils = require('../utils');
 
 router
-    .route('/:modelId')
+    .route('/model/info/:modelId')
     .get(async (req, res) => {
         try {
             modelId = utils.checkId(req.params.modelId, 'model id');
         } catch(e) {
-            res.status(400).json({error: e});
+            res.status(400).render("./error/errorPage", {error_message: e});
             return;
         }
 
         try {
             await modelData.getModelById(modelId);
         } catch(e) {
-            res.status(404).json({error: 'model not found'});
+            res.status(404).render("./error/searchNotFound", {error_message: e});
             return;
         }
 
         try {
             const allComments = await commentData.getAllComment(modelId);
             if (allComments.length == 0) {
-              return res.status(404).json({error: 'No comments for this model'});
+              return res.status(404).render("./error/searchNotFound", {error_message: e});
             }
-            res.status(200).json(allComments);
+            // where should it be redirected?
+            res.status(200).render("./model/info");
           } catch(e) {
-            res.status(500).json({error: "model not found"});
+            res.status(500).render("./error/searchNotFound", {error_message: e});
           }
     })
     .post(async (req, res) => {
@@ -37,29 +38,52 @@ router
 
         try {
           modelId = utils.checkId(req.params.modelId, 'model id');
-          username = utils.checkUsername(userName);
-          comment = utils.checkComment(comment);
+          username = utils.checkUsername(commentInfo.userName);
+          comment = utils.checkComment(commentInfo.comment);
         } catch(e) {
-          res.status(400).json({error: e});
+          res.status(400).render("./model/info", {error_message: e});
           return;
         }
     
         try{
           await modelData.getModelById(modelId);
         } catch(e) {
-          res.status(404).json({error: "model not found"});
+          res.status(404).render("./model/info", {error_message: e});
           return;
         }
     
         try {
           await commentData.createComment(movieId, username, comment);
-          res.status(200).json(await modelData.getModelById(modelId));
+          res.status(200).render("./model/info");
         } catch(e) {
-          res.status(500).json({error: "model not found"});
+          res.status(500).render("./model/info", {error_message: e});
         }
     })
-    .put(async (req, res) => {
+    // .put(async (req, res) => {
+    // })
+  router
+    .route('comment/:commentId')
+    .delete(async (req, res) => {
+      try {
+        commentId = utils.checkId(req.params.commentId, 'comment id');
+      } catch(e) {
+        res.status(400).render("./error/searchNotFound", {error_message: e});
+        return;
+      }
+  
+      try {
+        await commentData.getComment()
+      } catch(e) {
+        res.status(404).render("./error/searchNotFound", {error_message: e});
+        return;
+      }
+  
+      try {
+        const updatedComments = await commentData.updatedComments(commentId);
+        res.status(200).render("./model/info");
+      } catch (e) {
+        res.status(500).render("./error/errorPage", {error_message: e});
+      }
     })
-    .delete(async (req, res) => {})
 
 module.exports = router;
