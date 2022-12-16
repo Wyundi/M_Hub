@@ -9,6 +9,8 @@ const path = require('path');
 const utils = require('../utils');
 const { model } = require('../data');
 
+const xss = require('xss');
+
 router
     .route("/")
     .get(async (req, res) => {
@@ -43,13 +45,13 @@ router
 
         try {
             // error check
-            model_name = utils.checkString(req.body.model_name);
-            model_category = utils.checkString(req.body.model_category);
-            model_description = utils.checkString(req.body.model_description);
-            model_link = utils.checkUrl(req.body.model_link);
-            model_input = utils.checkString(req.body.model_input);
-            model_output = utils.checkString(req.body.model_output);
-            model_data = utils.checkString(req.body.model_data);
+            model_name = utils.checkString(xss(req.body.model_name));
+            model_category = utils.checkString(xss(req.body.model_category));
+            model_description = utils.checkString(xss(req.body.model_description));
+            model_link = utils.checkUrl(xss(req.body.model_link));
+            model_input = utils.checkString(xss(req.body.model_input));
+            model_output = utils.checkString(xss(req.body.model_output));
+            model_data = utils.checkString(xss(req.body.model_data));
 
             // upload onnx file to server
             let onnx_file = req.files.onnx_file;
@@ -109,7 +111,7 @@ router
         let model_db = undefined;
 
         try {
-            modelId = utils.checkId(req.params.id, "model id");
+            modelId = utils.checkId(xss(req.params.id), "model id");
             model_db = await modelData.getModelById(modelId);
         } catch (e) {
             let error_status = 400;
@@ -261,8 +263,19 @@ router
     })
     .post(async (req, res) => {
 
-        let search_input = req.body.search_input;
+        let search_input = undefined
         let search_res = [];
+
+        try {
+            search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {
@@ -330,7 +343,7 @@ router
         let model_db = undefined;
 
         try {
-            modelId = utils.checkId(req.params.id, "model id");
+            modelId = utils.checkId(xss(req.params.id), "model id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -374,8 +387,19 @@ router
     })
     .post(async (req, res) => {
 
-        let modelId = req.params.id;
+        let modelId = undefined
         let model_db = undefined;
+
+        try {
+            modelId = xss(req.params.id);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             model_db = await modelData.getModelById(modelId);
@@ -398,13 +422,13 @@ router
 
         try {
 
-            model_name = utils.checkString(utils.prior(req.body.model_name, model_db.model_name));
-            model_category = utils.checkString(utils.prior(req.body.model_category, model_db.category));
-            model_description = utils.checkString(utils.prior(req.body.model_description, model_db.description));
-            model_link = utils.checkUrl(utils.prior(req.body.model_link, model_db.link));
-            model_input = utils.checkString(utils.prior(req.body.model_input, model_db.input));
-            model_output = utils.checkString(utils.prior(req.body.model_output, model_db.output));
-            model_data = utils.checkId(utils.prior(req.body.model_data, model_db.data_list[0]))
+            model_name = utils.checkString(utils.prior(xss(req.body.model_name), model_db.model_name));
+            model_category = utils.checkString(utils.prior(xss(req.body.model_category), model_db.category));
+            model_description = utils.checkString(utils.prior(xss(req.body.model_description), model_db.description));
+            model_link = utils.checkUrl(utils.prior(xss(req.body.model_link), model_db.link));
+            model_input = utils.checkString(utils.prior(xss(req.body.model_input), model_db.input));
+            model_output = utils.checkString(utils.prior(xss(req.body.model_output), model_db.output));
+            model_data = utils.checkId(utils.prior(xss(req.body.model_data), model_db.data_list[0]))
 
         } catch (e) {
             let error_status = 400;
