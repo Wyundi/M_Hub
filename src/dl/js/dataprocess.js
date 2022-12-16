@@ -85,6 +85,7 @@ const loadData = async (dataId, index, getNorm=false) => {
 // test();
 
 module.exports = {
+    readImg,
     loadImg,
     loadData
 }

@@ -112,7 +112,7 @@ router
         try {
             user_db = await userData.getUserById(userId);
         } catch (e) {
-            let error_status = 400;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
@@ -160,8 +160,17 @@ router
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
-            return res.redirect("/user");
+        try {
+            return res.status(200).redirect("/user");
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -170,14 +179,69 @@ router
                 error_message: e
             });
         }
+
     })
 
-// router
-//     .route('/user/:id')
-//     .get(async (req, res) => {})
-//     .post(async (req, res) => {})
-//     .put(async (req, res) => {})
-//     .delete(async (req, res) => {});
+router
+    .route('/user/edit/changepasswd')
+    .get(async (req, res) => {
+        let username = req.session.user.username;
+
+        try {
+            return res.status(200).render("./userViews/changePasswd");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+        
+    })
+    .post(async (req, res) => {
+
+        let userId = req.session.user.userId;
+
+        let old_passwd = undefined;
+        let new_passwd = undefined;
+
+        try {
+            old_passwd = utils.checkPasswd(xss(req.body.user_old_passwd));
+            new_passwd = utils.checkPasswd(xss(req.body.user_new_passwd));
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            let state_message = await userData.changePasswd(userId, old_passwd, new_passwd);
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            return res.status(200).redirect("/user");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+
+    })
 
 router
     .route('/login')
@@ -193,7 +257,6 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });
@@ -226,7 +289,6 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
-                // username: username,
                 error_status: error_status,
                 error_message: e
             });
@@ -247,7 +309,6 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });
@@ -256,49 +317,36 @@ router
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        let username = undefined
-        let first_name = undefined
-        let last_name = undefined
-        let email = undefined
-        let gender = undefined
-        let loc = undefined
-        let org = undefined
-        let passwd = undefined
+        let username = undefined;
+        let first_name = undefined;
+        let last_name = undefined;
+        let email = undefined;
+        let gender = undefined;
+        let loc = undefined;
+        let org = undefined;
+        let passwd = undefined;
 
         try {
+            // error check
 
-            username = xss(req.body.user_name);
-            first_name = xss(req.body.user_first_name);
-            last_name = xss(req.body.user_last_name);
-            email = xss(req.body.user_email)
-            gender = xss(req.body.user_gender)
-            loc = xss(req.body.user_location)
-            org = xss(req.body.user_organization)
-            passwd = xss(req.body.user_password)
+            username = utils.checkUsername(xss(req.body.user_name));
+            first_name = utils.checkString(xss(req.body.user_first_name));
+            last_name = utils.checkString(xss(req.body.user_last_name));
+            email = utils.checkEmail(xss(req.body.user_email));
+            gender = utils.checkGender(xss(req.body.user_gender));
+            loc = utils.checkLocation(xss(req.body.user_location));
+            org = utils.checkString(xss(req.body.user_organization));
+            passwd = utils.checkPasswd(xss(req.body.user_password));
 
-        }  catch (e) {
-
+        } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });
         }
 
         try {
-            // error check
-
-            username = utils.checkUsername(username);
-            first_name = utils.checkString(first_name);
-            last_name = utils.checkString(last_name);
-            email = utils.checkEmail(email);
-            gender = utils.checkGender(gender);
-            loc = utils.checkLocation(loc);
-            org = utils.checkString(org);
-
-            passwd = utils.checkPasswd(passwd);
-
             let user_info = {
                 username: username,
                 first_name: first_name,
@@ -315,11 +363,19 @@ router
             if (create_status.insertedUser) {
                 return res.status(200).redirect("/login");
             }
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: e
+            });
+        }
             
+        try {
+            return res.status(200).redirect("/login");
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });

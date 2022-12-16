@@ -244,12 +244,11 @@ router
 
     })
     .post(async (req, res) => {
-        let search_input = undefined
-
-        let search_res = [];
+        
+        let search_input = undefined;
 
         try {
-            let search_input = xss(req.body.search_input);
+            search_input = xss(req.body.search_input);
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -287,22 +286,11 @@ router
         }
 
         try {
-            search_res = await dataInfoData.getDataByName(search_input);
+            let search_res = await dataInfoData.getDataByName(search_input);
 
-            if (search_res.length === 0) {
-                throw 'Data not found.';
-            }
-        } catch (e) {
-            let error_status = 404;
-            return res.status(error_status).render("./error/searchNotFound", {
-                username: req.session.user.username,
-                error_status: error_status,
-                error_message: e
-            });
-        }
-
-        try {
+            let no_res = (search_res.length === 0);
             return res.status(200).render("./data/searchRes", {
+                no_res: no_res,
                 username: req.session.user.username,
                 data_list: search_res
             })

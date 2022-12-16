@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 app.use('/user', (req, res, next) => {
 
   if (!req.session.user) {
-      return res.redirect('/forbidden');
+      return res.status(403).redirect('/forbidden');
   } else {
       next();
   }
@@ -57,7 +57,7 @@ app.use('/user', (req, res, next) => {
 app.use('/data', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        return res.status(403).redirect('/forbidden');
     } else {
         next();
     }
@@ -67,7 +67,7 @@ app.use('/data', (req, res, next) => {
 app.use('/model', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        return res.status(403).redirect('/forbidden');
     } else {
         next();
     }

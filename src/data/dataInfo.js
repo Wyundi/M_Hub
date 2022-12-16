@@ -4,7 +4,11 @@ const {ObjectId} = require('mongodb');
 
 const rawData = require('./raw');
 
+const {readImg} = require("../dl/js/readImg");
+
+const path = require("path");
 const utils = require("../utils");
+const { read } = require('fs');
 
 const createData = async (data) => {
     /*
@@ -41,31 +45,65 @@ const createData = async (data) => {
     let mean_list = [];
     let std_list = [];
 
-    for (let f of features) {
-        feature_id = ObjectId();
-        raw[f] = {};
-        raw_list.push([])
-
-        for (let i in json_obj[f]) {
-            // add to raw obj
-            let single_data = await rawData.addData(json_obj[f][i].toString());
-            raw[f][i] = single_data._id.toString();
-
-            // add to raw list
-            if (Number(json_obj[f][i] == json_obj[f][i])) {
-                raw_list[raw_list.length - 1].push(Number(json_obj[f][i]));
+    if (data_type === 'data') {
+        for (let f of features) {
+            raw[f] = {};
+            raw_list.push([])
+    
+            for (let i in json_obj[f]) {
+                // add to raw obj
+                let single_data = await rawData.addData(json_obj[f][i].toString());
+                raw[f][i] = single_data._id.toString();
+    
+                // add to raw list
+                if (Number(json_obj[f][i] == json_obj[f][i])) {
+                    raw_list[raw_list.length - 1].push(Number(json_obj[f][i]));
+                }
+                else {
+                    raw_list[raw_list.length - 1].push(0);
+                }
             }
-            else {
-                raw_list[raw_list.length - 1].push(0);
+    
+            let values = raw_list[raw_list.length - 1];
+            let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+            let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
+    
+            mean_list.push(mean);
+            std_list.push(std);
+        }
+    }
+    else if (data_type === 'img') {
+        for (let f of features) {
+            raw[f] = {};
+            raw_list.push([])
+    
+            let l = Object.keys(json_obj[f]).length;
+            for (let i in json_obj[f]) {
+                // add to raw obj
+                let single_data = await rawData.addData(json_obj[f][i].toString());
+                raw[f][i] = single_data._id.toString();
+    
+                // add to raw list
+                raw_list[raw_list.length - 1].push(json_obj[f][i]);
+
+                if (f === 'img_path') {
+                    // read img
+                    let img_path = path.resolve(json_obj[f][i]);
+                    let img_info = readImg(img_path);
+
+                    // // calculate mean and std, add them to the list
+                    // let values = img_info.img_data.flat(Infinity);
+                    // let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+                    // let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
+
+                    // mean_list.push(mean);
+                    // std_list.push(std);
+
+                    p = (Number(i)+1).toString().padStart(3, '0');
+                    console.log(`Process: [${p} | ${l}]`);
+                }
             }
         }
-
-        let values = raw_list[raw_list.length - 1];
-        let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
-        let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
-
-        mean_list.push(mean);
-        std_list.push(std);
     }
 
     let newData = {
