@@ -86,13 +86,12 @@ router
         }
 
         try {
-            let no_res = data_search_res.length === 0 && model_search_res.length === 0;
-            return res.status(200).render("./search/searchPage", {
-                username: req.session.user.username,
+            let no_res = (data_search_res.length === 0 && model_search_res.length === 0);
+            return res.status(200).json({
                 no_res: no_res,
                 data_search_res: data_search_res,
                 model_search_res: model_search_res
-            })
+            });
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {

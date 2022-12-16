@@ -7,6 +7,9 @@ const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
+const static = express.static(__dirname + '/public');
+app.use('/public', static);
+
 app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -73,7 +76,12 @@ app.use('/model', (req, res, next) => {
 app.use('/search', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        if (req.body.ajax) {
+            return res.status(403).json({error_message: "Forbidden Access"});
+        }
+        else {
+            return res.status(403).redirect('/forbidden');
+        }
     } else {
         next();
     }
