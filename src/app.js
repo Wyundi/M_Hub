@@ -2,10 +2,14 @@
 
 const express = require('express');
 const app = express();
+
 const session = require('express-session');
 const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
+
+const static = express.static(__dirname + '/public');
+app.use('/public', static);
 
 app.use(fileUpload());
 app.use(express.json());
@@ -43,7 +47,7 @@ app.use((req, res, next) => {
 app.use('/user', (req, res, next) => {
 
   if (!req.session.user) {
-      return res.redirect('/forbidden');
+      return res.status(403).redirect('/forbidden');
   } else {
       next();
   }
@@ -53,7 +57,7 @@ app.use('/user', (req, res, next) => {
 app.use('/data', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        return res.status(403).redirect('/forbidden');
     } else {
         next();
     }
@@ -63,7 +67,7 @@ app.use('/data', (req, res, next) => {
 app.use('/model', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        return res.status(403).redirect('/forbidden');
     } else {
         next();
     }
@@ -73,7 +77,12 @@ app.use('/model', (req, res, next) => {
 app.use('/search', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.redirect('/forbidden');
+        if (req.body.ajax) {
+            return res.status(403).json({error_message: "Forbidden Access"});
+        }
+        else {
+            return res.status(403).redirect('/forbidden');
+        }
     } else {
         next();
     }
