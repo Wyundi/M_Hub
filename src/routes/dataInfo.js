@@ -138,6 +138,7 @@ router
             });
         }
     })
+    .post(async (req, res) => {})
     .put(async (req, res) => {})
     .delete(async (req, res) => {})
 
@@ -156,9 +157,9 @@ router
             features = data_db.features;
 
             for (let i=0; i<20; i++) {
-                let {single_res, single_res_norm} = await dl_dataprocess.loadData(dataId, i, getNorm=true);
-                res_ori.push(single_res);
-                res_norm.push(single_res_norm);
+                let single_res = await dl_dataprocess.loadData(dataId, i, getNorm=true);
+                res_ori.push(single_res.ori);
+                res_norm.push(single_res.norm);
             }
             
         } catch (e) {
@@ -285,7 +286,7 @@ router
         }
 
         try {
-            return res.render("./data/searchRes", {
+            return res.status(200).render("./data/searchRes", {
                 username: req.session.user.username,
                 data_list: search_res
             })

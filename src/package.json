@@ -26,6 +26,7 @@
     "express-session": "^1.17.3",
     "mongodb": "^4.10.0",
     "ndarray": "^1.0.19",
-    "onnxruntime-node": "^1.13.1"
+    "onnxruntime-node": "^1.13.1",
+    "xss": "^1.0.14"
   }
 }

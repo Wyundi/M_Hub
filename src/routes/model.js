@@ -36,7 +36,7 @@ router
         let model_link = undefined;
         let model_input = undefined;
         let model_output = undefined;
-        let onnx_path = undefined;
+        let upload_path = undefined;
 
         let newModel = undefined;
         let modelId = undefined;
@@ -53,7 +53,7 @@ router
 
             // upload onnx file to server
             let onnx_file = req.files.onnx_file;
-            let upload_path = path.resolve(`./onnx/${model_name}.onnx`)
+            upload_path = path.resolve(`./onnx/${model_name}.onnx`)
             await onnx_file.mv(upload_path);
 
             // search data from data list

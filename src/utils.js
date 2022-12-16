@@ -167,7 +167,7 @@ function checkPasswd(passwd) {
 
     // haven't consider special character ralated cases
 
-    passwd = checkString(passwd);
+    let passwd_trim = checkString(passwd);
 
     if (passwd.includes(' ')) {
         throw "Password should not contain spaces.";
