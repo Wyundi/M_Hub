@@ -136,8 +136,6 @@ const updateModel = async (modelId, model_info) => {
     onnx_path = utils.checkPath(model_info.onnx_path);
     input = utils.checkString(model_info.input);
     output = utils.checkString(model_info.output);
-    userId = utils.checkId(model_info.userId, "user id");
-    dataId = utils.checkId(model_info.dataId, "data id");
 
     // update data
 
@@ -154,8 +152,6 @@ const updateModel = async (modelId, model_info) => {
             onnx_path: onnx_path,
             input: input,
             output: output,
-            user_list: [userId],
-            data_list: [dataId]
         }}
     );
 

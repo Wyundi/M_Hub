@@ -129,12 +129,6 @@ router
             contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
 
-            for (userIdx in model_db.user_list) {
-                userId = utils.checkId(model_db.user_list[userIdx], "user id");
-                let user_db = await userData.getUserById(userId);
-                user_name_list.push(user_db.username);
-            }
-
             for (dataIdx in model_db.data_list) {
                 dataId = utils.checkId(model_db.data_list[dataIdx], "data id");
                 let data_db = await dataInfo.getDataById(dataId);
@@ -242,13 +236,26 @@ router
             });
         }
 
+        /* owner delete: 1. delete model from db    2. all users' model list --
+         * not owner delete: current user's model list --
+         */
+
         try {
-            modelId = utils.checkId(req.params.id, "model id");
             userId = utils.checkId(req.session.user.userId, "user id");
-            userRemoveInfo = await userData.removeFromModelList(userId, modelId);
-            modelRemoveInfo = await modelData.removeFromUserList(modelId,userId);
-            if (userRemoveInfo && modelRemoveInfo) {
-                return res.redirect("/user");
+            if (userId === model_db.user_list[0]) {
+                for (user of model_db.user_list) {
+                    userRemoveInfo = await userData.removeFromModelList(user, modelId);
+                    if (!userRemoveInfo) throw 'remove modelid from user profile failed'
+                }
+
+                modelRemoveInfo = await modelData.removeModel(modelId);
+
+                if (modelRemoveInfo) return res.redirect("/user");
+            } else {
+                userRemoveInfo = await userData.removeFromModelList(userId, modelId);
+                if (userRemoveInfo) {
+                    return res.redirect("/user");
+                }
             }
         } catch (e) {
             let error_status = 500;

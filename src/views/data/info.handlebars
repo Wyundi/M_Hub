@@ -23,6 +23,7 @@
 <p> {{contributor}} </p>
 
 <h3> Comment </h3>
+<h4> <a href="/comment/data/{{dataId}}">See more comments</a> </h4>
 <ul>
     {{#each comment}}
         <li> {{this}} </li>
@@ -101,6 +102,26 @@ document.getElementById("div1").style.display="none";
 {{else}}
     <form action="./{{dataId}}" method="POST">
         <button type="submit" value="{{dataId}}" name="dataId"> add to data list </button>
+    </form>
+    <br>
+    <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
+        <button type="submit" onclick="javascript:return del();"> Remove this dataset
+
+            <script type="text/javascript">
+
+            function del() {
+                var msg = "Are you sure to delete?";
+                if (confirm(msg) === true) {
+                    alert('Successfully deleted');
+                    return true;
+                } else {
+                    alert('Cancelled');
+                    return false;
+                }
+            }
+
+            </script>
+        </button>
     </form>
 {{/if}} 
 <br>

@@ -79,6 +79,7 @@ const createData = async (data) => {
         file_path: file_path,
         raw_data: raw,
         user_list: [userId],
+        model_list: [],
         comment: []
     }
 
@@ -188,7 +189,6 @@ const updateData = async (dataId, newData) => {
     features = utils.checkStringArray(newData.features);
     length = utils.checkInt(newData.length);
     source = utils.checkUrl(newData.source);
-    userId = utils.checkId(newData.userId);
 
     // add data info
 
@@ -202,7 +202,6 @@ const updateData = async (dataId, newData) => {
         length: length,
         source: source,
         raw_data: data_db.raw_data,
-        user_list: [userId],
         comment: []
     }
 
@@ -232,6 +231,33 @@ const addUser = async (dataId, userId) => {
     const dataInfoCollection = await dataInfo();
     const updatedInfo = await dataInfoCollection
         .updateOne( {_id: ObjectId(dataId)}, {$push: {user_list: userId}} );
+
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'could not add user successfully';
+    }
+
+    data_db = await getDataById(dataId);
+
+    data_db._id = data_db._id.toString();
+
+    return data_db;
+
+};
+
+const addModel = async (dataId, modelId) => {   
+    
+    // error check
+    dataId = utils.checkId(dataId, "data id");
+    modelId = utils.checkId(modelId, "model id");
+
+    // add model
+    let data_db = await getDataById(dataId);
+    if (!data_db) throw `Could not find data with id ${dataId}!`;
+
+    // add model to data
+    const dataInfoCollection = await dataInfo();
+    const updatedInfo = await dataInfoCollection
+        .updateOne( {_id: ObjectId(dataId)}, {$push: {model_list: modelId}} );
 
     if (updatedInfo.modifiedCount === 0) {
         throw 'could not add user successfully';
@@ -292,5 +318,6 @@ module.exports = {
     removeData,
     updateData,
     addUser,
+    addModel,
     removeFromUserList
 };

@@ -26,12 +26,6 @@ router
     .route('/user')
     // post function for create user
     .get(async (req, res) => {
-        if (req.session.message) {
-            window.onbeforeunload = function() {
-                return req.session.message;
-              };
-        }
-
         time = new Date().toUTCString();
 
         let userId = req.session.user.userId;

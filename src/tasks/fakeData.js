@@ -40,7 +40,8 @@ let data1 = {
     length: 506,
     source: 'http://lib.stat.cmu.edu/datasets/boston',
     file_path: './raw_data/boston.json',
-    userId: undefined
+    userId: undefined,
+    modelId: undefined
 }
 
 let data2 = {
@@ -50,7 +51,8 @@ let data2 = {
     length: 200,
     source: 'https://www.kaggle.com/c/dogs-vs-cats',
     file_path: './raw_data/cat.json',
-    userId: undefined
+    userId: undefined,
+    modelId: undefined
 }
 
 let model1 = {
