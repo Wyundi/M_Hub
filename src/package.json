@@ -26,6 +26,8 @@
     "express-session": "^1.17.3",
     "is-valid-path": "^0.1.1",
     "mongodb": "^4.10.0",
-    "onnxruntime-node": "^1.13.1"
+    "ndarray": "^1.0.19",
+    "onnxruntime-node": "^1.13.1",
+    "xss": "^1.0.14"
   }
 }
