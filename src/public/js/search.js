@@ -62,23 +62,18 @@
     let model_result_list = $('#model_result_list');
 
     function error_func(res) {
-        if (res.statue === 403) {
+        console.log(res);
+        if (res.status === 403) {
             search_page.empty();
-            search_page.html('<h1> Forbidden Access </h1><br><p> The user is not logged in. </p><br><a href="../"> homepage </a>');
+            search_page.html('<h1> Forbidden Access </h1><br><p> The user is not logged in. </p><br><img src="https://http.cat/403" width="500"><br><a href="../"> homepage </a>');
         }
         else {
             search_page.empty();
-            search_page.html(`<h1> ${res.statusText} </h1>`);
+            search_page.html(`<img src="https://http.cat/${res.status}" width="500">`);
         }
     }
 
     function update_page(res) {
-
-        if (res.error_message) {
-            search_page.empty();
-            search_page.html('<h1> Forbidden Access </h1><br><p> The user is not logged in. </p><br><a href="../"> homepage </a>');
-        }
-
 
         search_result_header.empty();
         data_search_res.empty();
@@ -87,28 +82,21 @@
         data_result_list.empty();
         model_result_list.empty();
 
-        console.log(res);
-        if (res.error_message) {
-            console.log('test');
-            newContent.html(`<h2>${res.error_message}</h2>`);
+        if (res.no_res) {
+            search_result_header.text("No result for your search.");
         }
         else {
-            if (res.no_res) {
-                search_result_header.text("No result for your search.");
-            }
-            else {
-                search_result_header.text("Search Result");
-                if (res.data_search_res.length !== 0) {
-                    data_search_res.append("<h2> Data </h2>");
-                    for (let data_db of res.data_search_res) {
-                        data_result_list.append(`<li><a href="../data/info/${data_db._id}"> ${data_db.data_name} </a><p> ${data_db.description} </p></li>`);
-                    }
+            search_result_header.text("Search Result");
+            if (res.data_search_res.length !== 0) {
+                data_search_res.append("<h2> Data </h2>");
+                for (let data_db of res.data_search_res) {
+                    data_result_list.append(`<li><a href="../data/info/${data_db._id}"> ${data_db.data_name} </a><p> ${data_db.description} </p></li>`);
                 }
-                if (res.model_search_res.length !== 0) {
-                    model_search_res.append("<h2> Model </h2>");
-                    for (let model_db of res.model_search_res) {
-                        model_result_list.append(`<li><a href="../model/info/${model_db._id}"> ${model_db.model_name} </a><p> ${model_db.description} </p></li>`);
-                    }
+            }
+            if (res.model_search_res.length !== 0) {
+                model_search_res.append("<h2> Model </h2>");
+                for (let model_db of res.model_search_res) {
+                    model_result_list.append(`<li><a href="../model/info/${model_db._id}"> ${model_db.model_name} </a><p> ${model_db.description} </p></li>`);
                 }
             }
         }
@@ -122,7 +110,7 @@
             newContent.html("<p>input error</p>");
         }
         else {
-            newContent.html("");
+            newContent.empty();
 
             let post_data = JSON.stringify({
                 ajax: true,

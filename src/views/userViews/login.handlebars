@@ -1,6 +1,5 @@
 <h2> Log in </h2>
 
-{{#if true}}
 <form action="/login" method="POST" class="searchuser-form">
 
     <label for="name">
@@ -33,21 +32,3 @@
     <button type="button" class="btn"> <a href="../"> back to home page </a></button>
 
 </form>
-{{/if}}
-
-{{#if false}}
-<form id="log-in-form">
-    <label> User Name <input id="user_name" type="text" placeholder="please input user name" class="full-width-input" /></label>
-    <br>
-    <label> Password <input id="user_password" type="password" placeholder="please input password" class="full-width-input"/></label>
-    <br>
-    <button type="submit" class="btn"> log in </button>
-</form>
-
-<div id="new-content">
-</div>
-
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-        crossorigin="anonymous"></script>
-<script src="/public/js/login.js"></script>
-{{/if}}

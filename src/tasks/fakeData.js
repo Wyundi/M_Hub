@@ -5,7 +5,7 @@ let user1 = {
     first_name: 'James',
     last_name: 'Robert',
     email: 'JamesR@gmail.com',
-    gender: 'Male',
+    gender: 'Man',
     location: 'NJ',
     organization: 'SIT',
     passwd: 'JamesR1914#'
@@ -16,7 +16,7 @@ let user2 = {
     first_name: 'John',
     last_name: 'Michael',
     email: 'JohnM@gmail.com',
-    gender: 'Male',
+    gender: 'Man',
     location: 'NY',
     organization: 'NYU',
     passwd: 'JohnM1939#'
@@ -27,7 +27,7 @@ let user3 = {
     first_name: 'Mary',
     last_name: 'Linda',
     email: 'MaryL@gmail.com',
-    gender: 'Female',
+    gender: 'Woman',
     location: 'MA',
     organization: 'MIT',
     passwd: 'MaryL2019#'
@@ -41,7 +41,8 @@ let data1 = {
     length: 506,
     source: 'http://lib.stat.cmu.edu/datasets/boston',
     file_path: './raw_data/boston.json',
-    userId: undefined
+    userId: undefined,
+    modelId: undefined
 }
 
 let data2 = {
@@ -52,7 +53,8 @@ let data2 = {
     length: 200,
     source: 'https://www.kaggle.com/c/dogs-vs-cats',
     file_path: './raw_data/cat.json',
-    userId: undefined
+    userId: undefined,
+    modelId: undefined
 }
 
 let model1 = {

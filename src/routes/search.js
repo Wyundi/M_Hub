@@ -5,7 +5,6 @@ const data = require("../data");
 const dataInfoData = data.dataInfo;
 const modelData = data.model ;
 
-const path = require('path');
 const utils = require('../utils');
 
 const xss = require('xss');
@@ -48,8 +47,10 @@ router
 
         try {
             if (search_input === '') {
-                return res.render('./error/searchNotFound', {
+                let error_status = 404;
+                return res.status(403).render('./error/searchNotFound', {
                     username: req.session.user.username,
+                    error_status: error_status,
                     error_message: "Please enter your search."
                 });
             }
