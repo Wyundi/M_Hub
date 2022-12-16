@@ -1,6 +1,6 @@
 {
   "name": "m_hub",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A Deep Learning model share platform.",
   "main": "app.js",
   "scripts": {
