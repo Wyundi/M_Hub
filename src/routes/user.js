@@ -110,7 +110,7 @@ router
         let user_db = undefined;
 
         try {
-            userId = utils.checkId(xss(req.params.id), "user id");
+            userId = utils.checkId(xss(req.session.user.userId), "user id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -119,7 +119,6 @@ router
                 error_message: e
             });
         }
-
 
         try {
             user_db = await userData.getUserById(userId);
@@ -173,6 +172,66 @@ router
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            return res.status(200).redirect("/user");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+    })
+
+router
+    .route('/user/edit/changepasswd')
+    .get(async (req, res) => {
+        let username = req.session.user.username;
+
+        try {
+            return res.status(200).render("./userViews/changePasswd");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+        
+    })
+    .post(async (req, res) => {
+
+        let userId = req.session.user.userId;
+
+        let old_passwd = undefined;
+        let new_passwd = undefined;
+
+        try {
+            old_passwd = utils.checkPasswd(xss(req.body.user_old_passwd));
+            new_passwd = utils.checkPasswd(xss(req.body.user_new_passwd));
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            let state_message = await userData.changePasswd(userId, old_passwd, new_passwd);
         } catch (e) {
             let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {

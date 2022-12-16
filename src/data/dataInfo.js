@@ -53,7 +53,6 @@ const createData = async (data) => {
                 // add to raw obj
                 let single_data = await rawData.addData(json_obj[f][i].toString());
                 raw[f][i] = single_data._id.toString();
-
                 // add to raw list
                 if (Number(json_obj[f][i] == json_obj[f][i])) {
                     raw_list[raw_list.length - 1].push(Number(json_obj[f][i]));
@@ -62,11 +61,11 @@ const createData = async (data) => {
                     raw_list[raw_list.length - 1].push(0);
                 }
             }
-
+    
             let values = raw_list[raw_list.length - 1];
             let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
             let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
-
+    
             mean_list.push(mean);
             std_list.push(std);
         }
@@ -75,13 +74,13 @@ const createData = async (data) => {
         for (let f of features) {
             raw[f] = {};
             raw_list.push([])
-
+    
             let l = Object.keys(json_obj[f]).length;
             for (let i in json_obj[f]) {
                 // add to raw obj
                 let single_data = await rawData.addData(json_obj[f][i].toString());
                 raw[f][i] = single_data._id.toString();
-
+    
                 // add to raw list
                 raw_list[raw_list.length - 1].push(json_obj[f][i]);
 

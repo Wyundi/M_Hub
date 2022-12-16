@@ -131,7 +131,7 @@ function checkGender(gender) {
     // ["male", "female"]  
     // according to the professor, gender should be not only male and femail, but also included some other opbtions
 
-    const options = ["Male", "Female", "Trans", "NonBinary", "NotRespond"];
+    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
 
     gender = checkString(gender);
     // gender = gender.toLowerCase();
@@ -166,7 +166,7 @@ function checkPasswd(passwd) {
 
     // haven't consider special character ralated cases
 
-    passwd = checkString(passwd);
+    let passwd_trim = checkString(passwd);
 
     if (passwd.includes(' ')) {
         throw "Password should not contain spaces.";
@@ -311,6 +311,23 @@ function str2strArray(str) {
 
 }
 
+function checkComment(id, username, comment) {
+
+    id = checkId(id);
+    username = checkUsername(username);
+    comment = checkString(comment);
+}
+
+function checkDataType(type) {
+
+    let type_list = ['data', 'img'];
+    if (type_list.indexOf(type) === -1) {
+        throw 'input type not in type list.';
+    }
+
+    return type;
+}
+
 function deleteFromArray(element, array) {
     let index = array.indexOf(element);
     if (index > -1) {
@@ -345,5 +362,8 @@ module.exports = {
 
     checkRawData,
     str2strArray,
+
+    checkComment,
+    checkDataType,
     deleteFromArray
 }

@@ -6,6 +6,8 @@ const modelData = data.model;
 const dataInfo = data.dataInfo;
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/data/:id')
     .get(async (req, res) => {

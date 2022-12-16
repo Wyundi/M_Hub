@@ -4,6 +4,8 @@ const dataInfoRoutes = require("./dataInfo");
 const commentRoutes = require("./comment");
 const searchRoutes = require("./search");
 
+const xss = require('xss');
+
 const constructorMethod = (app) => {
 
     app.use('/', userRoutes);

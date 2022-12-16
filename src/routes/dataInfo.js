@@ -45,6 +45,7 @@ router
 
         try {
             // error check
+
             data_name = utils.checkString(xss(req.body.data_name));
             data_type = utils.checkString(xss(req.body.data_type));
             data_description = utils.checkString(xss(req.body.data_description));
@@ -86,6 +87,7 @@ router
                 error_message: e
             });
         }
+
 
         try {
             return res.redirect(`/data/info/${dataId}`);
@@ -316,6 +318,16 @@ router
 
         try {
             dataId = utils.checkId(xss(req.params.id), "data id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
             let data_db = await dataInfoData.getDataById(dataId);
             features = data_db.features;
 
@@ -324,15 +336,15 @@ router
                 let single_set_raw = {};
                 let single_set_norm = {};
                 for (let j = 0; j < features.length; j++) {
-                    single_set_raw[features[j]] = single_data.res[j];
-                    single_set_norm[features[j]] = single_data.res_norm[j];
+                    single_set_raw[features[j]] = single_data.ori[j];
+                    single_set_norm[features[j]] = single_data.norm[j];
                 }
                 dataSet_raw.push(single_set_raw);
                 dataSet_norm.push(single_set_norm);
 
             }
         } catch (e) {
-            let error_status = 400;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
@@ -345,6 +357,24 @@ router
                 username: req.session.user.username,
                 post_raw: dataSet_raw,
                 post_norm: dataSet_norm
+            })
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
+
+router
+    .route("/rawimg/:id")
+    .get(async (req, res) => {
+
+        try {
+            return res.status(200).render("./data/rawImg", {
+                username: req.session.user.username
             })
         } catch (e) {
             let error_status = 500;
@@ -389,7 +419,7 @@ router
 
     })
     .post(async (req, res) => {
-
+        
         let search_input = undefined;
 
         try {
@@ -506,7 +536,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = xss(req.params.id);
+            dataId = utils.checkId(xss(req.params.id), 'data id');
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {

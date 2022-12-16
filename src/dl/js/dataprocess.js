@@ -48,15 +48,18 @@ const loadData = async (dataId, index, getNorm=false) => {
         let mean = data_db.mean;
         let std = data_db.std;
 
-        let res_norm = [];
+        let ori = [];
+        let norm = [];
         for (let i in res) {
-            res[i] = Number(res[i]);
-            res_norm.push(res[i] - mean[i]) / std[i];
+            ori.push(Number(res[i]));
+            norm.push((ori[i] - mean[i]) / std[i]);
         }
-        return {res, res_norm};
+
+        return {ori, norm};
+
     }
 
-    return res;
+    return ori;
 
 };
 
@@ -83,7 +86,6 @@ const loadData = async (dataId, index, getNorm=false) => {
 // test();
 
 module.exports = {
-    loadData,
-    loadImg
-
+    loadImg,
+    loadData
 }

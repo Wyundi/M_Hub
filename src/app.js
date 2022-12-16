@@ -85,7 +85,7 @@ app.use('/search', (req, res, next) => {
         }
         else {
             return res.status(403).redirect('/forbidden');
-        };
+        }
     } else {
         next();
     }

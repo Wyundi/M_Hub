@@ -377,7 +377,7 @@ router
 
         let modelId = undefined;
         let model_db = undefined;
-    
+
         try {
             modelId = utils.checkId(xss(req.params.id), "model id");
         } catch (e) {
