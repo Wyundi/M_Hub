@@ -201,7 +201,7 @@ router
     })
     // post function post a form of user name and passward and go to user profile page
     .post(async (req, res) => {
-        //code here for POST
+        
         // error check
         let username = undefined
         let passwd = undefined

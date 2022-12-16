@@ -35,6 +35,7 @@ let user3 = {
 
 let data1 = {
     name: 'Boston Housing Data',
+    type: 'data',
     description: 'Concerns housing values in suburbs of Boston',
     features: ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV'],
     length: 506,
@@ -45,6 +46,7 @@ let data1 = {
 
 let data2 = {
     name: 'cat and dog',
+    type: 'img',
     description: 'cat and dog dataset',
     features: ['img_path', 'label'],
     length: 200,

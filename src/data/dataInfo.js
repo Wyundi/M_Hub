@@ -9,6 +9,7 @@ const utils = require("../utils");
 const createData = async (data) => {
     /*
     data.name,
+    data.type,
     data.description,
     data.features,
     data.length,
@@ -20,6 +21,7 @@ const createData = async (data) => {
     // error check
 
     data_name = utils.checkString(data.name);
+    data_type = utils.checkDataType(data.type);
     description = utils.checkString(data.description);
     features = utils.checkStringArray(data.features);
     length = utils.checkInt(data.length);
@@ -34,21 +36,45 @@ const createData = async (data) => {
     // add data info
     // according to mongodb document size limit, we need add another document to store raw data separately instead of store them in one document.
 
-    let raw = {}
+    let raw = {};
+    let raw_list = [];
+    let mean_list = [];
+    let std_list = [];
+
     for (let f of features) {
         feature_id = ObjectId();
         raw[f] = {};
+        raw_list.push([])
 
         for (let i in json_obj[f]) {
+            // add to raw obj
             let single_data = await rawData.addData(json_obj[f][i].toString());
             raw[f][i] = single_data._id.toString();
+
+            // add to raw list
+            if (Number(json_obj[f][i] == json_obj[f][i])) {
+                raw_list[raw_list.length - 1].push(Number(json_obj[f][i]));
+            }
+            else {
+                raw_list[raw_list.length - 1].push(0);
+            }
         }
+
+        let values = raw_list[raw_list.length - 1];
+        let mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+        let std = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / values.length);
+
+        mean_list.push(mean);
+        std_list.push(std);
     }
 
     let newData = {
         data_name: data_name,
+        type: data_type,
         description: description,
         features: features,
+        mean: mean_list,
+        std: std_list,
         length: length,
         source: source,
         file_path: file_path,
@@ -158,42 +184,26 @@ const updateData = async (dataId, newData) => {
     dataId = utils.checkId(dataId, 'data id');
 
     // check new data
-    data_name = utils.checkString(newData.name);
-    description = utils.checkString(newData.description);
-    features = utils.checkStringArray(newData.features);
-    length = utils.checkInt(newData.length);
-    source = utils.checkUrl(newData.source);
-    file_path = utils.checkPath(newData.file_path);
-    userId = utils.checkId(newData.userId);
-
-    // check valid json file
-
-    json_obj = utils.checkJson(file_path);
+    let data_name = utils.checkString(newData.name);
+    let type = utils.checkDataType(newData.type);
+    let description = utils.checkString(newData.description);
+    let features = utils.checkStringArray(newData.features);
+    let length = utils.checkInt(newData.length);
+    let source = utils.checkUrl(newData.source);
+    let userId = utils.checkId(newData.userId);
 
     // add data info
-    // according to mongodb document size limit, we need add another document to store raw data separately instead of store them in one document.
-
-    let raw = {}
-    for (let f of features) {
-        feature_id = ObjectId();
-        raw[f] = {};
-
-        for (let i in json_obj[f]) {
-            let single_data = await rawData.addData(json_obj[f][i].toString());
-            raw[f][i] = single_data._id.toString();
-        }
-    }
 
     let data_db = await getDataById(dataId);
     if (!data_db) throw `Could not update data with id ${dataId}!`;
 
     newData = {
         data_name: data_name,
+        type: type,
         description: description,
         features: features,
         length: length,
         source: source,
-        file_path: file_path,
         raw_data: raw,
         user_list: [userId],
         comment: []

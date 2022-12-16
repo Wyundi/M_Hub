@@ -168,7 +168,7 @@ function checkPasswd(passwd) {
 
     // haven't consider special character ralated cases
 
-    passwd = checkString(passwd);
+    let passwd_trim = checkString(passwd);
 
     if (passwd.includes(' ')) {
         throw "Password should not contain spaces.";
@@ -320,6 +320,16 @@ function checkComment(id, username, comment) {
     comment = checkString(comment);
 }
 
+function checkDataType(type) {
+
+    let type_list = ['data', 'img'];
+    if (type_list.indexOf(type) === -1) {
+        throw 'input type not in type list.';
+    }
+
+    return type;
+}
+
 module.exports = {
 
     // error check
@@ -348,5 +358,6 @@ module.exports = {
     checkRawData,
     str2strArray,
 
-    checkComment
+    checkComment,
+    checkDataType
 }
