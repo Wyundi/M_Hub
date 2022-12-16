@@ -5,7 +5,7 @@ let user1 = {
     first_name: 'James',
     last_name: 'Robert',
     email: 'JamesR@gmail.com',
-    gender: 'Male',
+    gender: 'Man',
     location: 'NJ',
     organization: 'SIT',
     passwd: 'JamesR1914#'
@@ -16,7 +16,7 @@ let user2 = {
     first_name: 'John',
     last_name: 'Michael',
     email: 'JohnM@gmail.com',
-    gender: 'Male',
+    gender: 'Man',
     location: 'NY',
     organization: 'NYU',
     passwd: 'JohnM1939#'
@@ -27,7 +27,7 @@ let user3 = {
     first_name: 'Mary',
     last_name: 'Linda',
     email: 'MaryL@gmail.com',
-    gender: 'Female',
+    gender: 'Woman',
     location: 'MA',
     organization: 'MIT',
     passwd: 'MaryL2019#'
@@ -35,6 +35,7 @@ let user3 = {
 
 let data1 = {
     name: 'Boston Housing Data',
+    type: 'data',
     description: 'Concerns housing values in suburbs of Boston',
     features: ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV'],
     length: 506,
@@ -46,6 +47,7 @@ let data1 = {
 
 let data2 = {
     name: 'cat and dog',
+    type: 'img',
     description: 'cat and dog dataset',
     features: ['img_path', 'label'],
     length: 200,

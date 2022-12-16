@@ -216,39 +216,51 @@ const updateUser = async (userId, user_info) => {
 const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
     // check validation
-    id = utils.checkId(userId);
+    userId = utils.checkId(userId);
     oldPasswd = utils.checkPasswd(oldPasswd);
     newPasswd = utils.checkPasswd(newPasswd);
 
-    let user = await getUserById(id);
-    if (!user) throw `Could not find user with id ${id}!`;
+    let user_db = await getUserById(userId);
+    if (!user_db) throw `Could not find user with id ${userId}!`;
     
     // check old password is correct
     let compareToMatch = false;
     try {
-        compareToMatch = await bcrypt.compare(oldPasswd, user.passwd);
+        compareToMatch = await bcrypt.compare(oldPasswd, user_db.passwd);
     } catch (e) {
-        // no op
+        throw 'failed to compare password.';
     }
 
-    if (compareToMatch) {
-        newPasswd = utils.hash(newPasswd);
-        let newUser = user;
-        newUser.passwd = newPasswd;
+    if (!compareToMatch) {
+        throw 'Old password not match.';
+    }
 
-        const userInfoCollection = await user();
-        const updateInfo = await userInfoCollection.updateOne(
-            {_id: id},
-            {$set: newUser}
-        );
-    
-        if (!updateInfo) throw `Could not change user password!`;
-    
-        return `user ${user.username}'s password has been successfully changed!`;
+    // check if new password equal to old
+    let compareNew = false;
+    try {
+        compareNew = await bcrypt.compare(newPasswd, user_db.passwd);
+    } catch (e) {
+        throw 'failed to compare password.';
+    }
 
-    } else throw 'old password is not correct, try again!';
+    if (compareNew) {
+        throw "The new password is the same as the old one.";
+    }
 
+    // change passwd
+    newPasswd = await bcrypt.hash(newPasswd, saltRounds);
 
+    const userInfoCollection = await user();
+    const updateInfo = await userInfoCollection.updateOne(
+        {_id: ObjectId(userId)},
+        {$set: {
+            passwd: newPasswd
+        }}
+    );
+
+    if (!updateInfo) throw `Could not change user password!`;
+
+    return "Your password has been successfully changed!";
 };
 
 const addData = async (userId, dataId) => {
