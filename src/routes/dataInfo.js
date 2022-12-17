@@ -3,9 +3,13 @@ const router = express.Router();
 const data = require('../data');
 const userData = data.user;
 const dataInfoData = data.dataInfo;
+const ModelData = data.model;
 
 const path = require("path");
 const utils = require('../utils');
+const dl_dataprocess = require("../dl/js/dataprocess");
+
+const xss = require('xss');
 
 router
     .route("/")
@@ -29,6 +33,7 @@ router
     .post(async (req, res) => {
 
         let data_name = undefined;
+        let data_type = undefined;
         let data_description = undefined;
         let data_features = undefined;
         let data_length = undefined;
@@ -40,13 +45,16 @@ router
 
         try {
             // error check
-            data_name = utils.checkString(req.body.data_name);
-            data_description = utils.checkString(req.body.data_description);
-            data_length = utils.checkInt(req.body.data_length);
-            data_source = utils.checkUrl(req.body.data_source);
+
+            data_name = utils.checkString(xss(req.body.data_name));
+            data_type = utils.checkString(xss(req.body.data_type));
+            data_description = utils.checkString(xss(req.body.data_description));
+            data_length = utils.checkInt(xss(req.body.data_length));
+            data_source = utils.checkUrl(xss(req.body.data_source));
+
             data_rawdata = utils.checkRawData(req.files.data_rawdata);
 
-            data_features = utils.str2strArray(req.body.data_features);
+            data_features = utils.str2strArray(xss(req.body.data_features));
             data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
@@ -57,6 +65,7 @@ router
 
             newData = {
                 name: data_name,
+                type: data_type,
                 description: data_description,
                 features: data_features,
                 length: data_length,
@@ -79,8 +88,9 @@ router
             });
         }
 
+
         try {
-            return res.redirect(`/data/id/${dataId}`);
+            return res.redirect(`/data/info/${dataId}`);
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -98,9 +108,10 @@ router
 
         let dataId = undefined;
         let data_db = undefined;
+        let user_name_list = [];
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
             let error_status = 400;
@@ -112,17 +123,34 @@ router
         }
 
         try {
+            userId = utils.checkId(req.session.user.userId, "user id");
+            contributorId = data_db.user_list[0];
+            let user_db = await userData.getUserById(contributorId);
+            contributor = user_db.username;
+            let is_contributor = req.session.user.userId === contributorId;
+            let model_info_list = [];
+            for (let i = 0; i < data_db.model_list.length; i++) {
+                let model_info = {};
+                model_db = await ModelData.getModelById(data_db.model_list[i]);
+                model_name = model_db.model_name;
+                model_info.id = data_db.model_list[i];
+                model_info.name = model_name;
+                model_info_list.push(model_info);
+            }
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
                 data_name: data_db.data_name,
+                data_type: data_db.type,
                 description: data_db.description,
                 features: data_db.features,
                 length: data_db.length,
                 source: data_db.source,
-                raw_data_path: `../../data/rawdata/${dataId}`,
-                user_list: data_db.user_list,
-                comment: data_db.comment
+                raw_data_path: `../../data/raw${data_db.type}/${dataId}`,
+                contributor: contributor,
+                model_info_list: model_info_list,
+                comment: data_db.comment,
+                is_contributor: is_contributor,
             });
         } catch (e) {
             let error_status = 500;
@@ -133,21 +161,15 @@ router
             });
         }
     })
-    .put(async (req, res) => {})
-    .delete(async (req, res) => {})
-
-router
-    .route("/rawdata/:id")
-    .get(async (req, res) => {
-
-        let dataId = undefined;
-        let json_obj = undefined;
+    .post(async (req, res) => {
+        let userId = req.session.user.userId;
+        let dataId = req.body.dataId;
+        let user_db = undefined;
+        let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
-            let data_db = await dataInfoData.getDataById(dataId);
-            console.log(data_db.file_path);
-            json_obj = utils.checkJson(data_db.file_path);
+            userId = utils.checkId(userId, "user id");
+            dataId = utils.checkId(dataId, "data id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -158,9 +180,201 @@ router
         }
 
         try {
+            user_db = await userData.getUserById(userId);
+            data_db = await dataInfoData.getDataById(dataId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            if (user_db.data_list.includes(dataId)) {
+                let message = 'Data already contained in your list';
+                let notification = 'true';
+                return res.render("./data/info", {
+                    username: req.session.user.username,
+                    dataId: dataId,
+                    data_name: data_db.data_name,
+                    data_type: data_db.type,
+                    description: data_db.description,
+                    features: data_db.features,
+                    length: data_db.length,
+                    source: data_db.source,
+                    raw_data_path: `../../data/raw${data_db.type}/${dataId}`,
+                    contributor: data_db.contributor,
+                    model_info_list: data_db.model_info_list,
+                    comment: data_db.comment,
+                    is_contributor: data_db.is_contributor,
+                    message: message,
+                    notification: notification
+                });
+            } else {
+                userUpdateInfo = await userData.addData(userId, dataId);
+                let message = 'Data added successfully';
+                let notification = 'true';
+                if (userUpdateInfo) {
+                    return res.render("./data/info", {
+                        username: req.session.user.username,
+                        dataId: dataId,
+                        data_name: data_db.data_name,
+                        description: data_db.description,
+                        features: data_db.features,
+                        length: data_db.length,
+                        source: data_db.source,
+                        raw_data_path: `../../data/rawdata/${dataId}`,
+                        contributor: data_db.contributor,
+                        model_info_list: data_db.model_info_list,
+                        comment: data_db.comment,
+                        is_contributor: data_db.is_contributor,
+                        message: message,
+                        notification: notification
+                    });
+                };
+            }
+
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
+    .delete(async (req, res) => {
+        let dataId = undefined;
+        let data_db = undefined;
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            dataId = utils.checkId(req.params.id, "data id");
+            data_db = await dataInfoData.getDataById(dataId);
+        } catch (e) {
+            let error_status = 404;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        /* owner delete data: 1. delete data from db    2. all users' data list -1  3. all model's data list -1
+         * not owner delete: current user's data list -1
+         */
+        try {
+            userId = utils.checkId(req.session.user.userId, "user id");
+            if (userId === data_db.user_list[0]) {
+                for (user of data_db.user_list) {
+                    userRemoveInfo = await userData.removeFromDataList(user, dataId);
+                    if (!userRemoveInfo) throw 'remove dataid from user profile failed'
+                }
+
+                for (model_id of data_db.model_list) {
+                    modelRemoveInfo = await ModelData.removeFromDataList(model_id, dataId);
+                    if (!modelRemoveInfo) throw 'remove dataid from model profile failed'
+                }
+
+                dataRemoveInfo = await dataInfoData.removeData(dataId);
+
+                if (dataRemoveInfo) return res.redirect("/user");
+            } else {
+                userRemoveInfo = await userData.removeFromDataList(userId, dataId);
+                if (userRemoveInfo) {
+                    return res.redirect("/user");
+                }
+            }
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
+
+router
+    .route("/rawdata/:id")
+    .get(async (req, res) => {
+
+        let dataId = undefined;
+        let features = undefined;
+        let dataSet_raw = [];
+        let dataSet_norm = [];
+
+        try {
+            dataId = utils.checkId(xss(req.params.id), "data id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            let data_db = await dataInfoData.getDataById(dataId);
+            features = data_db.features;
+
+            for (let i=0; i<20; i++) {
+                let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
+                let single_set_raw = {};
+                let single_set_norm = {};
+                for (let j = 0; j < features.length; j++) {
+                    single_set_raw[features[j]] = single_data.ori[j];
+                    single_set_norm[features[j]] = single_data.norm[j];
+                }
+                dataSet_raw.push(single_set_raw);
+                dataSet_norm.push(single_set_norm);
+
+            }
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
             res.status(200).render("./data/rawData", {
                 username: req.session.user.username,
-                json_obj: json_obj
+                post_raw: dataSet_raw,
+                post_norm: dataSet_norm
+            })
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+    })
+
+router
+    .route("/rawimg/:id")
+    .get(async (req, res) => {
+
+        try {
+            return res.status(200).render("./data/rawImg", {
+                username: req.session.user.username
             })
         } catch (e) {
             let error_status = 500;
@@ -205,9 +419,19 @@ router
 
     })
     .post(async (req, res) => {
+        
+        let search_input = undefined;
 
-        let search_input = req.body.search_input;
-        let search_res = [];
+        try {
+            search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             if (search_input === '') {
@@ -237,22 +461,11 @@ router
         }
 
         try {
-            search_res = await dataInfoData.getDataByName(search_input);
+            let search_res = await dataInfoData.getDataByName(search_input);
 
-            if (search_res.length === 0) {
-                throw 'Data not found.';
-            }
-        } catch (e) {
-            let error_status = 404;
-            return res.status(error_status).render("./error/searchNotFound", {
-                username: req.session.user.username,
-                error_status: error_status,
-                error_message: e
-            });
-        }
-
-        try {
-            return res.render("./data/searchRes", {
+            let no_res = (search_res.length === 0);
+            return res.status(200).render("./data/searchRes", {
+                no_res: no_res,
                 username: req.session.user.username,
                 data_list: search_res
             })
@@ -275,7 +488,7 @@ router
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, "data id");
+            dataId = utils.checkId(xss(req.params.id), "data id");
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -301,6 +514,7 @@ router
                 username: req.session.user.username,
                 dataId: dataId,
                 data_name: data_db.data_name,
+                data_type: data_db.type,
                 description: data_db.description,
                 features: data_db.features.toString(),
                 length: data_db.length,
@@ -316,10 +530,21 @@ router
         }
 
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
-        let dataId = req.params.id;
+        let dataId = undefined;
         let data_db = undefined;
+
+        try {
+            dataId = utils.checkId(xss(req.params.id), 'data id');
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             data_db = await dataInfoData.getDataById(dataId);
@@ -333,6 +558,7 @@ router
         }
 
         let data_name = undefined;
+        let data_type = undefined;
         let description = undefined;
         let features = undefined;
         let length = undefined;
@@ -340,11 +566,12 @@ router
 
         try {
 
-            data_name = utils.checkString(utils.prior(req.body.data_name, data_db.data_name));
-            description = utils.checkString(utils.prior(req.body.data_description, data_db.description));
-            features = utils.checkStringArray(utils.prior(req.body.data_features, data_db.features));
-            length = utils.checkInt(utils.prior(req.body.data_length, data_db.length));
-            source = utils.checkUrl(utils.prior(req.body.data_source, data_db.source));
+            data_name = utils.checkString(utils.prior(xss(req.body.data_name), data_db.data_name));
+            data_type = utils.checkDataType(utils.prior(xss(req.body.data_type), data_db.type));
+            description = utils.checkString(utils.prior(xss(req.body.data_description), data_db.description));
+            features = utils.checkStringArray(utils.prior(xss(req.body.data_features), data_db.features));
+            length = utils.checkInt(utils.prior(xss(req.body.data_length), data_db.length));
+            source = utils.checkUrl(utils.prior(xss(req.body.data_source), data_db.source));
 
         } catch (e) {
             let error_status = 400;
@@ -358,6 +585,7 @@ router
         try {
             let newData = {
                 name: data_name,
+                type: data_type,
                 description: description,
                 features: features,
                 length: length,

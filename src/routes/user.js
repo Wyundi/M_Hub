@@ -6,6 +6,8 @@ const userData = data.user;
 const path = require('path');
 const utils = require('../utils');
 
+const xss = require('xss');
+
 router
     .route('/')
     .get(async (req, res) => {
@@ -53,7 +55,7 @@ router
                 location: user_db.location,
                 organization: user_db.organization,
                 data_list: data_list,
-                model_list: model_list
+                model_list: model_list,
             });
         } catch (e) {
             let error_status = 500;
@@ -102,15 +104,26 @@ router
             });
         }
     })
-    .post(async (req, res) => {
+    .put(async (req, res) => {
 
-        let userId = req.session.user.userId;
+        let userId = undefined;
         let user_db = undefined;
+
+        try {
+            userId = utils.checkId(xss(req.session.user.userId), "user id");
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
         try {
             user_db = await userData.getUserById(userId);
         } catch (e) {
-            let error_status = 400;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
@@ -125,16 +138,17 @@ router
         let gender = undefined;
         let location = undefined;
         let organization = undefined;
+        let password = undefined;
 
         try {
 
-            username = utils.checkUsername(utils.prior(req.body.user_name, user_db.username));
-            first_name = utils.checkString(utils.prior(req.body.user_first_name, user_db.first_name));
-            last_name = utils.checkString(utils.prior(req.body.user_last_name, user_db.last_name));
-            email = utils.checkEmail(utils.prior(req.body.user_email, user_db.email));
-            gender = utils.checkGender(utils.prior(req.body.user_gender, user_db.gender));
-            location = utils.checkLocation(utils.prior(req.body.user_location, user_db.location));
-            organization = utils.checkString(utils.prior(req.body.user_organization, user_db.organization));
+            username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
+            first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
+            last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));
+            email = utils.checkEmail(utils.prior(xss(req.body.user_email), user_db.email));
+            gender = utils.checkGender(utils.prior(xss(req.body.user_gender), user_db.gender));
+            location = utils.checkLocation(utils.prior(xss(req.body.user_location), user_db.location));
+            organization = utils.checkString(utils.prior(xss(req.body.user_organization), user_db.organization));
 
         } catch (e) {
             let error_status = 400;
@@ -158,8 +172,77 @@ router
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
-            return res.redirect("/user");
+        try {
+            return res.status(200).redirect("/user");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+    })
+
+router
+    .route('/user/edit/changepasswd')
+    .get(async (req, res) => {
+        let username = req.session.user.username;
+
+        try {
+            return res.status(200).render("./userViews/changePasswd");
+        } catch (e) {
+            let error_status = 500;
+            return res.status(error_status).render("./error/errorPage", {
+                username: username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+        
+    })
+    .post(async (req, res) => {
+
+        let userId = req.session.user.userId;
+
+        let old_passwd = undefined;
+        let new_passwd = undefined;
+
+        try {
+            old_passwd = utils.checkPasswd(xss(req.body.user_old_passwd));
+            new_passwd = utils.checkPasswd(xss(req.body.user_new_passwd));
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            let state_message = await userData.changePasswd(userId, old_passwd, new_passwd);
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            return res.status(200).redirect("/user");
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -169,13 +252,6 @@ router
             });
         }
     })
-
-// router
-//     .route('/user/:id')
-//     .get(async (req, res) => {})
-//     .post(async (req, res) => {})
-//     .put(async (req, res) => {})
-//     .delete(async (req, res) => {});
 
 router
     .route('/login')
@@ -191,7 +267,6 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });
@@ -199,14 +274,14 @@ router
     })
     // post function post a form of user name and passward and go to user profile page
     .post(async (req, res) => {
-        //code here for POST
+
         // error check
-        let username = req.body.user_name;
-        let passwd = req.body.user_password;
+        let username = undefined;
+        let passwd = undefined;
 
         try {
-            username = utils.checkUsername(username);
-            passwd = utils.checkPasswd(passwd);
+            username = utils.checkUsername(xss(req.body.user_name));
+            passwd = utils.checkPasswd(xss(req.body.user_password));
 
             let check_status = await userData.checkUser(username, passwd);
             if (check_status.authenticatedUser) {
@@ -220,7 +295,6 @@ router
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
-                // username: username,
                 error_status: error_status,
                 error_message: e
             });
@@ -241,7 +315,6 @@ router
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });
@@ -250,28 +323,36 @@ router
     // post function for create user and go to login page
     .post(async (req, res) => {
 
-        let username = req.body.user_name;
-        let first_name = req.body.user_first_name;
-        let last_name = req.body.user_last_name;
-        let email = req.body.user_email
-        let gender = req.body.user_gender
-        let loc = req.body.user_location
-        let org = req.body.user_organization
-        let passwd = req.body.user_password;
+        let username = undefined;
+        let first_name = undefined;
+        let last_name = undefined;
+        let email = undefined;
+        let gender = undefined;
+        let loc = undefined;
+        let org = undefined;
+        let passwd = undefined;
 
         try {
             // error check
 
-            username = utils.checkUsername(username);
-            first_name = utils.checkString(first_name);
-            last_name = utils.checkString(last_name);
-            email = utils.checkEmail(email);
-            gender = utils.checkGender(gender);
-            loc = utils.checkLocation(loc);
-            org = utils.checkString(org);
+            username = utils.checkUsername(xss(req.body.user_name));
+            first_name = utils.checkString(xss(req.body.user_first_name));
+            last_name = utils.checkString(xss(req.body.user_last_name));
+            email = utils.checkEmail(xss(req.body.user_email));
+            gender = utils.checkGender(xss(req.body.user_gender));
+            loc = utils.checkLocation(xss(req.body.user_location));
+            org = utils.checkString(xss(req.body.user_organization));
+            passwd = utils.checkPasswd(xss(req.body.user_password));
 
-            passwd = utils.checkPasswd(passwd);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: e
+            });
+        }
 
+        try {
             let user_info = {
                 username: username,
                 first_name: first_name,
@@ -285,14 +366,23 @@ router
 
             const create_status = await userData.createUser(user_info);
 
-            if (create_status.insertedUser) {
-                return res.status(200).redirect("/login");
+            if (!create_status.insertedUser) {
+                throw 'Failed to create user.';
             }
+
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: e
+            });
+        }
             
+        try {
+            return res.status(200).redirect("/login");
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
                 error_status: error_status,
                 error_message: e
             });

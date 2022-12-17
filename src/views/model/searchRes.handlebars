@@ -1,4 +1,4 @@
-<form action="/model" method="POST" class="search">
+<form action="/model/search" method="POST" class="search">
 
     <label for="search_model">
         search in model list
@@ -9,6 +9,9 @@
 
 </form>
 
+{{#if no_res}}
+    <p> No result </p>
+{{else}}
 <ul>
     {{#each model_list}}
         <li>
@@ -17,3 +20,4 @@
         </li>
     {{/each}}
 </ul>
+{{/if}}

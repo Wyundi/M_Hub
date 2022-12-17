@@ -1,6 +1,6 @@
 {
   "name": "m_hub",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A Deep Learning model share platform.",
   "main": "app.js",
   "scripts": {
@@ -24,7 +24,12 @@
     "express-fileupload": "^1.4.0",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+    "is-valid-path": "^0.1.1",
+    "jpeg-js": "^0.4.4",
+    "method-override": "^3.0.0",
     "mongodb": "^4.10.0",
-    "onnxruntime-node": "^1.13.1"
+    "onnxruntime-node": "^1.13.1",
+    "sharp": "^0.31.2",
+    "xss": "^1.0.14"
   }
 }
