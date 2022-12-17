@@ -8,9 +8,6 @@ const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/raw_data', express.static(__dirname + '/raw_data'));
-
 const methodOverride = require('method-override');
 
 app.use(fileUpload());
