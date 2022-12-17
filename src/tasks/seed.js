@@ -2,6 +2,7 @@ const { dataInfo } = require('../config/mongoCollections');
 const connection = require('../config/mongoConnection');
 const data = require('../data/');
 const userData = data.user;
+const commentData = data.comment;
 const dataInfoData = data.dataInfo;
 const modelData = data.model;
 
@@ -52,6 +53,11 @@ async function main() {
     await dataInfoData.addModel(data1._id, model2._id);
     await modelData.addData(model2._id, data1._id);
 
+    // add comment
+    let modelComment1 = fakeData.modelComment1;
+    await commentData.createComment(model1._id, modelComment1.userName, modelComment1.comment);
+    let modelComment2 = fakeData.modelComment2;
+    await commentData.createComment(model1._id, modelComment1.userName, modelComment1.comment);
     // close connect
     await connection.closeConnection();
     console.log('Done seeding database');

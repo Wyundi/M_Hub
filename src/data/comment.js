@@ -1,11 +1,11 @@
 const mongoCollections = require('../config/mongoCollections');
 const {ObjectId} = require('mongodb');
 
-const data = mongoCollections.data;
-const dataData = require("./data");
+// const data = mongoCollections.data;
+// const dataData = require("./data");
 
 const model = mongoCollections.model;
-const modelData = require("./model");
+// const modelData = require("../model");
 
 const utils = require("../utils");
 
@@ -35,7 +35,7 @@ const createComment = async (
     const modelCollection = await model();
     const modelData = await modelCollection.findOne({_id: ObjectId(modelId)});
     if (modelData === null) throw `Error: no movie with id ${modelId}`;
-    modelData['comments'].push(newComment);
+    modelData['comment'].push(newComment);
 
     const updatedInfo = await modelCollection.updateOne(
         {_id: ObjectId(modelId)},

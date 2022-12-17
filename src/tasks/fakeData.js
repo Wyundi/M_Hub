@@ -79,6 +79,16 @@ let model2 = {
     dataId: undefined
 }
 
+let modelComment1 = {
+    userName: "LindaM",
+    comment: "Nice Work! I like this one."
+}
+
+let modelComment2 = {
+    userName: "Michael23",
+    comment: "Meh, average work."
+}
+
 module.exports = {
     user1,
     user2,
@@ -86,5 +96,7 @@ module.exports = {
     data1,
     data2,
     model1,
-    model2
+    model2,
+    modelComment1,
+    modelComment2
 }

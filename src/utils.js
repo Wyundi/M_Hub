@@ -318,6 +318,16 @@ function deleteFromArray(element, array) {
     } else throw 'ID not found in list.'
 }
 
+function checkComment(comment, varName) {
+    if (!comment) throw `Comment needs to have valid values`;
+    if (typeof comment !== 'string') {throw `Input "${varName}" type must be string`};
+    comment = comment.trim();
+    if (comment.length ==0) throw `Comment cannot be empty`;
+    const pattern = /^[\p{S}\p{N}\p{P}\s]+$/gu;
+    if (comment.match(pattern)) throw 'Comment cannot only contain punctuation or special character or numbers.';
+    return comment;
+}
+
 module.exports = {
 
     // error check
@@ -345,5 +355,7 @@ module.exports = {
 
     checkRawData,
     str2strArray,
-    deleteFromArray
+    deleteFromArray,
+
+    checkComment
 }
