@@ -89,6 +89,11 @@ let modelComment2 = {
     comment: "Meh, average work."
 }
 
+let modelComment3 = {
+    userName: "James1234",
+    comment: "Cool Concept!"
+}
+
 module.exports = {
     user1,
     user2,
