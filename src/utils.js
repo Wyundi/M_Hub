@@ -335,6 +335,10 @@ function deleteFromArray(element, array) {
     } else throw 'ID not found in list.'
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
 module.exports = {
 
     // error check
@@ -365,5 +369,7 @@ module.exports = {
 
     checkComment,
     checkDataType,
-    deleteFromArray
+    deleteFromArray,
+
+    getRandomInt
 }
