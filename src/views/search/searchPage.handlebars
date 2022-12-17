@@ -1,52 +1,31 @@
-<form action="/search" method="POST" class="search">
-
+<div id="search_page">
     <label for="search_data">
         <input id="search_data" type="text" name="search_input" class="full-width-input">
     </label>
 
-    <button type="submit" class="btn"> search </button>
+    <button type="submit" id="form_submit" class="btn"> search </button>
 
-</form>
+    <div id="new-content"></div>
 
 
-<br>
+    <br>
 
-<a href="/data/search"> search only in data list </a>
-<br>
-<a href="/model/search"> search only in model list </a>
-<br>
+    <h3> Or you can: </h3>
+    <button class="btn"><a href="/data/search"> search only in data list </a></button>
+    <button class="btn"><a href="/model/search"> search only in model list </a></button>
+    <br>
 
-<h2> Search Result </h2>
+    <h2 id="search_result_header"></h2>
 
-{{#if no_res}}
-    <p> No result for your search. </p>
-{{else}}
-    {{#if data_search_res}}
-        <h2> Data </h2>
+    <div id="data_search_res"></div>
+    <ul id="data_result_list"></ul>
+    <div id="model_search_res"></div>
+    <ul id="model_result_list"></ul>
 
-        <ul>
-            {{#each data_search_res}}
-                <li>
-                    <a href="../data/id/{{_id}}"> {{data_name}} </a>
-                    <p> {{description}} </p>
-                </li>
-            {{/each}}
-        </ul>
-    {{/if}} 
+    <br>
+    <button type="button" class="btn"> <a href="../"> back to home page </a></button>
 
-    {{#if model_search_res}}
-        <h2> Model </h2>
-
-        <ul>
-            {{#each model_search_res}}
-                <li>
-                    <a href="../model/id/{{_id}}"> {{model_name}} </a>
-                    <p> {{description}} </p>
-                </li>
-            {{/each}}
-        </ul>
-    {{/if}}
-{{/if}} 
-
-<br>
-<button type="button" class="btn"> <a href="../"> back to home page </a></button>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="/public/js/search.js"></script>
+</div>

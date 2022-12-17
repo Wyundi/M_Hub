@@ -1,1 +1,41 @@
-<p> {{{json json_obj}}} </p>
+<h2> Raw Data View </h2>
+
+<table>
+<thead>
+  <tr>
+    {{#each post_raw.[0]}}
+      <th>{{@key}}</th>
+    {{/each}}
+  </tr>
+</thead>
+<tbody>
+  {{#each post_raw}}
+    <tr>
+      {{#each this}}
+        <td>{{this}}</td>
+      {{/each}}
+    </tr>
+  {{/each}}
+</tbody>
+</table>
+
+<h2> Data after Normalization </h2>
+
+<table>
+<thead>
+  <tr>
+    {{#each post_norm.[0]}}
+      <th>{{@key}}</th>
+    {{/each}}
+  </tr>
+</thead>
+<tbody>
+  {{#each post_norm}}
+    <tr>
+      {{#each this}}
+        <td>{{this}}</td>
+      {{/each}}
+    </tr>
+  {{/each}}
+</tbody>
+</table>

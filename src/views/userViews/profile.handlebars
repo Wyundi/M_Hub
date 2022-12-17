@@ -8,7 +8,44 @@ Also, you will need to have a hyperlink at the bottom of the page to /logout.
 
 --}}
 
+<style>
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+</style>
+
 <h2> User Profile </h2>
+
+
+
+<form method="" id="profile_button">
+
+    <img src = 
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNbLnA6SQcWWByv0MSfFCymj5jVYXS22kSoQ&usqp=CAU" 
+        alt="random_cat"
+        style="height: 150px; width: 150px" 
+        id = "profile_img">
+
+    <button type="submit"> Get a Random Profile Image </button>
+
+</form>
 
 <p> {{username}} </p>
 <p> Time: {{time}} </p>
@@ -17,6 +54,13 @@ Also, you will need to have a hyperlink at the bottom of the page to /logout.
 <p> organization: {{organization}} </p>
 
 <button type="button" class="btn"> <a href="../user/edit"> edit profile </a></button>
+
+{{#if message}}
+    <div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    <strong> {{message}} </strong>
+    </div>
+{{/if}}
 
 <h3> Data List </h3>
 

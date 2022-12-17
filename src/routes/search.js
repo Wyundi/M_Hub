@@ -5,8 +5,9 @@ const data = require("../data");
 const dataInfoData = data.dataInfo;
 const modelData = data.model ;
 
-const path = require('path');
 const utils = require('../utils');
+
+const xss = require('xss');
 
 router
     .route('/')
@@ -29,14 +30,27 @@ router
     // post function should show search result
     .post(async (req, res) => {
 
-        let search_input = req.body.search_input;
+        let search_input = undefined;
         let data_search_res = [];
         let model_search_res = [];
 
         try {
+            search_input = xss(req.body.search_input);
+        } catch (e) {
+            let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
             if (search_input === '') {
-                return res.render('./error/searchNotFound', {
+                let error_status = 404;
+                return res.status(403).render('./error/searchNotFound', {
                     username: req.session.user.username,
+                    error_status: error_status,
                     error_message: "Please enter your search."
                 });
             }
@@ -73,13 +87,12 @@ router
         }
 
         try {
-            let no_res = data_search_res.length === 0 && model_search_res.length === 0;
-            return res.status(200).render("./search/searchPage", {
-                username: req.session.user.username,
+            let no_res = (data_search_res.length === 0 && model_search_res.length === 0);
+            return res.status(200).json({
                 no_res: no_res,
                 data_search_res: data_search_res,
                 model_search_res: model_search_res
-            })
+            });
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
