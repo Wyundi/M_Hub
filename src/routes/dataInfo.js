@@ -374,7 +374,8 @@ router
 
         try {
             return res.status(200).render("./data/rawImg", {
-                username: req.session.user.username
+                username: req.session.user.username,
+                img_url: "/raw_data/cat_dog/cat.107.jpg"
             })
         } catch (e) {
             let error_status = 500;
