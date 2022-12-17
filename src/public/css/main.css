@@ -1,0 +1,56 @@
+body {
+    background-color: #e8e3e3;
+}
+
+#header {
+    font-size: 22px;
+    color: #e8e3e3;
+    font-weight: bold;
+    /* text-transform: uppercase; */
+    
+}
+
+li a {
+    color: #3b3a3a;
+}
+
+h1 {
+    background-color: #3b3a3a;
+    color: white;
+    font-size: 70px;
+    font-family: "Brush Script MT", cursive;
+    left: 10%;
+    width: 100%;
+    padding: 25px 0px;
+    padding-left: 6%;
+
+}
+
+#home_random_cat_img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    height: 450px; 
+    width: 900px;
+}
+
+#home_random_cat_buttom {
+    text-align: center;
+    
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: #3b3a3a; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 0px;
+    width: 900px;
+
+    /* text-decoration: none; */
+    font-size: 40px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: cursive;
+
+}
