@@ -129,12 +129,12 @@ function checkId(id, varName) {
 function checkGender(gender) {
 
     // ["male", "female"]  
-    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+    // according to gender diversity, gender options should be offered not only male and female, but also other non-binary choices
 
-    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
+    const options = ["Man", "Woman", "Lesbian", "Gay", "Transgender", "Questioning", "Confidential"];
 
-    gender = checkString(gender);
-    // gender = gender.toLowerCase();
+    // gender = checkString(gender);
+    // // gender = gender.toLowerCase();
 
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
