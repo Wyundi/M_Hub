@@ -8,7 +8,7 @@ let user1 = {
     gender: 'Male',
     location: 'NJ',
     organization: 'SIT',
-    passwd: 'JamesR1914#'
+    passwd: 'James@1234'
 }
 
 let user2 = {
@@ -103,5 +103,6 @@ module.exports = {
     model1,
     model2,
     modelComment1,
-    modelComment2
+    modelComment2,
+    modelComment3
 }

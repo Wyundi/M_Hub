@@ -52,21 +52,21 @@ const getAllComment = async (id) => {
     const modelCollection = await model(); 
     const modelData = await modelCollection.findOne({_id: ObjectId(modelId)});
     if (modelData === null) throw `Error: no movie with id ${modelId}`;
-    modelObj['comments'].forEach(element => {
+    modelData['comment'].forEach(element => {
         element._id = element._id.toString();
     });
 
-    return modelObj['comment'];
+    return modelData['comment'];
 };
 
 const getComment = async (commentId) => {
     commentId = utils.checkId(commentId);
 
     const modelCollection = await model();
-    const modelObj = await modelCollection.find({"comments._id": ObjectId(commentId)}).toArray();
+    const modelObj = await modelCollection.find({"comment._id": ObjectId(commentId)}).toArray();
     if (modelObj === null) throw `Error: no comment exists with that id.`;
      
-    let comments= modelObj[0]['comments'];
+    let comments= modelObj[0]['comment'];
     comments.forEach(element =>{
       element._id = element._id.toString();
     })
@@ -81,16 +81,16 @@ const removeComment = async (commentId) => {
     commentId = utils.checkId(commentId);
 
     const modelCollection = await model();
-    const modelObj = await modelCollection.find({'comments._id': ObjectId(commentId)}).toArray();
+    const modelObj = await modelCollection.find({'comment._id': ObjectId(commentId)}).toArray();
     if (modelObj === null) throw `Error: no comment exists with that id.`;
 
     const modelId = modelObj[0]['_id'].toString();
-    const commentsUpdated = await modelCollection.updateOne({'comments._id': ObjectId(commentId)}, {$pull: {comments: {_id: ObjectId(commentId)}}});
+    const commentsUpdated = await modelCollection.updateOne({'comment._id': ObjectId(commentId)}, {$pull: {comments: {_id: ObjectId(commentId)}}});
     if (commentsUpdated.modifiedCount == 0) throw `Error: cannot remove the comments for movie ${modelId}`;
     
     const updatedModels = await models();
     const updatedModel = await updatedModels.findOne({_id: ObjectId(modelId)});
-    updatedModel.comments.forEach(element => {
+    updatedModel.comment.forEach(element => {
         element._id = element._id.toString();
     });
     updatedModel._id = updatedModel._id.toString();

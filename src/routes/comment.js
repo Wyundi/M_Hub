@@ -7,14 +7,14 @@ const dataInfo = data.dataInfo;
 const utils = require('../utils');
 
 router
-    .route('/data/:id')
+    .route('/data/:dataId')
     .get(async (req, res) => {
 
         let dataId = undefined;
         let data_db = undefined;
 
         try {
-            dataId = utils.checkId(req.params.id, 'data id');
+            dataId = utils.checkId(req.params.dataId, 'data id');
         } catch(e) {
           let error_status = 400;
           return res.status(error_status).render("./error/errorPage", {
@@ -79,14 +79,14 @@ router
     })
 
 router
-    .route('/model/:id')
+    .route('/model/:modelId')
     .get(async (req, res) => {
 
       let modelId = undefined;
       let model_db = undefined;
 
       try {
-        modelId = utils.checkId(req.params.id, 'model id');
+        modelId = utils.checkId(req.params.modelId, 'model id');
       } catch(e) {
         let error_status = 400;
         return res.status(error_status).render("./error/errorPage", {
@@ -108,7 +108,8 @@ router
       }
 
       try {
-          const allComments = await commentData.getAllComment(modelId);
+          const allComments = await commentData.getAllComment(modelId);          
+          // console.log(allComments);
           return res.status(200).render("./comment/modelcomment", {
             modelId: modelId,
             model_name: model_db.model_name,
@@ -117,8 +118,8 @@ router
         } catch(e) {
           let error_status = 500;
         return res.status(error_status).render("./error/errorPage", {
-          username: req.session.user.username,
-          error_status: error_status,
+          // username: req.session.user.username,
+          // error_status: error_status,
           error_message: e
         });
         }
@@ -128,7 +129,7 @@ router
 
         try {
           modelId = utils.checkId(req.params.modelId, 'model id');
-          username = utils.checkUsername(commentInfo.userName);
+          username = utils.checkUsername(commentInfo.username);
           comment = utils.checkComment(commentInfo.comment);
         } catch(e) {
           res.status(400).render("./model/info", {error_message: e});
@@ -152,7 +153,7 @@ router
 
 
   router
-    .route('comment/:commentId')
+    .route('/:commentId')
     .delete(async (req, res) => {
       try {
         commentId = utils.checkId(req.params.commentId, 'comment id');
