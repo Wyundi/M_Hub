@@ -114,11 +114,7 @@
 
 <h3> Comment </h3>
 <h4> <a href="/comment/data/{{dataId}}">See more comments</a> </h4>
-<ul>
-    {{#each comment}}
-        <li> {{this}} </li>
-    {{/each}}
-</ul>
+
 
 <br>
 
@@ -152,15 +148,7 @@ document.getElementById("div1").style.display="none";
 </script>
 
 
-<input type="button" value="Comment" onClick="show()"/>
-
-<div id="div1" style="display:none">
-    <form action="" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
-    </form>
-
-</div>
+<button type="button" class="btn"> <a href="/comment/data/{{dataId}}"> Leave a comment! </a></button>
 
 </div>
 

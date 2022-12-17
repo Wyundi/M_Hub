@@ -62,12 +62,16 @@ async function main() {
     
     // add comment
     let modelComment1 = fakeData.modelComment1;
-    await commentData.createComment(model1._id, modelComment1.userName, modelComment1.comment);
+    await commentData.createComment(model1._id, modelComment1.userName, modelComment1.comment, 'model');
     let modelComment2 = fakeData.modelComment2;
-    await commentData.createComment(model1._id, modelComment2.userName, modelComment2.comment);
-    let modelComment3 = fakeData.modelComment2;
-    await commentData.createComment(model2._id, modelComment3.userName, modelComment3.comment); 
-
+    await commentData.createComment(model1._id, modelComment2.userName, modelComment2.comment, 'model');
+    let modelComment3 = fakeData.modelComment3;
+    await commentData.createComment(model2._id, modelComment3.userName, modelComment3.comment, 'model'); 
+    let dataComment1 = fakeData.dataComment1;
+    await commentData.createComment(data1._id, dataComment1.userName, dataComment1.comment, 'data');
+    let dataComment2 = fakeData.dataComment2;
+    await commentData.createComment(data2._id, dataComment2.userName, dataComment2.comment, 'data');
+    
     // close connect
     await connection.closeConnection();
     console.log('Done seeding database');

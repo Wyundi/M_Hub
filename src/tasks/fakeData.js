@@ -96,6 +96,16 @@ let modelComment3 = {
     comment: "Cool Concept!"
 }
 
+let dataComment1 = {
+    userName: "Michael23",
+    comment: "Clean data! Ready to work!"
+}
+
+let dataComment2 = {
+    userName: "Michael23",
+    comment: "Messy data, need more work done!"
+}
+
 module.exports = {
     user1,
     user2,
@@ -106,5 +116,7 @@ module.exports = {
     model2,
     modelComment1,
     modelComment2,
-    modelComment3
+    modelComment3,
+    dataComment1,
+    dataComment2
 }
