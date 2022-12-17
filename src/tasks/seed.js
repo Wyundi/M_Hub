@@ -2,6 +2,7 @@ const { dataInfo, model } = require('../config/mongoCollections');
 const connection = require('../config/mongoConnection');
 const data = require('../data/');
 const userData = data.user;
+const commentData = data.comment;
 const dataInfoData = data.dataInfo;
 const modelData = data.model;
 
@@ -58,6 +59,14 @@ async function main() {
     await dataInfoData.addModel(data2._id, model2._id);
     await modelData.addData(model2._id, data1._id);
     await modelData.addUser(model2._id, user1._id);
+    
+    // add comment
+    let modelComment1 = fakeData.modelComment1;
+    await commentData.createComment(model1._id, modelComment1.userName, modelComment1.comment);
+    let modelComment2 = fakeData.modelComment2;
+    await commentData.createComment(model1._id, modelComment2.userName, modelComment2.comment);
+    let modelComment3 = fakeData.modelComment2;
+    await commentData.createComment(model2._id, modelComment3.userName, modelComment3.comment); 
 
     // close connect
     await connection.closeConnection();
