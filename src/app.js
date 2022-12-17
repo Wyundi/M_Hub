@@ -8,8 +8,8 @@ const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
-const static = express.static(__dirname + '/public');
-app.use('/public', static);
+app.use('/public', express.static(__dirname + '/public'));
+app.use('/raw_data', express.static(__dirname + '/raw_data'));
 
 const methodOverride = require('method-override');
 
@@ -91,6 +91,27 @@ app.use('/search', (req, res, next) => {
     }
     
 });
+
+app.use('/public/', (req, res, next) => {
+
+    if (!req.session.user) {
+        return res.status(403).redirect('/forbidden');
+    } else {
+        next();
+    }
+});
+
+app.use('/raw_data/', (req, res, next) => {
+
+    if (!req.session.user) {
+        return res.status(403).send('<img src="https://http.cat/403" alt="img" width="700">');
+    } else {
+        next();
+    }
+});
+
+app.use('/public', express.static(__dirname + '/public'));
+app.use('/raw_data', express.static(__dirname + '/raw_data'));
 
 configRoutes(app);
 
