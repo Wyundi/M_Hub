@@ -86,7 +86,7 @@ const createData = async (data) => {
 
                 if (f === 'img_path') {
                     // read img
-                    let img_path = path.resolve(json_obj[f][i]);
+                    let img_path = path.resolve(process.cwd() + json_obj[f][i]);
                     let img_info = await readImg(img_path);
 
                     // // calculate mean and std, add them to the list
