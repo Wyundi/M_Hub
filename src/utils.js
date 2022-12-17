@@ -173,7 +173,7 @@ function checkPasswd(passwd) {
     }
 
     if (passwd.length < 6 || passwd.length > 14) {
-        throw "Password should be at least 6 characters long.";
+        throw "Password length should be in the range of 6 to 14 characters.";
     }
 
     if (passwd.match(/[A-Z]+/g) === null) {
