@@ -2,11 +2,12 @@ const fs = require('fs');
 const jpeg = require('jpeg-js');
 const sharp = require('sharp');
 
+const path = require('path');
+
 const readImg = async (img_path, resize=false) => {
     // Read the image file into a buffer
     // Decode the JPEG data to get raw pixel data
-    const buf = fs.readFileSync(img_path);
-    let sharp_img = await sharp(img_path);
+    let sharp_img = await sharp(path.resolve(img_path));
 
     if (resize) {
         sharp_img = await sharp_img.resize(224,224).toBuffer();
