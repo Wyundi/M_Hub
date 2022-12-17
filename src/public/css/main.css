@@ -2,7 +2,7 @@ body {
     background-color: #e8e3e3;
 }
 
-#header {
+header {
     font-size: 22px;
     color: #e8e3e3;
     font-weight: bold;
@@ -10,9 +10,9 @@ body {
     
 }
 
-li a {
+/* header.li a {
     color: #3b3a3a;
-}
+} */
 
 h1 {
     background-color: #3b3a3a;
@@ -24,6 +24,77 @@ h1 {
     padding: 25px 0px;
     padding-left: 6%;
 
+}
+
+h2 {
+    font-size: 30px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+a, p {
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+
+footer {
+    background-color: #3b3a3a;
+    color: white;
+    font-size: 15px;
+    padding: 5px 0px;
+    padding-left: 3%;
+
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+}
+
+#profile_img{
+    display: block;
+    border-radius: 50%;
+    margin-left: 50px;
+}
+
+
+label{
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+button {
+    text-align: center;
+
+    background-color: #3b3a3a;
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: cursive;
+    
+    border-radius: 8px;
+}
+
+button a {
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: cursive;
+}
+
+.home_intro {
+    font-size: 21px;
+    color: #3b3a3a;
+    text-align: center;
+    font-weight: bold;
 }
 
 #home_random_cat_img {
@@ -41,16 +112,13 @@ h1 {
     margin-left: auto;
     margin-right: auto;
 
-    background-color: #3b3a3a; /* Green */
+    background-color: #3b3a3a;
     border: none;
     color: white;
     padding: 8px 0px;
     width: 900px;
-
-    /* text-decoration: none; */
     font-size: 40px;
     cursor: pointer;
     text-transform: uppercase;
     font-family: cursive;
-
 }
