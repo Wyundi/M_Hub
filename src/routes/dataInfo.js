@@ -10,6 +10,8 @@ const path = require("path");
 const utils = require('../utils');
 const dl_dataprocess = require("../dl/js/dataprocess");
 
+const jszip = require('jszip');
+const fs = require('fs');
 const xss = require('xss');
 
 router
@@ -59,8 +61,40 @@ router
             data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
-            let upload_path = path.resolve(`./raw_data/${data_name}.json`)
-            await data_rawdata.mv(upload_path);
+            let upload_path = undefined;
+            if (data_type === 'data') {
+                // json
+                if (data_rawdata.name.slice(data_rawdata.name.length-4, data_rawdata.name.length) !== 'json') {
+                    throw "raw data must be a json file.";
+                }
+                // move file to raw_data path
+                upload_path = path.resolve(`./raw_data/${data_name}.json`)
+                await data_rawdata.mv(upload_path);
+            }
+            else if (data_type === 'img') {
+                // zip
+                if (data_rawdata.name.slice(data_rawdata.name.length-3, data_rawdata.name.length) !== 'zip') {
+                    throw "raw data must be a zip file.";
+                }
+
+                // unzip file
+                let jszipInstance = new jszip();
+                let unzip_res = await jszipInstance.loadAsync(data_rawdata.data);
+
+                for (let key of Object.keys(unzip_res.files)) {
+                    let item = unzip_res.files[key];
+                    if (item.dir) {
+                        fs.mkdirSync("raw_data/" + item.name);
+                    }
+                    else {
+                        fs.writeFileSync("raw_data/" + item.name, Buffer.from(await item.async('arraybuffer')));
+
+                        if (item.name.slice(item.name.length-4, item.name.length) === 'json') {
+                            upload_path = path.resolve(`./raw_data/${item.name}`)
+                        }
+                    }
+                }
+            }
 
             let userId = req.session.user.userId;
 
