@@ -27,6 +27,7 @@
     "express-session": "^1.17.3",
     "is-valid-path": "^0.1.1",
     "jpeg-js": "^0.4.4",
+    "jszip": "^3.10.1",
     "method-override": "^3.0.0",
     "mongodb": "^4.10.0",
     "onnxruntime-node": "^1.13.1",

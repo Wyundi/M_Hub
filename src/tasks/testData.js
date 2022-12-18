@@ -10,3 +10,16 @@ let data3 = {
     userId: undefined,
     modelId: undefined
 }
+
+let data4 = {
+    name: 'catTest',
+    type: 'img',
+    description: 'dataset with only cat',
+    //img_path, label
+    features: ['img_path', 'label'],
+    length: 107,
+    source: 'https://www.kaggle.com/c/dogs-vs-cats',
+    file_path: './raw_data/catTest.json',
+    userId: undefined,
+    modelId: undefined
+}
