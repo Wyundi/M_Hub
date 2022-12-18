@@ -28,6 +28,8 @@ app.engine('handlebars', exphbs.engine({helpers: {
 
 app.set('view engine', 'handlebars');
 
+app.use('/error', express.static(__dirname + '/error'));
+
 app.use(
     session({
         name: 'AuthCookie',
@@ -95,7 +97,7 @@ app.use('/search', (req, res, next) => {
 app.use('/public/', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.status(403).redirect('/forbidden');
+        return res.status(403).send('<a href="http://localhost:3000/error/alpaca.js"> here </a>');
     } else {
         next();
     }
