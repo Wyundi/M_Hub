@@ -8,31 +8,39 @@ This page will be shown when the following route is hit: GET http://localhost:30
     <head>
         <meta charset="utf-8">
         <title> M_Hub </title>
-        <link rel="stylesheet" href="/public/css/main.css">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+        crossorigin="anonymous"> -->
+        <link rel="stylesheet" href="../public/css/main.css">
     </head>
     <body>
         <!-- header -->
 
         <header id="header" class="header">
             <ul class="header_list">
-                <li><a href="/login"> log in </a></li>
-                <li><a href="/signup"> sign up </a></li>
+                <li><a href="/login"> Log in </a></li>
+                <li><a href="/signup"> Sign up </a></li>
             </ul>
         </header>
 
         <!-- page content -->
         <h1> M_Hub </h1>
         
-        
+        <p class = "home_intro">
+            Welcome to M_Hub, a sharing platform for deep learning models. 
+        </p>
+        <p class = "home_intro">
+            You can always share or find the stuffs you need here, as well as some cute cats.
+        </p>
+
         <img src = 
         "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?q=65&w=1135&ar=2:1&fit=crop" 
         alt="random_cat"
-        style="height: 250px; width: 500px" 
+        style="height: 450px; width: 900px" 
         id = "home_random_cat_img">
 
         <form method="" id="home_random_cat_buttom">
 
-            <button type="submit" onclick="randomCat()"> Get a Random Cat </button>
+            <button type="submit" onclick="randomCat()" id = "home_random_cat_buttom"> Get a Random Cat </button>
 
         </form>
 
@@ -41,8 +49,17 @@ This page will be shown when the following route is hit: GET http://localhost:30
 
         <main>
 
-            <p> This is a brief description of this web page. This app is for CS546 Final Project, M_Hub. </p>
+            <!-- <p> This is a brief description of this web page. This app is for CS546 Final Project, M_Hub. </p> -->
 
         </main>
+
+        <p class = "home_intro">
+            To get start with the contents, please Signup or Login.
+        </p>
+        <p class = "home_intro">
+            To get start with the cats, click to get a random one.
+        </p>
+
+        <footer>@2022 M_Hub, All rights reserved.</footer>
     </body>
 </html>

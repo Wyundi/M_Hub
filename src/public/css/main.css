@@ -1,0 +1,160 @@
+body {
+    background-color: #e8e3e3;
+}
+
+header {
+    font-size: 22px;
+    color: #e8e3e3;
+    font-weight: bold;
+    /* text-transform: uppercase; */
+    
+}
+
+/* header.li a {
+    color: #3b3a3a;
+} */
+
+h1 {
+    background-color: #4e4b4b;
+    color: white;
+    font-size: 70px;
+    font-family: "Brush Script MT", cursive;
+    left: 10%;
+    width: 100%;
+    padding: 25px 0px;
+    padding-left: 6%;
+
+}
+
+h2 {
+    font-size: 30px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+h3, h4 {
+    font-size: 25px;
+    color: #3b3a3a;
+    font-family: fangsong;
+
+}
+
+a, p, #edit-comment-form, #userName, #comment, li {
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+dd, dt {
+    font-size: 19px;
+    color: #3b3a3a;
+    
+    padding-left: 10px;
+}
+
+li {
+    padding-left: 10px;
+}
+
+footer {
+    background-color: #3b3a3a;
+    color: white;
+    font-size: 15px;
+    padding: 5px 0px;
+    padding-left: 3%;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+}
+
+.data_list {
+    margin-left: 20px;
+}
+
+#search_data, .full-width-input {
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+#profile_img {
+    display: block;
+    border-radius: 50%;
+    margin-left: 0px;
+}
+
+#profile_button {
+    margin-left: 90px;
+}
+
+
+label{
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
+}
+
+button {
+    text-align: center;
+
+    background-color: #3b3a3a;
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: cursive;
+    
+    border-radius: 8px;
+}
+
+button a {
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: cursive;
+}
+
+#reminder {
+    font-size: 13px;
+    color: #5f5757;
+    font-family: cursive;
+}
+
+.home_intro {
+    font-size: 21px;
+    color: #3b3a3a;
+    text-align: center;
+    font-weight: bold;
+}
+
+#home_random_cat_img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    height: 450px; 
+    width: 900px;
+}
+
+#home_random_cat_buttom {
+    text-align: center;
+    
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: #3b3a3a;
+    border: none;
+    color: white;
+    padding: 8px 0px;
+    width: 900px;
+    font-size: 40px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: cursive;
+}

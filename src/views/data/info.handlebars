@@ -80,10 +80,10 @@
 {{/if}}
 
 <h2> {{data_name}} </h2>
-<p> {{data_type}} </p>
+<p class = "data_list"> {{data_type}} </p>
 
 <h3> Description </h3>
-<p> {{description}} </p>
+<p class = "data_list"> {{description}} </p>
 
 <h3> Features </h3>
 <ul>
@@ -93,16 +93,16 @@
 </ul>
 
 <h3> Length </3>
-<p> {{length}} </p>
+<p class = "data_list"> {{length}} </p>
 
 <h3> Source </3>
-<p> <a href="{{source}}"> {{source}} </a> </p>
+<p class = "data_list"> <a href="{{source}}"> {{source}} </a> </p>
 
 <h3> Raw Data </h3>
-<a href="{{raw_data_path}}"> link to raw data </a>
+<a href="{{raw_data_path}}" class = "data_list"> link to raw data </a>
 
 <h3> Contributor </h3>
-<p> {{contributor}} </p>
+<p class = "data_list"> {{contributor}} </p>
 
 <h3> Applied models </h3>
 <ul>
@@ -113,54 +113,20 @@
 
 
 <h3> Comment </h3>
-<h4> <a href="/comment/data/{{dataId}}">See more comments</a> </h4>
+
 <ul>
-    {{#each comment}}
-        <li> {{this}} </li>
-    {{/each}}
+    <dl>
+        <dt>Time: </dt>
+        <dd>{{comment.0.commentDate}}</dd>
+        <dt>Username: </dt>
+        <dd>{{comment.0.username}}</dd>
+        <dt>Comment: </dt>
+        <dd>{{comment.0.comment}}</dd>
+    </dl>
 </ul>
 
-<br>
 
-<h4>Make your comment</h4>
-<p>
-
-<label>
-
-<script type="text/javascript">
-
-function show()
-
-{
-
-var value = document.getElementById("div1").style.display;
-
-if(value=="none")
-
-{
-
-document.getElementById("div1").style.display="block";
-
-}
-
-else
-
-document.getElementById("div1").style.display="none";
-
-}
-
-</script>
-
-
-<input type="button" value="Comment" onClick="show()"/>
-
-<div id="div1" style="display:none">
-    <form action="" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
-    </form>
-
-</div>
+<button type="button" class="btn"> <a href="/comment/data/{{dataId}}"> Leave a comment if you like! ... or hate? </a></button>
 
 </div>
 
