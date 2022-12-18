@@ -124,6 +124,19 @@ const checkUser = async (username, password) => {
 
 };
 
+const verifyUsername = async (username) => {
+    username = utils.checkUsername(username);
+    
+    // query user name in database
+    let userList = await getAllUser();
+
+    let user_found = false;
+    for (let i in userList) {
+        if (userList[i].username.toLowerCase() === username.toLowerCase()) throw `username ${username} already exists`
+    }
+    return username;
+}
+
 const getAllUser = async () => {
 
     const userCollection = await user();
@@ -474,5 +487,6 @@ module.exports = {
     getDataList,
     getModelList,
     removeFromDataList,
-    removeFromModelList
+    removeFromModelList,
+    verifyUsername
 };
