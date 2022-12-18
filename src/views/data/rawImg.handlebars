@@ -1,6 +1,46 @@
+<style>
+body {
+    margin: 0;
+}
+
+.image-grid {
+    --gap: 16px;
+    --num-cols: 4;
+    --row-height: 300px;
+
+    box-sizing: border-box;
+    padding: var(--gap);
+    display: grid;
+    grid-template-columns: repeat(var(--num-cols), 1fr);
+    grid-auto-rows: var(--row-height);
+    gap: var(--gap);
+}
+
+.image-grid > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 1024px){
+    .image-grid {
+        --num-cols: 2;
+        --row-height: 200px;
+    }
+}
+</style>
+
 <h2> Raw Img View </h2>
 
-<img src="{{random_img_path}}" alt="ok" width="300"> 
+<div class="image-grid">
+    {{#each random_img_path_list}}
+        <img src="{{this}}" alt="ok"> 
+    {{/each}}
+</div>
+
+<br>
+
+<button type="button" class="btn"> <a href="/data/rawimg/{{dataId}}"> change another batch of cats and dogs! </a></button>
 
 <br>
 

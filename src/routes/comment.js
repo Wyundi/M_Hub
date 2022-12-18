@@ -58,9 +58,9 @@ router
         let data_db = undefined;
 
         try {
-          dataId = utils.checkId(req.params.dataId, 'data id');
-          username = utils.checkUsername(commentInfo.username);
-          comment = utils.checkString(commentInfo.comment);
+          dataId = utils.checkId(xss(req.params.dataId, 'data id'));
+          username = utils.checkUsername(xss(req.session.user.username));
+          comment = utils.checkString(xss(commentInfo.comment));
         } catch(e) {
           let error_status = 400;
           res.status(error_status).render("./error/errorPage", {
@@ -82,8 +82,14 @@ router
     
         try {
           newComment = await commentData.createComment(dataId, username, comment, 'data');
+          const allComments = await commentData.getAllComment(dataId, 'data');
           if (newComment) {
-            res.status(200).redirect(`/comment/data/${dataId}`);
+            res.status(200).render("./comment/datacomment", {
+              username: username,
+              dataId: dataId,
+              data_name: data_db.data_name,
+              comment: allComments,
+            });
           }
         } catch(e) {
           let error_status = 500;
@@ -102,7 +108,7 @@ router
       let model_db = undefined;
 
       try {
-        modelId = utils.checkId(req.params.modelId, 'model id');
+        modelId = utils.checkId(xss(req.params.modelId, 'model id'));
       } catch(e) {
         let error_status = 400;
         return res.status(error_status).render("./error/errorPage", {
@@ -144,9 +150,9 @@ router
         let model_db = undefined;
         
         try {
-          modelId = utils.checkId(req.params.modelId, 'model id');
-          username = utils.checkUsername(commentInfo.username);
-          comment = utils.checkString(commentInfo.comment);
+          modelId = utils.checkId(xss(req.params.modelId, 'model id'));
+          username = utils.checkUsername((xss(req.session.user.username)));
+          comment = utils.checkString(xss(commentInfo.comment));
         } catch(e) {
           let error_status = 400;
           res.status(error_status).render("./error/errorPage", {
@@ -168,8 +174,14 @@ router
     
         try {
           newComment = await commentData.createComment(modelId, username, comment, 'model');
+          const allComments = await commentData.getAllComment(modelId, 'model');
           if (newComment) {
-            res.status(200).redirect(`/comment/model/${modelId}`);
+            res.status(200).render("./comment/modelcomment", {
+              username: username,
+              modelId: modelId,
+              model_name: model_db.model_name,
+              comment: allComments,
+            });
           }
         } catch(e) {
           let error_status = 500;

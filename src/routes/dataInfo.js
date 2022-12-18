@@ -390,6 +390,8 @@ router
         let dataId = undefined;
         let data_db = undefined;
         let raw_db = undefined;
+        let random_img_path_list = [];
+
 
         try {
             dataId = utils.checkId(xss(req.params.id, "data id"));
@@ -415,23 +417,18 @@ router
 
         try {
             let img_path_list = data_db.raw_data.img_path;
-            let random_num = utils.getRandomInt(Object.keys(img_path_list).length);
-            let random_img_id = img_path_list[random_num];
-            raw_db = await RawData.getDataById(random_img_id);
-        } catch (e) {
-            let error_status = 503;
-            return res.status(error_status).render("./error/errorPage", {
-                username: req.session.user.username,
-                error_status: error_status,
-                error_message: e
-            });
-        }
+            for (let i = 0; i < 12; i++) {
+                let random_num = utils.getRandomInt(Object.keys(img_path_list).length);
+                let random_img_id = img_path_list[random_num];
+                raw_db = await RawData.getDataById(random_img_id);
+                let random_img_path = raw_db.data;
+                random_img_path_list.push(random_img_path);
+            }
 
-        try {
-            let random_img_path = raw_db.data;
             return res.status(200).render("./data/rawImg", {
                 username: req.session.user.username,
-                random_img_path: random_img_path
+                random_img_path_list: random_img_path_list,
+                dataId: dataId
             })
         } catch (e) {
             let error_status = 500;

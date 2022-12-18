@@ -8,9 +8,6 @@ const fileUpload = require("express-fileupload");
 const configRoutes = require('./routes');
 const exphbs = require('express-handlebars');
 
-app.use('/public', express.static(__dirname + '/public'));
-app.use('/raw_data', express.static(__dirname + '/raw_data'));
-
 const methodOverride = require('method-override');
 
 app.use(fileUpload());
@@ -27,6 +24,8 @@ app.engine('handlebars', exphbs.engine({helpers: {
 }));
 
 app.set('view engine', 'handlebars');
+
+app.use('/error', express.static(__dirname + '/error'));
 
 app.use(
     session({
@@ -95,7 +94,7 @@ app.use('/search', (req, res, next) => {
 app.use('/public/', (req, res, next) => {
 
     if (!req.session.user) {
-        return res.status(403).redirect('/forbidden');
+        return res.status(403).send('<a href="http://localhost:3000/error/alpaca.js"> here </a>');
     } else {
         next();
     }

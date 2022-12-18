@@ -18,11 +18,7 @@
 
 
 <form action="/comment/model/{{modelId}}" method="POST">
-    <label for="username">Username: </label>
-    <input name="username" id="username" placeholder="{{username}}">
-    <br>
-    <label for="comment">Comment: </label>
-    <input name="comment" id="comment" placeholder="type in your comment">
+    <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
     <br>
     <button type="submit" class="btn"> submit</button>
     <br>
@@ -33,6 +29,6 @@
 </div>
 <br>
 
-<button type="button" class="btn"> <a href="/model/info/{{modelId}}"> back to mdoel page </a></button>
+<button type="button" class="btn"> <a href="/model/info/{{modelId}}"> back to model page </a></button>
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>
