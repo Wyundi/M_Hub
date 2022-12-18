@@ -15,7 +15,7 @@ header {
 } */
 
 h1 {
-    background-color: #3b3a3a;
+    background-color: #4e4b4b;
     color: white;
     font-size: 70px;
     font-family: "Brush Script MT", cursive;
@@ -87,6 +87,12 @@ button a {
     color: white;
     font-size: 20px;
     cursor: pointer;
+    font-family: cursive;
+}
+
+#reminder {
+    font-size: 13px;
+    color: #5f5757;
     font-family: cursive;
 }
 
