@@ -15,7 +15,31 @@
 <p>
 
 <label>
+<script type="text/javascript">
 
+function show()
+
+{
+
+var value = document.getElementById("div1").style.display;
+
+if(value=="none")
+
+{
+
+document.getElementById("div1").style.display="block";
+
+}
+
+else
+
+document.getElementById("div1").style.display="none";
+
+}
+
+</script>
+
+<input type="button" value="Comment" onClick="show()"/>
 
 <form action="/comment/model/{{modelId}}" method="POST">
     <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
