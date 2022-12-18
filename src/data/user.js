@@ -152,8 +152,10 @@ const getUserById = async (userId) => {
 
 };
 
-const getUserByUsernameOrEmail = async (str) => {
+const getUserByUsername = async (str) => {
     // code goes here
+
+    // allow both lower and upper case
     
     return 0;
 };
@@ -447,7 +449,7 @@ module.exports = {
     checkUser,
     getAllUser,
     getUserById,
-    getUserByUsernameOrEmail,
+    getUserByUsername,
     removeUser,
     updateUser,
     changePasswd,

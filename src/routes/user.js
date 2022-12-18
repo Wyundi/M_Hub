@@ -145,6 +145,10 @@ router
             username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
             first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
             last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));
+
+            let full_name = first_name + ' ' + last_name;
+            full_name = utils.checkValidName(xss(full_name));
+
             email = utils.checkEmail(utils.prior(xss(req.body.user_email), user_db.email));
             gender = utils.checkGender(utils.prior(xss(req.body.user_gender), user_db.gender));
             location = utils.checkLocation(utils.prior(xss(req.body.user_location), user_db.location));
@@ -172,6 +176,7 @@ router
             }
 
             let updateStatus = await userData.updateUser(userId, newUser);
+            req.session.user.username = username;
         } catch (e) {
             let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
@@ -338,6 +343,10 @@ router
             username = utils.checkUsername(xss(req.body.user_name));
             first_name = utils.checkString(xss(req.body.user_first_name));
             last_name = utils.checkString(xss(req.body.user_last_name));
+
+            let full_name = first_name + ' ' + last_name;
+            full_name = utils.checkValidName(xss(full_name));
+            
             email = utils.checkEmail(xss(req.body.user_email));
             gender = utils.checkGender(xss(req.body.user_gender));
             loc = utils.checkLocation(xss(req.body.user_location));
@@ -346,6 +355,16 @@ router
 
         } catch (e) {
             let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            // check if username already in database
+        } catch (e) {
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 error_status: error_status,
                 error_message: e

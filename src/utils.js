@@ -45,7 +45,7 @@ function checkStringEnpty(str) {
     }
 }
 
-function checkValidName(name, reg) {
+function checkValidName(name, reg=/[^a-zA-Z ]+/g) {
 
     name_standard = name.replace(reg, "");
 
@@ -119,8 +119,7 @@ function checkId(id, varName) {
     if (!id) throw `You must provide a ${varName}`;
     if (typeof id !== 'string') throw `${varName} must be a string`;
     id = id.trim();
-    if (id.length === 0)
-        throw `${varName} cannot be an empty string or just spaces`;
+    if (id.length === 0) throw `${varName} cannot be an empty string or just spaces`;
     if (!ObjectId.isValid(id)) throw `${varName} invalid object ID`;
 
     return id;
@@ -129,12 +128,12 @@ function checkId(id, varName) {
 function checkGender(gender) {
 
     // ["male", "female"]  
-    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+    // according to gender diversity, gender options should be offered not only male and female, but also other non-binary choices
 
-    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
+    const options = ["Man", "Woman", "Lesbian", "Gay", "Transgender", "Questioning", "Confidential"];
 
-    gender = checkString(gender);
-    // gender = gender.toLowerCase();
+    // gender = checkString(gender);
+    // // gender = gender.toLowerCase();
 
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
@@ -173,7 +172,7 @@ function checkPasswd(passwd) {
     }
 
     if (passwd.length < 6 || passwd.length > 14) {
-        throw "Password should be at least 6 characters long.";
+        throw "Password length should be in the range of 6 to 14 characters.";
     }
 
     if (passwd.match(/[A-Z]+/g) === null) {
@@ -282,7 +281,11 @@ function prior(first_ele, second_ele) {
 
 function checkRawData(rawdata) {
 
-    if (!rawdata || Object.keys(rawdata).length === 0) {
+    // if (!rawdata || Object.keys(rawdata).length === 0) {
+    //     throw "No files were uploaded.";
+    // }
+
+    if (!rawdata) {
         throw "No files were uploaded.";
     }
 
@@ -335,6 +338,10 @@ function deleteFromArray(element, array) {
     } else throw 'ID not found in list.'
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
 module.exports = {
 
     // error check
@@ -365,5 +372,7 @@ module.exports = {
 
     checkComment,
     checkDataType,
-    deleteFromArray
+    deleteFromArray,
+
+    getRandomInt
 }

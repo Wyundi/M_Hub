@@ -1,1 +1,15 @@
-<img src="https://http.cat/200" alt="ok" width="300">
+<h2> Raw Img View </h2>
+
+<div class="image-grid">
+    {{#each random_img_path_list}}
+        <img src="{{this}}" alt="ok"> 
+    {{/each}}
+</div>
+
+<br>
+
+<button type="button" class="btn"> <a href="/data/rawimg/{{dataId}}"> change another batch of cats and dogs! </a></button>
+
+<br>
+
+<button type="button" class="btn"> <a href="/user"> back to user page </a></button> 
