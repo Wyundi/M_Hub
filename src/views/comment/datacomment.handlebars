@@ -45,7 +45,9 @@ document.getElementById("div1").style.display="none";
 
 <div id="div1" style="display:none">
     <form action="/comment/data/{{dataId}}" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
+        <label for="comment"> Leave a comment here!</label>
+        <br>
+        <textarea name="comment" id="comment" cols="30" rows="5" ></textarea>
         <br>
         <button type="submit" class="btn"> submit</button>
         <br>
