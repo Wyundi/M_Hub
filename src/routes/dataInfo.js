@@ -351,7 +351,6 @@ router
             }
 
             for (let i=0; i<20; i++) {
-                console.log(dataId);
                 let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
                 let single_set_raw = {};
                 let single_set_norm = {};
