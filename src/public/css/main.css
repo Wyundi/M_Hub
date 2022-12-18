@@ -158,3 +158,15 @@ button a {
     text-transform: uppercase;
     font-family: cursive;
 }
+
+.ul-comment {
+    height: 150px; 
+    width: 600px; 
+    overflow-y:scroll;
+    background-color:#fffbfb
+}
+
+.li-comment {
+    font-size: 21px;
+    padding: 3px;
+}
