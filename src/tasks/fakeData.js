@@ -33,6 +33,28 @@ let user3 = {
     passwd: 'MaryL2019#'
 }
 
+let user4 = {
+    username: 'Tyler345',
+    first_name: 'Tyler',
+    last_name: 'kadi',
+    email: 'Tyler563@gmail.com',
+    gender: 'Man',
+    location: 'NJ',
+    organization: 'Trenton',
+    passwd: 'JTyler@1998'
+}
+
+let user5 = {
+    username: 'Emily222',
+    first_name: 'Emily ',
+    last_name: 'Miller',
+    email: 'eMiller20@gmail.com',
+    gender: 'Woman',
+    location: 'PA',
+    organization: 'PennState',
+    passwd: 'EMiller@222'
+}
+
 let data1 = {
     name: 'Boston Housing Data',
     type: 'data',
@@ -95,6 +117,22 @@ let modelComment3 = {
     userName: "James1234",
     comment: "Cool Concept!"
 }
+let modelComment4 = {
+    userName: "Tyler345",
+    comment: "Helps a lot! Thanks!"
+}
+let modelComment5 = {
+    userName: "Tyler345",
+    comment: "Really cool model! I like the idea behind it!"
+}
+let modelComment6 = {
+    userName: "Emily222",
+    comment: "Like this model!"
+}
+let modelComment7 = {
+    userName: "Emily222",
+    comment: "Great model!"
+}
 
 let dataComment1 = {
     userName: "Michael23",
@@ -110,6 +148,8 @@ module.exports = {
     user1,
     user2,
     user3,
+    user4,
+    user5,
     data1,
     data2,
     model1,
@@ -117,6 +157,10 @@ module.exports = {
     modelComment1,
     modelComment2,
     modelComment3,
+    modelComment4,
+    modelComment5,
+    modelComment6,
+    modelComment7,
     dataComment1,
     dataComment2
 }

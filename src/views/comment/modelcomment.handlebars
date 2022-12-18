@@ -1,17 +1,10 @@
 <h2> {{model_name}} </h2>
 
 <h3> Comment </h3>
-<ul>
+<ul class="ul-comment" style="height: 80px; overflow-y:scroll">
     {{#each comment}}
-        <li> 
-            <dl>
-                <dt>Time: </dt>
-                <dd>{{this.commentDate}}</dd>
-                <dt>Username: </dt>
-                <dd>{{this.username}}</dd>
-                <dt>Comment: </dt>
-                <dd>{{this.comment}}</dd>
-            </dl>
+        <li class="li-comment"> 
+            {{this.commentDate}} - {{this.username}}: {{this.comment}}
         </li>
     {{/each}}
 </ul>

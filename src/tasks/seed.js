@@ -21,6 +21,10 @@ async function main() {
     user2 = user2.insertedUser;
     let user3 = await userData.createUser(fakeData.user3);
     user3 = user3.insertedUser;
+    let user4 = await userData.createUser(fakeData.user4);
+    user4 = user4.insertedUser;
+    let user5 = await userData.createUser(fakeData.user5);
+    user5 = user5.insertedUser;
 
     // add data
     let data1 = fakeData.data1;
@@ -66,7 +70,15 @@ async function main() {
     let modelComment2 = fakeData.modelComment2;
     await commentData.createComment(model1._id, modelComment2.userName, modelComment2.comment, 'model');
     let modelComment3 = fakeData.modelComment3;
-    await commentData.createComment(model2._id, modelComment3.userName, modelComment3.comment, 'model'); 
+    await commentData.createComment(model1._id, modelComment3.userName, modelComment3.comment, 'model'); 
+    let modelComment4 = fakeData.modelComment4;
+    await commentData.createComment(model1._id, modelComment4.userName, modelComment4.comment, 'model');
+    let modelComment5 = fakeData.modelComment5;
+    await commentData.createComment(model2._id, modelComment5.userName, modelComment5.comment, 'model');
+    let modelComment6 = fakeData.modelComment6;
+    await commentData.createComment(model2._id, modelComment6.userName, modelComment6.comment, 'model');
+    let modelComment7 = fakeData.modelComment7;
+    await commentData.createComment(model1._id, modelComment7.userName, modelComment7.comment, 'model');
     let dataComment1 = fakeData.dataComment1;
     await commentData.createComment(data1._id, dataComment1.userName, dataComment1.comment, 'data');
     let dataComment2 = fakeData.dataComment2;
