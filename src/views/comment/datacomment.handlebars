@@ -1,9 +1,11 @@
 <h2> {{data_name}} </h2>
 
 <h3> Comment </h3>
-<ul>
+<ul class="ul-comment" style="height: 80px; overflow-y:scroll">
     {{#each comment}}
-        <li> {{this}} </li>
+        <li class="li-comment"> 
+            {{this.commentDate}} - {{this.username}}: {{this.comment}}
+        </li>
     {{/each}}
 </ul>
 
@@ -42,9 +44,15 @@ document.getElementById("div1").style.display="none";
 <input type="button" value="Comment" onClick="show()"/>
 
 <div id="div1" style="display:none">
-    <form action="" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
+    <form action="/comment/data/{{dataId}}" method="POST">
+        <label for="username">Username: </label>
+        <input name="username" id="username" placeholder="{{username}}">
+        <br>
+        <label for="comment">Comment: </label>
+        <input name="comment" id="comment" placeholder="type in your comment">
+        <br>
+        <button type="submit" class="btn"> submit</button>
+        <br>
     </form>
 
 </div>

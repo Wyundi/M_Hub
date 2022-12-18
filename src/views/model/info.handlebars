@@ -107,12 +107,19 @@
 </ul>
 
 <h3> Comment </h3>
-<h4> <a href="/comment/model/{{modelId}}">See more comments</a> </h4>
+
 <ul>
-    {{#each comment}}
-        <li> {{this}} </li>
-    {{/each}}
+    <dl>
+        <dt>Time: </dt>
+        <dd>{{comment.0.commentDate}}</dd>
+        <dt>Username: </dt>
+        <dd>{{comment.0.username}}</dd>
+        <dt>Comment: </dt>
+        <dd>{{comment.0.comment}}</dd>
+    </dl>
 </ul>
+
+<h4> <a href="/comment/model/{{modelId}}">Wanna see more comments? Click here!</a> </h4>
 
 <br>
 
@@ -146,15 +153,7 @@ document.getElementById("div1").style.display="none";
 </script>
 
 
-<input type="button" value="Comment" onClick="show()"/>
-
-<div id="div1" style="display:none">
-    <form action="" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
-    </form>
-
-</div>
+<button type="button" class="btn"> <a href="/comment/model/{{modelId}}"> Leave a comment if you like! ... or hate? </a></button>
 
 </div>
 
