@@ -193,10 +193,9 @@ router
         }
 
         try {
-            userId = utils.checkId(req.session.user.userId, "user id");
             contributorId = data_db.user_list[0];
-            let user_db = await userData.getUserById(contributorId);
-            contributor = user_db.username;
+            let contributor_db = await userData.getUserById(contributorId);
+            contributor = contributor_db.username;
             let is_contributor = req.session.user.userId === contributorId;
             let model_info_list = [];
             for (let i = 0; i < data_db.model_list.length; i++) {
