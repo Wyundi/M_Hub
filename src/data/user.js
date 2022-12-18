@@ -130,7 +130,6 @@ const verifyUsername = async (username) => {
     // query user name in database
     let userList = await getAllUser();
 
-    let user_found = false;
     for (let i in userList) {
         if (userList[i].username.toLowerCase() === username.toLowerCase()) throw `username ${username} already exists`
     }
@@ -165,28 +164,12 @@ const getUserById = async (userId) => {
 
 };
 
-const getUserByUsername = async (username) => {
+const getUserByUsername = async (str) => {
     // code goes here
 
-    // error check
-    username = utils.checkUsername(username);
+    // allow both lower and upper case
 
-    // query user name in database
-    let userList = await getAllUser();
-
-    let user_found = null;
-    for (let i in userList) {
-        if (userList[i].username.toLowerCase() === username.toLowerCase()) {
-            if (user_found === null){
-                user_found = userList[i];
-            }
-            else {
-                throw "Error in database: duplicate username.";
-            }
-        }
-    }
-
-    return user_found;
+    return 0;
 };
 
 const removeUser = async (userId) => {
