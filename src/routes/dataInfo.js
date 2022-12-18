@@ -345,6 +345,11 @@ router
             let data_db = await dataInfoData.getDataById(dataId);
             features = data_db.features;
 
+            let l = 20;
+            if (data_db.length < l) {
+                l = data_db.length;
+            }
+
             for (let i=0; i<20; i++) {
                 let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
                 let single_set_raw = {};

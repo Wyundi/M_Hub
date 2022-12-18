@@ -40,7 +40,8 @@ const loadData = async (dataId, index, getNorm=false) => {
 
     let res = [];
     for (let key of Object.keys(raw)) {
-        let single_data = await rawData.getDataById(raw[key][index.toString()]);
+        let rawId = raw[key][index.toString()];
+        let single_data = await rawData.getDataById(rawId);
         res.push(single_data['data'])
     }
 
