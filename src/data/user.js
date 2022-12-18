@@ -43,7 +43,7 @@ const createUser = async (user_info) => {
 
     // check if same username/email exists
     const userInfoCollection = await user();
-    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: username, $options: 'i'}});
+    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: email, $options: 'i'}});
     const userFoundByUsername = await userInfoCollection.findOne({username: {$regex: username, $options: 'i'}});
 
     if (userFoundByEmail || userFoundByUsername) {
@@ -130,7 +130,6 @@ const verifyUsername = async (username) => {
     // query user name in database
     let userList = await getAllUser();
 
-    let user_found = false;
     for (let i in userList) {
         if (userList[i].username.toLowerCase() === username.toLowerCase()) throw `username ${username} already exists`
     }
@@ -169,7 +168,7 @@ const getUserByUsername = async (str) => {
     // code goes here
 
     // allow both lower and upper case
-    
+
     return 0;
 };
 

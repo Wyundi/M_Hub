@@ -77,11 +77,11 @@ const createData = async (data) => {
         for (let f of features) {
             raw[f] = {};
             raw_list.push([])
-            
+
             if (!json_obj[f]) {
                 throw 'feature not in json file';
             }
-
+    
             let l = Object.keys(json_obj[f]).length;
             for (let i in json_obj[f]) {
                 // add to raw obj

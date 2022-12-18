@@ -138,10 +138,8 @@ router
         let gender = undefined;
         let location = undefined;
         let organization = undefined;
-        let password = undefined;
 
         try {
-            username = await userData.verifyUsername(xss(req.body.user_name));
             username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
             first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
             last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));
@@ -156,6 +154,17 @@ router
 
         } catch (e) {
             let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            username = await userData.verifyUsername(username);
+        } catch (e) {
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,

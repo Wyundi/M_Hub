@@ -593,7 +593,7 @@ router
         try {
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
-            let error_status = 404;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
@@ -641,7 +641,7 @@ router
         try {
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
-            let error_status = 404;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
