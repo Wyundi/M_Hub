@@ -43,7 +43,7 @@ const createUser = async (user_info) => {
 
     // check if same username/email exists
     const userInfoCollection = await user();
-    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: username, $options: 'i'}});
+    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: email, $options: 'i'}});
     const userFoundByUsername = await userInfoCollection.findOne({username: {$regex: username, $options: 'i'}});
 
     if (userFoundByEmail || userFoundByUsername) {
@@ -152,12 +152,28 @@ const getUserById = async (userId) => {
 
 };
 
-const getUserByUsername = async (str) => {
+const getUserByUsername = async (username) => {
     // code goes here
 
-    // allow both lower and upper case
-    
-    return 0;
+    // error check
+    username = utils.checkUsername(username);
+
+    // query user name in database
+    let userList = await getAllUser();
+
+    let user_found = null;
+    for (let i in userList) {
+        if (userList[i].username.toLowerCase() === username.toLowerCase()) {
+            if (user_found === null){
+                user_found = userList[i];
+            }
+            else {
+                throw "Error in database: duplicate username.";
+            }
+        }
+    }
+
+    return user_found;
 };
 
 const removeUser = async (userId) => {

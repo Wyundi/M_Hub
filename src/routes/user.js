@@ -138,7 +138,6 @@ router
         let gender = undefined;
         let location = undefined;
         let organization = undefined;
-        let password = undefined;
 
         try {
 
@@ -156,6 +155,21 @@ router
 
         } catch (e) {
             let error_status = 400;
+            return res.status(error_status).render("./error/errorPage", {
+                username: req.session.user.username,
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
+            let user_found = await userData.getUserByUsername(username);
+
+            if (user_found) {
+                throw 'username already in database, please try another one.';
+            }
+        } catch (e) {
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
