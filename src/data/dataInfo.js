@@ -33,7 +33,6 @@ const createData = async (data) => {
     userId = utils.checkId(data.userId, "user id");
     
     // check valid json file
-
     json_obj = utils.checkJson(file_path);
 
     // add data info

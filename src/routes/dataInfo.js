@@ -193,10 +193,9 @@ router
         }
 
         try {
-            userId = utils.checkId(req.session.user.userId, "user id");
             contributorId = data_db.user_list[0];
-            let user_db = await userData.getUserById(contributorId);
-            contributor = user_db.username;
+            let contributor_db = await userData.getUserById(contributorId);
+            contributor = contributor_db.username;
             let is_contributor = req.session.user.userId === contributorId;
             let model_info_list = [];
             for (let i = 0; i < data_db.model_list.length; i++) {
@@ -345,6 +344,11 @@ router
         try {
             let data_db = await dataInfoData.getDataById(dataId);
             features = data_db.features;
+
+            let l = 20;
+            if (data_db.length < l) {
+                l = data_db.length;
+            }
 
             for (let i=0; i<20; i++) {
                 let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
