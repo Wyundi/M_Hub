@@ -5,7 +5,7 @@ let user1 = {
     first_name: 'James',
     last_name: 'Robert',
     email: 'JamesR@gmail.com',
-    gender: 'Male',
+    gender: 'Man',
     location: 'NJ',
     organization: 'SIT',
     passwd: 'JamesR1914#'
