@@ -45,11 +45,7 @@ document.getElementById("div1").style.display="none";
 
 <div id="div1" style="display:none">
     <form action="/comment/data/{{dataId}}" method="POST">
-        <label for="username">Username: </label>
-        <input name="username" id="username" placeholder="{{username}}">
-        <br>
-        <label for="comment">Comment: </label>
-        <input name="comment" id="comment" placeholder="type in your comment">
+        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
         <br>
         <button type="submit" class="btn"> submit</button>
         <br>
