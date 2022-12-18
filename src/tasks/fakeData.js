@@ -16,7 +16,7 @@ let user2 = {
     first_name: 'John',
     last_name: 'Michael',
     email: 'JohnM@gmail.com',
-    gender: 'Man',
+    gender: 'Prefer not to respond',
     location: 'NY',
     organization: 'NYU',
     passwd: 'JohnM1939#'
@@ -49,7 +49,7 @@ let user5 = {
     first_name: 'Emily ',
     last_name: 'Miller',
     email: 'eMiller20@gmail.com',
-    gender: 'Woman',
+    gender: 'Transgender',
     location: 'PA',
     organization: 'PennState',
     passwd: 'EMiller@222'

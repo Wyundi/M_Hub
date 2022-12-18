@@ -130,7 +130,7 @@ function checkGender(gender) {
     // ["male", "female"]  
     // according to gender diversity, gender options should be offered not only male and female, but also other non-binary choices
 
-    const options = ["Man", "Woman", "Lesbian", "Gay", "Transgender", "Questioning", "Confidential"];
+    const options = ["Man", "Woman", "Transgender", "Non-binary/Non-conforming", "Prefer not to respond"];
 
     // gender = checkString(gender);
     // // gender = gender.toLowerCase();

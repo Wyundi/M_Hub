@@ -141,7 +141,7 @@ router
         let password = undefined;
 
         try {
-
+            username = await userData.verifyUsername(xss(req.body.user_name));
             username = utils.checkUsername(utils.prior(xss(req.body.user_name), user_db.username));
             first_name = utils.checkString(utils.prior(xss(req.body.user_first_name), user_db.first_name));
             last_name = utils.checkString(utils.prior(xss(req.body.user_last_name), user_db.last_name));

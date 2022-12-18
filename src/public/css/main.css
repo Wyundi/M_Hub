@@ -228,3 +228,14 @@ body {
     }
 }
 
+.ul-comment {
+    height: 150px;
+    width: 600px;
+    overflow-y: scroll;
+}
+
+.li-comment {
+    background-color: #fefefe;
+    font-size: 22px;
+    padding: 3px;
+}
