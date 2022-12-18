@@ -72,8 +72,8 @@ function checkValidName(name, reg) {
         throw 'first name should be at least 3 characters';
     }
 
-    if (last_name.length < 3) {
-        throw 'last name should be at least 3 characters';
+    if (last_name.length < 2) {
+        throw 'last name should be at least 2 characters';
     }
 
 }
