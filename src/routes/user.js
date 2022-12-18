@@ -353,6 +353,16 @@ router
         }
 
         try {
+            // check if username already in database
+        } catch (e) {
+            let error_status = 502;
+            return res.status(error_status).render("./error/errorPage", {
+                error_status: error_status,
+                error_message: e
+            });
+        }
+
+        try {
             let user_info = {
                 username: username,
                 first_name: first_name,
