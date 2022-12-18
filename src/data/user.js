@@ -217,6 +217,7 @@ const changePasswd = async (userId, oldPasswd, newPasswd) => {
 
     // check validation
     userId = utils.checkId(userId);
+    userId = utils.checkId(userId);
     oldPasswd = utils.checkPasswd(oldPasswd);
     newPasswd = utils.checkPasswd(newPasswd);
 
@@ -261,6 +262,7 @@ const changePasswd = async (userId, oldPasswd, newPasswd) => {
     if (!updateInfo) throw `Could not change user password!`;
 
     return "Your password has been successfully changed!";
+
 };
 
 const addData = async (userId, dataId) => {

@@ -1,0 +1,29 @@
+
+
+<h2> Change Password </h2>
+
+<h3> {{username}} </h3>
+
+<form action="/user/edit/changepasswd" method="POST" class="change-passwd-form">
+
+    <label for="old_passwd">
+        Old Password
+        <input id="old_passwd" type="text" name="user_old_passwd" class="full-width-input">
+    </label>
+
+    <br>
+
+    <label for="new_passwd">
+        New Password
+        <input id="new_passwd" type="text" name="user_new_passwd" class="full-width-input">
+    </label>
+
+    <button type="submit" class="btn"> submit </button>
+
+</form>
+
+<br>
+
+<br>
+
+<button type="button" class="btn"> <a href="../user"> back to profile page </a></button>
