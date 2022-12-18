@@ -45,7 +45,7 @@ function checkStringEnpty(str) {
     }
 }
 
-function checkValidName(name, reg) {
+function checkValidName(name, reg=/[^a-zA-Z ]+/g) {
 
     name_standard = name.replace(reg, "");
 
@@ -281,7 +281,11 @@ function prior(first_ele, second_ele) {
 
 function checkRawData(rawdata) {
 
-    if (!rawdata || Object.keys(rawdata).length === 0) {
+    // if (!rawdata || Object.keys(rawdata).length === 0) {
+    //     throw "No files were uploaded.";
+    // }
+
+    if (!rawdata) {
         throw "No files were uploaded.";
     }
 

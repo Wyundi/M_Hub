@@ -10,6 +10,8 @@ const path = require("path");
 const utils = require('../utils');
 const dl_dataprocess = require("../dl/js/dataprocess");
 
+const jszip = require('jszip');
+const fs = require('fs');
 const xss = require('xss');
 
 router
@@ -59,8 +61,25 @@ router
             data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
-            let upload_path = path.resolve(`./raw_data/${data_name}.json`)
-            await data_rawdata.mv(upload_path);
+            let upload_path = undefined;
+            if (data_type === 'data') {
+                // json
+                upload_path = path.resolve(`./raw_data/${data_name}.json`)
+                await data_rawdata.mv(upload_path);
+            }
+            else if (data_type === 'img') {
+                // zip
+                let jszipInstance = new jszip();
+                let fileContent = fs.readFileSync(data_rawdata);
+                let unzip_res = await jszipInstance.loadAsync(data_rawdata);
+
+                for (let key of Object.keys(unzip_res.files)) {
+                    let item = unzip_res.files[key];
+                    console.log(item);
+                }
+            }
+
+            throw item;
 
             let userId = req.session.user.userId;
 
