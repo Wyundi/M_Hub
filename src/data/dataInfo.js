@@ -34,7 +34,9 @@ const createData = async (data) => {
     
     // check valid json file
 
+    console.log(file_path);
     json_obj = utils.checkJson(file_path);
+    console.log(json_obj);
 
     // add data info
     // according to mongodb document size limit, we need add another document to store raw data separately instead of store them in one document.
