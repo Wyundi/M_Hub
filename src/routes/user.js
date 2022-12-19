@@ -162,7 +162,9 @@ router
         }
 
         try {
-            username = await userData.verifyUsername(username);
+            if (username !== req.session.user.username) {
+                username = await userData.verifyUsername(username);
+            }
         } catch (e) {
             let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
