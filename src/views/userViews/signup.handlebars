@@ -1,6 +1,6 @@
 
 
-<h2> Sign Up </h2>
+<h2 id = "signup_h2"> Sign Up </h2>
 
 <form action="/signup" method="POST" class="signup-form">
 
@@ -26,7 +26,7 @@
     <br>
 
     <label for="email">
-        email
+        Email
         <input id="email" type="text" name="user_email" placeholder="please input your email" class="full-width-input">
     </label>
 
@@ -34,13 +34,14 @@
 
     <label for="gender">
         Gender
+        {{!-- const options = ["Man", "Woman", "Lesbian", "Gay", "Transgender", "Questioning", "Confidential"]; --}}
         <select name="user_gender" id="gender">
             <option disabled selected>Please Select</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-            <option value="Trans">Transgender</option>
-            <option value="NonBinary">Non-binary/non-conforming</option>
-            <option value="NotRespond">Prefer not to respond</option>
+            <option value="Woman">Woman</option>
+            <option value="Man">Man</option>
+            <option value="Transgender">Transgender</option>
+            <option value="Non-binary/Non-conforming">Non-binary/Non-conforming</option>
+            <option value="Prefer not to respond">Prefer not to respond</option>
         </select>
         {{!-- <input id="gender" type="text" name="user_gender" placeholder="please input your gender" class="full-width-input"> --}}
     </label>

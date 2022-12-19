@@ -124,11 +124,16 @@ router
         }
 
         try {
-            userId = utils.checkId(req.session.user.userId, "user id");
-            contributorId = model_db.user_list[0];
+            userId = utils.checkId(xss(req.session.user.userId), "user id");
+
+            // check if contributor
+            let contributorId = model_db.user_list[0];
             let user_db = await userData.getUserById(contributorId);
-            contributor = user_db.username;
+            let contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
+
+            // check if own this model
+            let user_in_model_user_list = model_db.user_list.includes(req.session.user.userId);
 
             let data_info_list = [];
             for (let i = 0; i < model_db.data_list.length; i++) {
@@ -153,7 +158,8 @@ router
                 contributor: contributor,
                 data_info_list: data_info_list,
                 comment: model_db.comment,
-                is_contributor: is_contributor
+                is_contributor: is_contributor,
+                user_in_model_user_list: user_in_model_user_list
             });
         } catch (e) {
             let error_status = 500;
@@ -166,14 +172,14 @@ router
 
     })
     .post(async (req, res) => {
-        let userId = req.session.user.userId;
-        let modelId = req.body.modelId;
+        let userId = undefined;
+        let modelId = undefined;
         let user_db = undefined;
         let model_db = undefined;
 
         try {
-            userId = utils.checkId(userId, "user id");
-            modelId = utils.checkId(modelId, "model id");
+            userId = utils.checkId(xss(req.session.user.userId, "user id"));
+            modelId = utils.checkId(xss(req.body.modelId, "model id"));
         } catch (e) {
             let error_status = 400;
             return res.status(error_status).render("./error/errorPage", {
@@ -196,15 +202,67 @@ router
         }
 
         try {
-            if (user_db.model_list.includes(modelId)) {
-                req.session.message = 'Model already contained in your list';
-                return res.redirect("/user");
+            userId = utils.checkId(xss(req.session.user.userId), "user id");
+            contributorId = model_db.user_list[0];
+            let contributor_db = await userData.getUserById(contributorId);
+            contributor = contributor_db.username;
+            let is_contributor = req.session.user.userId === contributorId;
+
+            let data_info_list = [];
+            for (let i = 0; i < model_db.data_list.length; i++) {
+                let data_info = {};
+                data_db = await dataInfoData.getDataById(model_db.data_list[i]);
+                data_name = data_db.data_name;
+                data_info.id = model_db.data_list[i];
+                data_info.name = data_name;
+                data_info_list.push(data_info);
             }
-            userUpdateInfo = await userData.addModel(userId, modelId);
-            if (userUpdateInfo) {
-                req.session.message = 'Model added to your list successfully';
-                return res.redirect("/user");
-            };
+
+            if (user_db.model_list.includes(modelId)) {
+                let message = 'Model already contained in your list';
+                let notification = 'true';
+                return res.render("./model/info", {
+                    username: req.session.user.username,
+                    modelId: modelId,
+                    model_name: model_db.model_name,
+                    category: model_db.category,
+                    description: model_db.description,
+                    link: model_db.link,
+                    onnx_path: model_db.onnx_path,
+                    input: model_db.input,
+                    output: model_db.output,
+                    contributor: contributor,
+                    data_info_list: data_info_list,
+                    comment: model_db.comment,
+                    is_contributor: is_contributor,
+                    message: message,
+                    notification: notification
+                });
+            } else {
+                userUpdateInfo = await userData.addModel(userId, modelId);    // add modelid to user's model list
+                modelUpdateInfo = await modelData.addUser(modelId, userId);      // add userid to model's userlist
+                let message = 'Model added successfully';
+                let notification = 'true';
+                if (userUpdateInfo && modelUpdateInfo) {
+                    return res.render("./model/info", {
+                        username: req.session.user.username,
+                        modelId: modelId,
+                        model_name: model_db.model_name,
+                        category: model_db.category,
+                        description: model_db.description,
+                        link: model_db.link,
+                        onnx_path: model_db.onnx_path,
+                        input: model_db.input,
+                        output: model_db.output,
+                        contributor: contributor,
+                        data_info_list: data_info_list,
+                        comment: model_db.comment,
+                        is_contributor: is_contributor,
+                        message: message,
+                        notification: notification
+                    });
+                };
+            }
         } catch (e) {
             let error_status = 500;
             return res.status(error_status).render("./error/errorPage", {
@@ -261,10 +319,17 @@ router
                 modelRemoveInfo = await modelData.removeModel(modelId);
 
                 if (modelRemoveInfo) return res.redirect("/user");
+                else {
+                    throw "failed to delete model"
+                }
             } else {
                 userRemoveInfo = await userData.removeFromModelList(userId, modelId);
-                if (userRemoveInfo) {
+                modelRemoveInfo = await modelData.removeFromUserList(modelId, userId);
+                if (userRemoveInfo && modelRemoveInfo) {
                     return res.redirect("/user");
+                }
+                else {
+                    throw "failed to delete model"
                 }
             }
         } catch (e) {

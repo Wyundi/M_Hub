@@ -1,9 +1,11 @@
 <h2> {{model_name}} </h2>
 
 <h3> Comment </h3>
-<ul>
+<ul class="ul-comment">
     {{#each comment}}
-        <li> {{this}} </li>
+        <li class="li-comment"> 
+            {{this.commentDate}} - {{this.username}}: {{this.comment}}
+        </li>
     {{/each}}
 </ul>
 
@@ -13,7 +15,6 @@
 <p>
 
 <label>
-
 <script type="text/javascript">
 
 function show()
@@ -38,19 +39,22 @@ document.getElementById("div1").style.display="none";
 
 </script>
 
-
 <input type="button" value="Comment" onClick="show()"/>
-
 <div id="div1" style="display:none">
-    <form action="" method="POST">
-        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="type in your comment"></textarea>
-        <button type="button" class="btn"> submit</button>
-    </form>
+<form action="/comment/model/{{modelId}}" method="POST">
+    <label for="comment"> Leave a comment here!</label>
+    <br>
+    <textarea name="comment" id="comment" cols="30" rows="5" ></textarea>
+    <br>
+    <button type="submit" class="btn"> submit</button>
+    <br>
+</form>
 
 </div>
 
 </div>
+<br>
 
-<button type="button" class="btn"> <a href="/model/info/{{modelId}}"> back to mdoel page </a></button>
+<button type="button" class="btn"> <a href="/model/info/{{modelId}}"> back to model page </a></button>
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>
