@@ -110,10 +110,6 @@
         </button>
     </form>
 {{else}}
-    <form action="./{{modelId}}" method="POST">
-        <button type="submit" value="{{modelId}}" name="modelId"> add to model list </button>
-    </form>
-    <br>
     {{#if user_in_model_user_list}}
     <form method="POST" action="/model/info/{{modelId}}?_method=DELETE">
         <button type="submit" onclick="javascript:return del();"> Remove this model
@@ -134,6 +130,11 @@
             </script>
         </button>
     </form>
+    {{else}}
+    <form action="./{{modelId}}" method="POST">
+        <button type="submit" value="{{modelId}}" name="modelId"> add to model list </button>
+    </form>
+    <br>
     {{/if}}
 {{/if}}
 <br>
