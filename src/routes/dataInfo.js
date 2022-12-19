@@ -227,10 +227,11 @@ router
                     notification: notification
                 });
             } else {
-                userUpdateInfo = await userData.addData(userId, dataId);
+                userUpdateInfo = await userData.addData(userId, dataId);            // add dataid to user data list
+                dataUpdateInfo = await dataInfoData.addUser(dataId, userId);            // add userid to data userlist
                 let message = 'Data added successfully';
                 let notification = 'true';
-                if (userUpdateInfo) {
+                if (userUpdateInfo && dataUpdateInfo) {
                     return res.render("./data/info", {
                         username: req.session.user.username,
                         dataId: dataId,
@@ -307,7 +308,8 @@ router
                 if (dataRemoveInfo) return res.redirect("/user");
             } else {
                 userRemoveInfo = await userData.removeFromDataList(userId, dataId);
-                if (userRemoveInfo) {
+                dataRemoveInfo = await dataInfoData.removeFromUserList(dataId, userId);
+                if (userRemoveInfo && dataRemoveInfo) {
                     return res.redirect("/user");
                 }
             }
