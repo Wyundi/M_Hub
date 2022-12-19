@@ -239,10 +239,11 @@ router
                     notification: notification
                 });
             } else {
-                userUpdateInfo = await userData.addModel(userId, modelId);
+                userUpdateInfo = await userData.addModel(userId, modelId);    // add modelid to user's model list
+                modelUpdateInfo = await modelData.addUser(modelId, userId);      // add userid to model's userlist
                 let message = 'Model added successfully';
                 let notification = 'true';
-                if (userUpdateInfo) {
+                if (userUpdateInfo && modelUpdateInfo) {
                     return res.render("./model/info", {
                         username: req.session.user.username,
                         modelId: modelId,
@@ -323,7 +324,8 @@ router
                 }
             } else {
                 userRemoveInfo = await userData.removeFromModelList(userId, modelId);
-                if (userRemoveInfo) {
+                modelRemoveInfo = await modelData.removeFromUserList(modelId, userId);
+                if (userRemoveInfo && modelRemoveInfo) {
                     return res.redirect("/user");
                 }
                 else {
