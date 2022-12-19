@@ -35,7 +35,7 @@ Listed are major frameworks/libraries that we used in our projects.
 
 
 ## Getting Started
-Before following the installation instructions below, your system will need nodejs.
+Before following the installation instructions below, your system will need nodejs. Don't forget to change directory to `/src`
 
 1. Installs all the package dependencies.
    ```sh
