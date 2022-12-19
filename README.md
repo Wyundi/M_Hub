@@ -7,24 +7,15 @@ CS546 final project, group 56.
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#About M_hub">About M_hub</a>
+      <a href="#about-m_hub">About M_hub</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
+    <li><a href="#getting-started">Getting Started</a></li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -36,11 +27,60 @@ The project our group has chosen to develop is a sharing platform for deep learn
 
 Listed are major frameworks/libraries that we used in our projects.
 
-* [![Nodejs][Node.js][Nodejs-url]
+* [![Nodejs][Node.js]][Nodejs-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 * [![handlebars][handlebar]][handlebars-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Getting Started
+Before following the installation instructions below, your system will need nodejs.
+
+1. Installs all the package dependencies.
+   ```sh
+   npm install
+   ```
+2. Seed database
+   ```sh
+   npm run seed
+   ```
+3. Install NPM packages
+   ```sh
+   npm start
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Usage
+
+You can register and sign in to our website. After sign-in, you can search for different dataset you would like to have, and add to your database. Or you can also upload your data as well. Remember to provide detailed features of dataset so as to make convenience to other users. Models work as the same with dataset.
+In our task file, there are several models that have been trained for your use. Feel free to test our model as your like!
+
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
