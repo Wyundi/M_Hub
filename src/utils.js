@@ -336,6 +336,8 @@ function deleteFromArray(element, array) {
     if (index > -1) {
         array.splice(index, 1);
     } else throw 'ID not found in list.'
+
+    return array;
 }
 
 function getRandomInt(max) {

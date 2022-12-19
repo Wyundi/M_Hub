@@ -119,6 +119,7 @@
         <button type="submit" value="{{dataId}}" name="dataId"> add to data list </button>
     </form>
     <br>
+    {{#if user_in_data_user_list}}
     <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
         <button type="submit" onclick="javascript:return del();"> Remove this dataset
 
@@ -138,6 +139,7 @@
             </script>
         </button>
     </form>
+    {{/if}}
 {{/if}} 
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>

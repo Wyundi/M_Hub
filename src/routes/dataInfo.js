@@ -163,6 +163,8 @@ router
             let user_db = await userData.getUserById(contributorId);
             contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
+            let user_in_data_user_list = data_db.user_list.includes(req.session.user.userId);
+
             let model_info_list = [];
             for (let i = 0; i < data_db.model_list.length; i++) {
                 let model_info = {};
@@ -172,6 +174,7 @@ router
                 model_info.name = model_name;
                 model_info_list.push(model_info);
             }
+
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
@@ -186,6 +189,7 @@ router
                 model_info_list: model_info_list,
                 comment: data_db.comment,
                 is_contributor: is_contributor,
+                user_in_data_user_list: user_in_data_user_list
             });
         } catch (e) {
             let error_status = 500;
