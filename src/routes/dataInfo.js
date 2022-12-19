@@ -10,6 +10,8 @@ const path = require("path");
 const utils = require('../utils');
 const dl_dataprocess = require("../dl/js/dataprocess");
 
+const jszip = require('jszip');
+const fs = require('fs');
 const xss = require('xss');
 
 router
@@ -59,8 +61,40 @@ router
             data_features = utils.checkStringArray(data_features, "data features");
 
             // upload json file to server
-            let upload_path = path.resolve(`./raw_data/${data_name}.json`)
-            await data_rawdata.mv(upload_path);
+            let upload_path = undefined;
+            if (data_type === 'data') {
+                // json
+                if (data_rawdata.name.slice(data_rawdata.name.length-4, data_rawdata.name.length) !== 'json') {
+                    throw "raw data must be a json file.";
+                }
+                // move file to raw_data path
+                upload_path = path.resolve(`./raw_data/${data_name}.json`)
+                await data_rawdata.mv(upload_path);
+            }
+            else if (data_type === 'img') {
+                // zip
+                if (data_rawdata.name.slice(data_rawdata.name.length-3, data_rawdata.name.length) !== 'zip') {
+                    throw "raw data must be a zip file.";
+                }
+
+                // unzip file
+                let jszipInstance = new jszip();
+                let unzip_res = await jszipInstance.loadAsync(data_rawdata.data);
+
+                for (let key of Object.keys(unzip_res.files)) {
+                    let item = unzip_res.files[key];
+                    if (item.dir) {
+                        fs.mkdirSync("raw_data/" + item.name);
+                    }
+                    else {
+                        fs.writeFileSync("raw_data/" + item.name, Buffer.from(await item.async('arraybuffer')));
+
+                        if (item.name.slice(item.name.length-4, item.name.length) === 'json') {
+                            upload_path = path.resolve(`./raw_data/${item.name}`)
+                        }
+                    }
+                }
+            }
 
             let userId = req.session.user.userId;
 
@@ -129,6 +163,8 @@ router
             let user_db = await userData.getUserById(contributorId);
             contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
+            let user_in_data_user_list = data_db.user_list.includes(req.session.user.userId);
+
             let model_info_list = [];
             for (let i = 0; i < data_db.model_list.length; i++) {
                 let model_info = {};
@@ -138,6 +174,7 @@ router
                 model_info.name = model_name;
                 model_info_list.push(model_info);
             }
+
             return res.status(200).render("./data/info", {
                 username: req.session.user.username,
                 dataId: dataId,
@@ -152,6 +189,7 @@ router
                 model_info_list: model_info_list,
                 comment: data_db.comment,
                 is_contributor: is_contributor,
+                user_in_data_user_list: user_in_data_user_list
             });
         } catch (e) {
             let error_status = 500;
@@ -346,6 +384,11 @@ router
         try {
             let data_db = await dataInfoData.getDataById(dataId);
             features = data_db.features;
+
+            let l = 20;
+            if (data_db.length < l) {
+                l = data_db.length;
+            }
 
             for (let i=0; i<20; i++) {
                 let single_data = await dl_dataprocess.loadData(dataId, i, getNorm=true);
@@ -556,7 +599,7 @@ router
         try {
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
-            let error_status = 404;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,
@@ -604,7 +647,7 @@ router
         try {
             data_db = await dataInfoData.getDataById(dataId);
         } catch (e) {
-            let error_status = 404;
+            let error_status = 502;
             return res.status(error_status).render("./error/errorPage", {
                 username: req.session.user.username,
                 error_status: error_status,

@@ -32,12 +32,29 @@ h2 {
     font-weight: bold;
 }
 
-a, p {
+h3, h4 {
+    font-size: 25px;
+    color: #3b3a3a;
+    font-family: fangsong;
+
+}
+
+a, p, #edit-comment-form, #userName, #comment, li {
     font-size: 21px;
     color: #3b3a3a;
     font-weight: bold;
 }
 
+dd, dt {
+    font-size: 19px;
+    color: #3b3a3a;
+    
+    padding-left: 10px;
+}
+
+li {
+    padding-left: 10px;
+}
 
 footer {
     background-color: #3b3a3a;
@@ -45,7 +62,6 @@ footer {
     font-size: 15px;
     padding: 5px 0px;
     padding-left: 3%;
-
 }
 
 img {
@@ -53,6 +69,16 @@ img {
     margin-left: auto;
     margin-right: auto;
     border-radius: 8px;
+}
+
+.data_list {
+    margin-left: 20px;
+}
+
+#search_data, .full-width-input {
+    font-size: 21px;
+    color: #3b3a3a;
+    font-weight: bold;
 }
 
 #profile_img {
@@ -202,3 +228,14 @@ body {
     }
 }
 
+.ul-comment {
+    height: 150px;
+    width: 600px;
+    overflow-y: scroll;
+}
+
+.li-comment {
+    background-color: #fefefe;
+    font-size: 22px;
+    padding: 3px;
+}

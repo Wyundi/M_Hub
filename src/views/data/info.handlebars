@@ -39,10 +39,10 @@
 {{/if}}
 
 <h2> {{data_name}} </h2>
-<p> {{data_type}} </p>
+<p class = "data_list"> {{data_type}} </p>
 
 <h3> Description </h3>
-<p> {{description}} </p>
+<p class = "data_list"> {{description}} </p>
 
 <h3> Features </h3>
 <ul>
@@ -52,16 +52,16 @@
 </ul>
 
 <h3> Length </3>
-<p> {{length}} </p>
+<p class = "data_list"> {{length}} </p>
 
 <h3> Source </3>
-<p> <a href="{{source}}"> {{source}} </a> </p>
+<p class = "data_list"> <a href="{{source}}"> {{source}} </a> </p>
 
 <h3> Raw Data </h3>
-<a href="{{raw_data_path}}"> link to raw data </a>
+<a href="{{raw_data_path}}" class = "data_list"> link to raw data </a>
 
 <h3> Contributor </h3>
-<p> {{contributor}} </p>
+<p class = "data_list"> {{contributor}} </p>
 
 <h3> Applied models </h3>
 <ul>
@@ -119,6 +119,7 @@
         <button type="submit" value="{{dataId}}" name="dataId"> add to data list </button>
     </form>
     <br>
+    {{#if user_in_data_user_list}}
     <form method="POST" action="/data/info/{{dataId}}?_method=DELETE">
         <button type="submit" onclick="javascript:return del();"> Remove this dataset
 
@@ -138,6 +139,7 @@
             </script>
         </button>
     </form>
+    {{/if}}
 {{/if}} 
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>

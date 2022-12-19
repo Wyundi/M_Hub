@@ -43,7 +43,7 @@ const createUser = async (user_info) => {
 
     // check if same username/email exists
     const userInfoCollection = await user();
-    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: username, $options: 'i'}});
+    const userFoundByEmail = await userInfoCollection.findOne({email: {$regex: email, $options: 'i'}});
     const userFoundByUsername = await userInfoCollection.findOne({username: {$regex: username, $options: 'i'}});
 
     if (userFoundByEmail || userFoundByUsername) {
@@ -124,6 +124,18 @@ const checkUser = async (username, password) => {
 
 };
 
+const verifyUsername = async (username) => {
+    username = utils.checkUsername(username);
+    
+    // query user name in database
+    let userList = await getAllUser();
+
+    for (let i in userList) {
+        if (userList[i].username.toLowerCase() === username.toLowerCase()) throw `username ${username} already exists`
+    }
+    return username;
+}
+
 const getAllUser = async () => {
 
     const userCollection = await user();
@@ -152,9 +164,11 @@ const getUserById = async (userId) => {
 
 };
 
-const getUserByUsernameOrEmail = async (str) => {
+const getUserByUsername = async (str) => {
     // code goes here
-    
+
+    // allow both lower and upper case
+
     return 0;
 };
 
@@ -447,7 +461,7 @@ module.exports = {
     checkUser,
     getAllUser,
     getUserById,
-    getUserByUsernameOrEmail,
+    getUserByUsername,
     removeUser,
     updateUser,
     changePasswd,
@@ -456,5 +470,6 @@ module.exports = {
     getDataList,
     getModelList,
     removeFromDataList,
-    removeFromModelList
+    removeFromModelList,
+    verifyUsername
 };

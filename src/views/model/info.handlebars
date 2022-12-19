@@ -39,25 +39,25 @@
 
 {{/if}}
 
-<h2> {{model_name}} </h2>
+<h2 class = "data_list"> {{model_name}} </h2>
 
 <h3> category </h3>
-<p> {{category}} </p>
+<p class = "data_list"> {{category}} </p>
 
 <h3> description </h3>
-<p> {{description}} </p>
+<p class = "data_list"> {{description}} </p>
 
 <h3> link </3>
-<p> <a href="{{link}}"> {{link}} </a> </p>
+<p class = "data_list"> <a href="{{link}}"> {{link}} </a> </p>
 
 <h3> input </h3>
-<p> {{input}} </p>
+<p class = "data_list"> {{input}} </p>
 
 <h3> output </3>
-<p> {{output}} </p>
+<p class = "data_list"> {{output}} </p>
 
 <h3> Contributor </h3>
-<p> {{contributor}} </p>
+<p class = "data_list"> {{contributor}} </p>
 
 <h3> data list </h3>
 <ul>
@@ -88,7 +88,7 @@
 <br>
 {{#if is_contributor}}
     <button type="button" class="btn"> <a href="../edit/{{modelId}}"> edit </a></button>
-    <button type="button" class="btn"> <a href="../run/{{modelId}}"> run your model </a></button>
+    {{!-- <button type="button" class="btn"> <a href="../run/{{modelId}}"> run your model </a></button> --}}
     <br>
     <form method="POST" action="/model/info/{{modelId}}?_method=DELETE">
         <button type="submit" onclick="javascript:return del();"> Delete this model
@@ -114,6 +114,7 @@
         <button type="submit" value="{{modelId}}" name="modelId"> add to model list </button>
     </form>
     <br>
+    {{#if user_in_model_user_list}}
     <form method="POST" action="/model/info/{{modelId}}?_method=DELETE">
         <button type="submit" onclick="javascript:return del();"> Remove this model
 
@@ -133,6 +134,7 @@
             </script>
         </button>
     </form>
+    {{/if}}
 {{/if}}
 <br>
 <button type="button" class="btn"> <a href="../../"> back to home page </a></button>

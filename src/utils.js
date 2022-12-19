@@ -45,7 +45,7 @@ function checkStringEnpty(str) {
     }
 }
 
-function checkValidName(name, reg) {
+function checkValidName(name, reg=/[^a-zA-Z ]+/g) {
 
     name_standard = name.replace(reg, "");
 
@@ -128,12 +128,12 @@ function checkId(id, varName) {
 function checkGender(gender) {
 
     // ["male", "female"]  
-    // according to the professor, gender should be not only male and femail, but also included some other opbtions
+    // according to gender diversity, gender options should be offered not only male and female, but also other non-binary choices
 
-    const options = ["Man", "Woman", "Trans", "NonBinary", "NotRespond"];
+    const options = ["Man", "Woman", "Transgender", "Non-binary/Non-conforming", "Prefer not to respond"];
 
-    gender = checkString(gender);
-    // gender = gender.toLowerCase();
+    // gender = checkString(gender);
+    // // gender = gender.toLowerCase();
 
     if (!options.includes(gender)) {
         throw "the gender you provide is not valid, please try again";
@@ -172,7 +172,7 @@ function checkPasswd(passwd) {
     }
 
     if (passwd.length < 6 || passwd.length > 14) {
-        throw "Password should be at least 6 characters long.";
+        throw "Password length should be in the range of 6 to 14 characters.";
     }
 
     if (passwd.match(/[A-Z]+/g) === null) {
@@ -281,7 +281,11 @@ function prior(first_ele, second_ele) {
 
 function checkRawData(rawdata) {
 
-    if (!rawdata || Object.keys(rawdata).length === 0) {
+    // if (!rawdata || Object.keys(rawdata).length === 0) {
+    //     throw "No files were uploaded.";
+    // }
+
+    if (!rawdata) {
         throw "No files were uploaded.";
     }
 
@@ -332,6 +336,8 @@ function deleteFromArray(element, array) {
     if (index > -1) {
         array.splice(index, 1);
     } else throw 'ID not found in list.'
+
+    return array;
 }
 
 function getRandomInt(max) {
