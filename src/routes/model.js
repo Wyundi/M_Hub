@@ -125,10 +125,15 @@ router
 
         try {
             userId = utils.checkId(xss(req.session.user.userId), "user id");
-            contributorId = model_db.user_list[0];
+
+            // check if contributor
+            let contributorId = model_db.user_list[0];
             let user_db = await userData.getUserById(contributorId);
-            contributor = user_db.username;
+            let contributor = user_db.username;
             let is_contributor = req.session.user.userId === contributorId;
+
+            // check if own this model
+            let user_in_model_user_list = model_db.user_list.includes(req.session.user.userId);
 
             let data_info_list = [];
             for (let i = 0; i < model_db.data_list.length; i++) {
@@ -153,7 +158,8 @@ router
                 contributor: contributor,
                 data_info_list: data_info_list,
                 comment: model_db.comment,
-                is_contributor: is_contributor
+                is_contributor: is_contributor,
+                user_in_model_user_list: user_in_model_user_list
             });
         } catch (e) {
             let error_status = 500;
@@ -312,10 +318,16 @@ router
                 modelRemoveInfo = await modelData.removeModel(modelId);
 
                 if (modelRemoveInfo) return res.redirect("/user");
+                else {
+                    throw "failed to delete model"
+                }
             } else {
                 userRemoveInfo = await userData.removeFromModelList(userId, modelId);
                 if (userRemoveInfo) {
                     return res.redirect("/user");
+                }
+                else {
+                    throw "failed to delete model"
                 }
             }
         } catch (e) {
